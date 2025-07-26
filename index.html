@@ -14,7 +14,6 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-    <link rel="manifest" href="/site.webmanifest" />
     
     <!-- Viewport and Basic Meta -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -354,14 +353,9 @@
     <link rel="dns-prefetch" href="//checkout.razorpay.com" />
     <link rel="dns-prefetch" href="//cdnjs.cloudflare.com" />
     
-    <!-- Security Headers (Removed X-Frame-Options as it doesn't work in meta tags) -->
-    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
-    <meta http-equiv="X-XSS-Protection" content="1; mode=block" />
+    <!-- Security Headers (Only effective ones for meta tags) -->
     <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
     <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=()" />
-    
-    <!-- Fixed Content Security Policy to allow Razorpay frames -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://checkout.razorpay.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https:; frame-src 'self' https://api.razorpay.com https://checkout.razorpay.com;" />
     
     <!-- Mobile Web App Meta -->
     <meta name="mobile-web-app-capable" content="yes" />

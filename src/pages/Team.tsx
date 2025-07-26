@@ -202,7 +202,7 @@ export const Team: React.FC = () => {
           <div className="text-center">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">Contact Our STEM Team</h2>
             <p className="text-xl text-gray-600 mb-8">
-              Have questions about Arduino kits, want to collaborate on STEM education, or interested custom projects? Aryan, Ayush, and Shubham would love to hear from you!
+              Have questions about Arduino kits, want to collaborate on STEM education, or interested in custom projects? Aryan, Ayush, and Shubham would love to hear from you!
             </p>
             
             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">

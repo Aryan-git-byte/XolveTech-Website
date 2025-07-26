@@ -7,4 +7,10 @@ export default defineConfig({
   optimizeDeps: {
     exclude: ['lucide-react'],
   },
+  server: {
+    headers: {
+      'X-Frame-Options': 'SAMEORIGIN',
+      'Content-Security-Policy': "default-src 'self'; frame-src 'self' https://api.razorpay.com https://checkout.razorpay.com;"
+    }
+  }
 });

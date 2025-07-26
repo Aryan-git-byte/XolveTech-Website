@@ -163,13 +163,13 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose })
 
         <div className="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full sm:p-6">
           <div className="flex items-center justify-between mb-6">
-            <h3 className="text-lg font-medium text-gray-900 flex items-center">
+            <h3 className="text-lg font-medium text-black flex items-center">
               <ShoppingCart className="w-5 h-5 mr-2" />
               {paymentStep === 'details' ? 'Shipping Details' : 'Payment'}
             </h3>
             <button
               onClick={onClose}
-              className="text-gray-600 hover:text-gray-800 transition-colors"
+              className="text-black hover:text-gray-700 transition-colors"
             >
               <X className="w-6 h-6" />
             </button>
@@ -262,7 +262,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose })
               <form onSubmit={handleDetailsSubmit} className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="relative">
-                    <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-600" />
+                    <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-black" />
                     <Input
                       name="name"
                       placeholder="Full Name"
@@ -275,7 +275,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose })
                   </div>
                   
                   <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-600" />
+                    <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-black" />
                     <Input
                       name="email"
                       type="email"
@@ -291,7 +291,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose })
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="relative">
-                    <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-600" />
+                    <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-black" />
                     <Input
                       name="phone"
                       type="tel"
@@ -305,7 +305,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose })
                   </div>
                   
                   <div className="relative">
-                    <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-600" />
+                    <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-black" />
                     <Input
                       name="pincode"
                       type="text"
@@ -320,19 +320,19 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose })
                 </div>
 
                 <div className="relative">
-                  <MapPin className="absolute left-3 top-3 w-5 h-5 text-gray-600" />
+                  <MapPin className="absolute left-3 top-3 w-5 h-5 text-black" />
                   <textarea
                     name="address"
                     placeholder="Complete Delivery Address (House/Flat, Street, City, State, Pincode)"
                     value={orderData.address}
                     onChange={handleChange}
-                    className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 placeholder-gray-600"
+                    className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-black placeholder-gray-600"
                     style={{ borderColor: validationErrors.address ? '#dc2626' : '' }}
                     rows={4}
                     required
                   />
                   {validationErrors.address && (
-                    <p className="text-sm text-red-700 mt-1">{validationErrors.address}</p>
+                    <p className="text-sm text-red-900 mt-1 font-medium">{validationErrors.address}</p>
                   )}
                 </div>
 
@@ -342,14 +342,14 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose })
                     placeholder="Additional Notes (Optional)"
                     value={orderData.notes}
                     onChange={handleChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 placeholder-gray-600"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-black placeholder-gray-600"
                     rows={2}
                   />
                 </div>
 
                 {error && (
-                  <div className="p-4 bg-red-50 border border-red-300 rounded-md">
-                    <p className="text-red-800 text-sm font-medium">{error}</p>
+                  <div className="p-4 bg-red-50 border border-red-400 rounded-md">
+                    <p className="text-red-900 text-sm font-medium">{error}</p>
                   </div>
                 )}
 

@@ -169,7 +169,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose })
             </h3>
             <button
               onClick={onClose}
-              className="text-gray-400 hover:text-gray-600 transition-colors"
+              className="text-gray-600 hover:text-gray-800 transition-colors"
             >
               <X className="w-6 h-6" />
             </button>
@@ -182,150 +182,16 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose })
                 <h4 className="font-semibold text-gray-900 mb-3">Order Summary</h4>
                 <div className="space-y-2">
                   {items.map((item) => (
-                    <div key={item.product.id} className="flex justify-between text-sm">
+                    <div key={item.product.id} className="flex justify-between text-sm text-gray-800">
                       <span>{item.product.title} x{item.quantity}</span>
                       <span>₹{item.product.price * item.quantity}</span>
                     </div>
                   ))}
                   <div className="border-t pt-2 flex justify-between font-semibold">
-                    <span>Total:</span>
-                    <span className="text-blue-600">₹{total}</span>
-                    <span className="text-xs text-gray-500 block">
-                      (Includes kit, packaging & shipping)
-                    </span>
+                    <span className="text-gray-900">Total:</span>
+                    <span className="text-blue-700">₹{total}</span>
                   </div>
-                </div>
-              </div>
-
-              {/* Customer Information Form */}
-              <form onSubmit={handleDetailsSubmit} className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="relative">
-                    <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                    <Input
-                      name="name"
-                      placeholder="Full Name"
-                      value={orderData.name}
-                      onChange={handleChange}
-                      className="pl-10"
-                      error={validationErrors.name}
-                      required
-                    />
-                  </div>
-                  
-                  <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                    <Input
-                      name="email"
-                      type="email"
-                      placeholder="Email Address"
-                      value={orderData.email}
-                      onChange={handleChange}
-                      className="pl-10"
-                      error={validationErrors.email}
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="relative">
-                    <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                    <Input
-                      name="phone"
-                      type="tel"
-                      placeholder="10-digit Mobile Number"
-                      value={orderData.phone}
-                      onChange={handleChange}
-                      className="pl-10"
-                      error={validationErrors.phone}
-                      required
-                    />
-                  </div>
-                  
-                  <div className="relative">
-                    <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                    <Input
-                      name="pincode"
-                      type="text"
-                      placeholder="6-digit Pincode"
-                      value={orderData.pincode}
-                      onChange={handleChange}
-                      className="pl-10"
-                      error={validationErrors.pincode}
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div className="relative">
-                  <MapPin className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
-                  <textarea
-                    name="address"
-                    placeholder="Complete Delivery Address (House/Flat, Street, City, State, Pincode)"
-                    value={orderData.address}
-                    onChange={handleChange}
-                    className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    style={{ borderColor: validationErrors.address ? '#ef4444' : '' }}
-                    rows={4}
-                    required
-                  />
-                  {validationErrors.address && (
-                    <p className="text-sm text-red-600 mt-1">{validationErrors.address}</p>
-                  )}
-                </div>
-
-                <div>
-                  <textarea
-                    name="notes"
-                    placeholder="Additional Notes (Optional)"
-                    value={orderData.notes}
-                    onChange={handleChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    rows={2}
-                  />
-                </div>
-
-                <div className="flex space-x-3">
-                  <Button
-                    type="submit"
-                    className="flex-1 bg-blue-600 hover:bg-blue-700"
-                  >
-                    Continue to Payment
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={onClose}
-                  >
-                    Cancel
-                  </Button>
-                </div>
-              </form>
-            </>
-          ) : (
-            <>
-              {/* Payment Step */}
-              {error && (
-                <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-md">
-                  <p className="text-red-800 text-sm">{error}</p>
-                </div>
-              )}
-              
-              <div className="mb-6 p-4 bg-gray-50 rounded-lg">
-                <h4 className="font-semibold text-gray-900 mb-3">Order Summary</h4>
-                <div className="space-y-2">
-                  {items.map((item) => (
-                    <div key={item.product.id} className="flex justify-between text-sm">
-                      <span>{item.product.title} x{item.quantity}</span>
-                      <span>₹{item.product.price * item.quantity}</span>
-                    </div>
-                  ))}
-                  <div className="border-t pt-2 flex justify-between font-semibold">
-                    <span>Total:</span>
-                    <span className="text-blue-600">₹{total}</span>
-                  </div>
-                  <p className="text-xs text-gray-500 text-center mt-2">
+                  <p className="text-sm text-gray-700 text-center mt-2">
                     MRP includes kit price, packaging, and shipping. No extra charges.
                   </p>
                 </div>
@@ -344,17 +210,17 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose })
 
               {/* Payment Information */}
               <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-md">
-                <div className="flex items-center space-x-2 text-blue-700 mb-2">
+                <div className="flex items-center space-x-2 text-blue-800 mb-2">
                   <CreditCard className="w-5 h-5" />
                   <span className="font-medium">Secure Payment with Razorpay</span>
                 </div>
-                <p className="text-sm text-blue-600">
+                <p className="text-sm text-blue-700">
                   Your payment is processed securely through Razorpay. We accept UPI, cards, net banking, and wallets.
                 </p>
               </div>
 
               <div className="bg-green-50 border border-green-200 rounded-md p-4 mb-6">
-                <h4 className="font-semibold text-green-900 mb-2">Order Review Process</h4>
+                <h4 className="font-semibold text-green-800 mb-2">Order Review Process</h4>
                 <p className="text-sm text-green-700">
                   After successful payment, your order will be "Pending Review". Our team reviews and confirms each order 
                   within 24 hours before shipping. Updates sent via email and WhatsApp.
@@ -383,4 +249,149 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose })
       </div>
     </div>
   )
-}
+}<span className="text-gray-900">Total:</span>
+                    <span className="text-blue-700">₹{total}</span>
+                  </div>
+                  <p className="text-sm text-gray-700 text-center mt-2">
+                    (Includes kit, packaging & shipping)
+                  </p>
+                </div>
+              </div>
+
+              {/* Customer Information Form */}
+              <form onSubmit={handleDetailsSubmit} className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="relative">
+                    <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-600" />
+                    <Input
+                      name="name"
+                      placeholder="Full Name"
+                      value={orderData.name}
+                      onChange={handleChange}
+                      className="pl-10"
+                      error={validationErrors.name}
+                      required
+                    />
+                  </div>
+                  
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-600" />
+                    <Input
+                      name="email"
+                      type="email"
+                      placeholder="Email Address"
+                      value={orderData.email}
+                      onChange={handleChange}
+                      className="pl-10"
+                      error={validationErrors.email}
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="relative">
+                    <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-600" />
+                    <Input
+                      name="phone"
+                      type="tel"
+                      placeholder="10-digit Mobile Number"
+                      value={orderData.phone}
+                      onChange={handleChange}
+                      className="pl-10"
+                      error={validationErrors.phone}
+                      required
+                    />
+                  </div>
+                  
+                  <div className="relative">
+                    <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-600" />
+                    <Input
+                      name="pincode"
+                      type="text"
+                      placeholder="6-digit Pincode"
+                      value={orderData.pincode}
+                      onChange={handleChange}
+                      className="pl-10"
+                      error={validationErrors.pincode}
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="relative">
+                  <MapPin className="absolute left-3 top-3 w-5 h-5 text-gray-600" />
+                  <textarea
+                    name="address"
+                    placeholder="Complete Delivery Address (House/Flat, Street, City, State, Pincode)"
+                    value={orderData.address}
+                    onChange={handleChange}
+                    className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 placeholder-gray-600"
+                    style={{ borderColor: validationErrors.address ? '#dc2626' : '' }}
+                    rows={4}
+                    required
+                  />
+                  {validationErrors.address && (
+                    <p className="text-sm text-red-700 mt-1">{validationErrors.address}</p>
+                  )}
+                </div>
+
+                <div>
+                  <textarea
+                    name="notes"
+                    placeholder="Additional Notes (Optional)"
+                    value={orderData.notes}
+                    onChange={handleChange}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 placeholder-gray-600"
+                    rows={2}
+                  />
+                </div>
+
+                {error && (
+                  <div className="p-4 bg-red-50 border border-red-300 rounded-md">
+                    <p className="text-red-800 text-sm font-medium">{error}</p>
+                  </div>
+                )}
+
+                {error && (
+                  <div className="p-4 bg-red-50 border border-red-300 rounded-md">
+                    <p className="text-red-800 text-sm font-medium">{error}</p>
+                  </div>
+                )}
+
+                <div className="flex space-x-3">
+                  <Button
+                    type="submit"
+                    className="flex-1 bg-blue-600 hover:bg-blue-700"
+                  >
+                    Continue to Payment
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={onClose}
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              </form>
+            </>
+          ) : (
+            <>
+              {/* Payment Step */}
+              {error && (
+                <div className="mb-6 p-4 bg-red-50 border border-red-300 rounded-md">
+                  <p className="text-red-800 text-sm font-medium">{error}</p>
+                </div>
+              )}
+              
+              <div className="mb-6 p-4 bg-gray-50 rounded-lg">
+                <h4 className="font-semibold text-gray-900 mb-3">Order Summary</h4>
+                <div className="space-y-2">
+                  {items.map((item) => (
+                    <div key={item.product.id} className="flex justify-between text-sm text-gray-800">
+                      <span>{item.product.title} x{item.quantity}</span>
+                      <span>₹{item.product.price * item.quantity}</span>
+                    </div>
+                  ))}
+                  <div className="border-t pt-2 flex justify-between font-semibold">

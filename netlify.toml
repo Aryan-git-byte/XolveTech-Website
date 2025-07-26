@@ -1,11 +1,11 @@
 [[headers]]
   for = "/*"
   [headers.values]
-  Content-Security-Policy = '''
-    default-src 'self';
-    script-src 'self' https://checkout.razorpay.com;
-    connect-src 'self' https://*.supabase.co;
-    img-src 'self' data: https:;
-    frame-src https://api.razorpay.com https://checkout.razorpay.com https://*.razorpay.com;
-  '''
-  X-Frame-Options = "SAMEORIGIN"
+    Content-Security-Policy = '''
+      default-src 'self';
+      script-src  'self' https://checkout.razorpay.com;
+      connect-src 'self' https://*.supabase.co;
+      img-src     'self' data: https:;
+      frame-src   https://api.razorpay.com https://checkout.razorpay.com https://*.razorpay.com;
+    '''
+    X-Frame-Options = "SAMEORIGIN"

@@ -1,0 +1,279 @@
+# XolveTech Admin Guide: Adding Products and Resources
+
+## Table of Contents
+1. [Getting Started](#getting-started)
+2. [Adding Products](#adding-products)
+3. [Adding Learning Resources](#adding-learning-resources)
+4. [Managing Orders](#managing-orders)
+5. [Best Practices](#best-practices)
+6. [Troubleshooting](#troubleshooting)
+
+---
+
+## Getting Started
+
+### Accessing the Admin Panel
+1. Navigate to your website URL + `/admin/login`
+2. Sign in with the admin email: `xolvetech@gmail.com`
+3. Enter your password
+4. You'll be redirected to the admin dashboard
+
+### Admin Dashboard Overview
+The dashboard has 5 main sections:
+- **Statistics**: Overview of your website data
+- **Products**: Manage STEM learning kits
+- **Orders**: View and manage customer orders
+- **Resources**: Manage learning materials (PDFs, videos)
+- **Messages**: View contact form submissions
+
+---
+
+## Adding Products
+
+### Step 1: Navigate to Products Section
+1. Click on the "Products" tab in the admin dashboard
+2. Click the "Add Product" button (blue button with + icon)
+
+### Step 2: Fill Product Information
+
+#### Basic Information
+- **Product Title**: Enter a clear, descriptive name
+  - Example: "Arduino LED Circuit Kit"
+  - Keep it under 50 characters for best display
+
+- **Description**: Write a detailed description (2-3 sentences)
+  - Explain what the kit does
+  - Mention the target age group or skill level
+  - Example: "Learn basic electronics with this hands-on LED circuit kit. Perfect for beginners aged 10+ to understand how circuits work and build their first blinking LED project."
+
+- **Price**: Enter price in Indian Rupees (₹)
+  - Enter numbers only (no ₹ symbol)
+  - Example: 299 (for ₹299)
+
+- **Category**: Choose or create a category
+  - Common categories: Electronics, Mechanics, Programming, Robotics
+  - Keep categories consistent for better organization
+
+#### Kit Details
+
+- **Kit Contents**: List all components included (one per line)
+  ```
+  LED lights (5 pieces)
+  Resistors (10 pieces)
+  Breadboard
+  Jumper wires
+  9V battery holder
+  Instruction manual
+  ```
+
+- **Learning Outcomes**: What skills will students gain? (one per line)
+  ```
+  Basic electronics understanding
+  Circuit design principles
+  Problem-solving skills
+  Hands-on building experience
+  ```
+
+- **Required Tools**: Tools students need but aren't included (one per line)
+  ```
+  Scissors
+  Small screwdriver
+  9V battery
+  ```
+
+- **Assembly Steps**: Brief overview of the building process
+  - Keep it concise (2-3 sentences)
+  - Example: "Connect the LED to the breadboard using jumper wires. Add resistors to control current flow. Connect the battery and watch your circuit come to life!"
+
+- **Image URL**: Add a product image
+  - Upload images to Supabase Storage first
+  - Use the public URL from Supabase
+  - Recommended size: 800x600 pixels
+  - Format: JPG or PNG
+
+### Step 3: Save the Product
+1. Click "Add Product" button
+2. The product will appear in your products list
+3. It will automatically be visible on the website
+
+### Product Management Tips
+- **Edit Products**: Click the "Edit" button on any product card
+- **Delete Products**: Click the "Delete" button (use with caution!)
+- **Preview**: Visit `/products` page to see how it looks to customers
+
+---
+
+## Adding Learning Resources
+
+### Step 1: Navigate to Resources Section
+1. Click on the "Resources" tab in the admin dashboard
+2. Click the "Add Resource" button
+
+### Step 2: Fill Resource Information
+
+#### Basic Information
+- **Resource Title**: Clear, descriptive title
+  - Example: "Arduino Programming Basics - PDF Guide"
+  - Example: "LED Circuit Assembly - Video Tutorial"
+
+- **Resource Type**: Choose between:
+  - **PDF**: For written guides, manuals, worksheets
+  - **Video**: For video tutorials, demonstrations
+
+- **Kit Tag**: Associate with product categories or specific kits
+  - Example: "Electronics", "Arduino", "LED Circuits"
+  - Use consistent tags for easy searching
+
+- **File URL**: Link to your resource file
+  - **For PDFs**: Upload to Supabase Storage and use public URL
+  - **For Videos**: Can use YouTube links or Supabase Storage
+
+### Step 3: File Upload Process
+
+#### For PDF Files:
+1. Go to your Supabase dashboard
+2. Navigate to Storage
+3. Create a bucket called "resources" (if not exists)
+4. Upload your PDF file
+5. Copy the public URL
+6. Paste in the "File URL" field
+
+#### For Video Files:
+1. **Option 1 - YouTube**: Upload to YouTube and use the share URL
+2. **Option 2 - Direct Upload**: Upload to Supabase Storage (for smaller files)
+
+### Step 4: Save the Resource
+1. Click "Add Resource"
+2. Resource will appear in the resources list
+3. It will be available on the `/learning` page
+
+### Resource Management Tips
+- **Organize by Tags**: Use consistent tagging for easy filtering
+- **File Naming**: Use descriptive filenames before uploading
+- **File Size**: Keep PDFs under 10MB, videos under 100MB for better performance
+- **Quality**: Ensure PDFs are readable and videos have good audio/video quality
+
+---
+
+## Managing Orders
+
+### Viewing Orders
+1. Click on the "Orders" tab
+2. See all customer orders in a table format
+3. Information includes:
+   - Customer name and contact
+   - Product ordered
+   - Order status
+   - Date placed
+
+### Order Status Management
+- **Pending**: New orders (default status)
+- **Confirmed**: Order confirmed and being prepared
+- **Delivered**: Order has been delivered
+
+### Updating Order Status
+1. Find the order in the table
+2. Use the dropdown menu in the "Actions" column
+3. Select new status (Pending/Confirmed/Delivered)
+4. Status updates automatically
+
+### Contacting Customers
+- Click "View" button to see full order details
+- Use the "Contact Customer" button to send WhatsApp message
+- Pre-filled message template will open
+
+---
+
+## Best Practices
+
+### Product Management
+1. **Consistent Naming**: Use clear, consistent product names
+2. **Quality Images**: Always include high-quality product images
+3. **Detailed Descriptions**: Provide comprehensive product information
+4. **Accurate Pricing**: Double-check prices before publishing
+5. **Regular Updates**: Keep product information current
+
+### Resource Management
+1. **Organized Filing**: Use consistent file naming conventions
+2. **Quality Content**: Ensure all resources are helpful and accurate
+3. **Regular Reviews**: Periodically review and update resources
+4. **User-Friendly**: Make resources easy to understand for your target audience
+
+### Order Management
+1. **Quick Response**: Update order status promptly
+2. **Clear Communication**: Keep customers informed about their orders
+3. **Record Keeping**: Maintain accurate order records
+
+---
+
+## Troubleshooting
+
+### Common Issues and Solutions
+
+#### "Error saving product"
+- **Cause**: Missing required fields or network issue
+- **Solution**: Check all required fields are filled, try again
+
+#### "Image not displaying"
+- **Cause**: Incorrect image URL or file not public
+- **Solution**: Verify Supabase Storage URL is public and accessible
+
+#### "Can't access admin panel"
+- **Cause**: Not signed in with admin email
+- **Solution**: Ensure you're using `xolvetech@gmail.com`
+
+#### "Resource file won't download"
+- **Cause**: File URL is incorrect or file was deleted
+- **Solution**: Check file exists in Supabase Storage, update URL
+
+### Getting Help
+1. Check the browser console for error messages
+2. Verify your internet connection
+3. Try refreshing the page
+4. Contact technical support if issues persist
+
+---
+
+## Security Notes
+
+### Important Reminders
+- Only use the admin email `xolvetech@gmail.com` for admin access
+- Keep your admin password secure
+- Log out when finished with admin tasks
+- Regularly backup your data
+
+### Data Safety
+- Products and resources are automatically saved to the database
+- Orders are permanently stored for record keeping
+- Always double-check before deleting any items
+
+---
+
+## Quick Reference
+
+### Adding a Product (Quick Steps)
+1. Admin Dashboard → Products → Add Product
+2. Fill: Title, Description, Price, Category
+3. Add: Kit Contents, Learning Outcomes, Tools Required
+4. Upload image to Supabase Storage
+5. Add image URL
+6. Click "Add Product"
+
+### Adding a Resource (Quick Steps)
+1. Admin Dashboard → Resources → Add Resource
+2. Fill: Title, Type (PDF/Video), Kit Tag
+3. Upload file to Supabase Storage
+4. Add file URL
+5. Click "Add Resource"
+
+### Managing Orders (Quick Steps)
+1. Admin Dashboard → Orders
+2. View order details with "View" button
+3. Update status using dropdown menu
+4. Contact customer via WhatsApp button
+
+---
+
+This guide covers all essential aspects of managing your XolveTech admin panel. Keep this guide handy for reference when adding new products and resources to your STEM learning platform.
+
+For technical support or questions about this guide, contact the development team.

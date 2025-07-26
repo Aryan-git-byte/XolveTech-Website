@@ -37,12 +37,12 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose }) => {
           <div className="flex h-full flex-col">
             {/* Header */}
             <div className="flex items-center justify-between border-b px-4 py-3">
-              <h2 className="text-lg font-semibold text-gray-900">
+              <h2 className="text-lg font-semibold text-black">
                 Shopping Cart ({itemCount})
               </h2>
               <button
                 onClick={onClose}
-                className="text-gray-400 hover:text-gray-600 transition-colors"
+                className="text-black hover:text-gray-700 transition-colors"
               >
                 <X className="w-6 h-6" />
               </button>
@@ -52,9 +52,9 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose }) => {
             <div className="flex-1 overflow-y-auto px-4 py-4">
               {items.length === 0 ? (
                 <div className="text-center py-12">
-                  <ShoppingCart className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">Your cart is empty</h3>
-                  <p className="text-gray-600">Add some STEM kits to get started!</p>
+                  <ShoppingCart className="w-12 h-12 text-black mx-auto mb-4" />
+                  <h3 className="text-lg font-medium text-black mb-2">Your cart is empty</h3>
+                  <p className="text-black">Add some STEM kits to get started!</p>
                 </div>
               ) : (
                 <div className="space-y-4">
@@ -69,25 +69,25 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose }) => {
                           />
                         )}
                         <div className="flex-1 min-w-0">
-                          <h4 className="text-sm font-medium text-gray-900 truncate">
+                          <h4 className="text-sm font-medium text-black truncate">
                             {item.product.title}
                           </h4>
-                          <p className="text-sm text-gray-600">₹{item.product.price}</p>
+                          <p className="text-sm text-black">₹{item.product.price}</p>
                           
                           <div className="flex items-center justify-between mt-2">
                             <div className="flex items-center space-x-2">
                               <button
                                 onClick={() => updateQuantity(item.product.id, item.quantity - 1)}
-                                className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50"
+                                className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 text-black"
                               >
                                 <Minus className="w-4 h-4" />
                               </button>
-                              <span className="w-8 text-center text-sm font-medium">
+                              <span className="w-8 text-center text-sm font-medium text-black">
                                 {item.quantity}
                               </span>
                               <button
                                 onClick={() => updateQuantity(item.product.id, item.quantity + 1)}
-                                className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50"
+                                className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 text-black"
                               >
                                 <Plus className="w-4 h-4" />
                               </button>
@@ -95,14 +95,14 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose }) => {
                             
                             <button
                               onClick={() => removeFromCart(item.product.id)}
-                              className="text-red-600 hover:text-red-800 transition-colors"
+                              className="text-red-900 hover:text-red-800 transition-colors"
                             >
                               <Trash2 className="w-4 h-4" />
                             </button>
                           </div>
                           
                           <div className="mt-2 text-right">
-                            <span className="text-sm font-semibold text-gray-900">
+                            <span className="text-sm font-semibold text-black">
                               ₹{item.product.price * item.quantity}
                             </span>
                           </div>
@@ -118,8 +118,8 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose }) => {
             {items.length > 0 && (
               <div className="border-t px-4 py-4 space-y-4">
                 <div className="flex justify-between items-center">
-                  <span className="text-lg font-semibold text-gray-900">Total:</span>
-                  <span className="text-xl font-bold text-blue-600">₹{total}</span>
+                  <span className="text-lg font-semibold text-black">Total:</span>
+                  <span className="text-xl font-bold text-blue-800">₹{total}</span>
                 </div>
                 
                 <div className="space-y-2">
@@ -133,7 +133,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose }) => {
                   <Button
                     onClick={clearCart}
                     variant="outline"
-                    className="w-full text-red-600 border-red-300 hover:bg-red-50"
+                    className="w-full text-red-900 border-red-400 hover:bg-red-50"
                   >
                     Clear Cart
                   </Button>

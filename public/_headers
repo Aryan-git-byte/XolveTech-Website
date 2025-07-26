@@ -1,0 +1,2 @@
+/*
+  Content-Security-Policy: frame-src https://api.razorpay.com https://*.razorpay.com;

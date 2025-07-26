@@ -1,3 +1,2 @@
-/*
-  X-Frame-Options: SAMEORIGIN
-  Content-Security-Policy: default-src 'self'; frame-src https://api.razorpay.com https://checkout.razorpay.com https://*.razorpay.com;
+X-Frame-Options: SAMEORIGIN
+Content-Security-Policy: default-src 'self'; script-src 'self' https://checkout.razorpay.com; frame-src https://api.razorpay.com https://checkout.razorpay.com https://*.razorpay.com;

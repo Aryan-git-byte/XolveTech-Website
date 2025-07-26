@@ -179,80 +179,19 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose })
             <>
               {/* Order Summary */}
               <div className="mb-6 p-4 bg-gray-50 rounded-lg">
-                <h4 className="font-semibold text-gray-900 mb-3">Order Summary</h4>
+                <h4 className="font-semibold text-black mb-3">Order Summary</h4>
                 <div className="space-y-2">
                   {items.map((item) => (
-                    <div key={item.product.id} className="flex justify-between text-sm text-gray-800">
+                    <div key={item.product.id} className="flex justify-between text-sm text-black">
                       <span>{item.product.title} x{item.quantity}</span>
                       <span>₹{item.product.price * item.quantity}</span>
                     </div>
                   ))}
                   <div className="border-t pt-2 flex justify-between font-semibold">
-                    <span className="text-gray-900">Total:</span>
-                    <span className="text-blue-700">₹{total}</span>
+                    <span className="text-black">Total:</span>
+                    <span className="text-blue-800">₹{total}</span>
                   </div>
-                  <p className="text-sm text-gray-700 text-center mt-2">
-                    MRP includes kit price, packaging, and shipping. No extra charges.
-                  </p>
-                </div>
-              </div>
-
-              {/* Shipping Details Summary */}
-              <div className="mb-6 p-4 bg-blue-50 rounded-lg">
-                <h4 className="font-semibold text-blue-900 mb-2">Shipping Details</h4>
-                <div className="text-sm text-blue-800">
-                  <p><strong>Name:</strong> {orderData.name}</p>
-                  <p><strong>Email:</strong> {orderData.email}</p>
-                  <p><strong>Phone:</strong> {orderData.phone}</p>
-                  <p><strong>Address:</strong> {orderData.address}</p>
-                </div>
-              </div>
-
-              {/* Payment Information */}
-              <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-md">
-                <div className="flex items-center space-x-2 text-blue-800 mb-2">
-                  <CreditCard className="w-5 h-5" />
-                  <span className="font-medium">Secure Payment with Razorpay</span>
-                </div>
-                <p className="text-sm text-blue-700">
-                  Your payment is processed securely through Razorpay. We accept UPI, cards, net banking, and wallets.
-                </p>
-              </div>
-
-              <div className="bg-green-50 border border-green-200 rounded-md p-4 mb-6">
-                <h4 className="font-semibold text-green-800 mb-2">Order Review Process</h4>
-                <p className="text-sm text-green-700">
-                  After successful payment, your order will be "Pending Review". Our team reviews and confirms each order 
-                  within 24 hours before shipping. Updates sent via email and WhatsApp.
-                </p>
-              </div>
-
-              <div className="flex space-x-3">
-                <Button
-                  onClick={handlePaymentSubmit}
-                  disabled={isSubmitting}
-                  className="flex-1 bg-green-600 hover:bg-green-700"
-                >
-                  {isSubmitting ? 'Processing Payment...' : 'Pay Now'}
-                </Button>
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={handleBackToDetails}
-                >
-                  Back
-                </Button>
-              </div>
-            </>
-          )}
-        </div>
-      </div>
-    </div>
-  )
-}<span className="text-gray-900">Total:</span>
-                    <span className="text-blue-700">₹{total}</span>
-                  </div>
-                  <p className="text-sm text-gray-700 text-center mt-2">
+                  <p className="text-sm text-black text-center mt-2">
                     (Includes kit, packaging & shipping)
                   </p>
                 </div>
@@ -353,12 +292,6 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose })
                   </div>
                 )}
 
-                {error && (
-                  <div className="p-4 bg-red-50 border border-red-300 rounded-md">
-                    <p className="text-red-800 text-sm font-medium">{error}</p>
-                  </div>
-                )}
-
                 <div className="flex space-x-3">
                   <Button
                     type="submit"
@@ -380,18 +313,80 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose })
             <>
               {/* Payment Step */}
               {error && (
-                <div className="mb-6 p-4 bg-red-50 border border-red-300 rounded-md">
-                  <p className="text-red-800 text-sm font-medium">{error}</p>
+                <div className="mb-6 p-4 bg-red-50 border border-red-400 rounded-md">
+                  <p className="text-red-900 text-sm font-medium">{error}</p>
                 </div>
               )}
               
               <div className="mb-6 p-4 bg-gray-50 rounded-lg">
-                <h4 className="font-semibold text-gray-900 mb-3">Order Summary</h4>
+                <h4 className="font-semibold text-black mb-3">Order Summary</h4>
                 <div className="space-y-2">
                   {items.map((item) => (
-                    <div key={item.product.id} className="flex justify-between text-sm text-gray-800">
+                    <div key={item.product.id} className="flex justify-between text-sm text-black">
                       <span>{item.product.title} x{item.quantity}</span>
                       <span>₹{item.product.price * item.quantity}</span>
                     </div>
                   ))}
                   <div className="border-t pt-2 flex justify-between font-semibold">
+                    <span className="text-black">Total:</span>
+                    <span className="text-blue-800">₹{total}</span>
+                  </div>
+                  <p className="text-sm text-black text-center mt-2">
+                    MRP includes kit price, packaging, and shipping. No extra charges.
+                  </p>
+                </div>
+              </div>
+
+              {/* Shipping Details Summary */}
+              <div className="mb-6 p-4 bg-blue-50 rounded-lg">
+                <h4 className="font-semibold text-blue-900 mb-2">Shipping Details</h4>
+                <div className="text-sm text-blue-900">
+                  <p><strong>Name:</strong> {orderData.name}</p>
+                  <p><strong>Email:</strong> {orderData.email}</p>
+                  <p><strong>Phone:</strong> {orderData.phone}</p>
+                  <p><strong>Address:</strong> {orderData.address}</p>
+                </div>
+              </div>
+
+              {/* Payment Information */}
+              <div className="mb-6 p-4 bg-blue-50 border border-blue-300 rounded-md">
+                <div className="flex items-center space-x-2 text-blue-900 mb-2">
+                  <CreditCard className="w-5 h-5" />
+                  <span className="font-medium">Secure Payment with Razorpay</span>
+                </div>
+                <p className="text-sm text-blue-800">
+                  Your payment is processed securely through Razorpay. We accept UPI, cards, net banking, and wallets.
+                </p>
+              </div>
+
+              <div className="bg-green-50 border border-green-300 rounded-md p-4 mb-6">
+                <h4 className="font-semibold text-green-900 mb-2">Order Review Process</h4>
+                <p className="text-sm text-green-800">
+                  After successful payment, your order will be "Pending Review". Our team reviews and confirms each order 
+                  within 24 hours before shipping. Updates sent via email and WhatsApp.
+                </p>
+              </div>
+
+              <div className="flex space-x-3">
+                <Button
+                  onClick={handlePaymentSubmit}
+                  disabled={isSubmitting}
+                  className="flex-1 bg-green-600 hover:bg-green-700"
+                >
+                  {isSubmitting ? 'Processing Payment...' : 'Pay Now'}
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handleBackToDetails}
+                >
+                  Back
+                </Button>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}

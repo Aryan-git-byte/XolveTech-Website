@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Package, ShoppingCart, FileText, MessageSquare, BarChart3, Plus, Settings } from 'lucide-react'
+import { Package, ShoppingCart, FileText, MessageSquare, BarChart3, Plus, Settings, RefreshCw } from 'lucide-react'
 import { Wrench } from 'lucide-react'
 import { supabase } from '../../lib/supabase'
 import { Button } from '../../components/ui/Button'
@@ -13,6 +13,7 @@ import { ContactsManager } from '../../components/admin/ContactsManager'
 
 export const AdminDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState('stats')
+  const [isRefreshing, setIsRefreshing] = useState(false)
   const [stats, setStats] = useState({
     totalProducts: 0,
     totalOrders: 0,
@@ -28,6 +29,7 @@ export const AdminDashboard: React.FC = () => {
 
   const fetchStats = async () => {
     try {
+      setIsRefreshing(true)
       const [products, orders, customProjects, resources, contacts, components] = await Promise.all([
         supabase.from('products').select('id'),
         supabase.from('orders').select('id'),
@@ -47,7 +49,13 @@ export const AdminDashboard: React.FC = () => {
       })
     } catch (error) {
       console.error('Error fetching stats:', error)
+    } finally {
+      setIsRefreshing(false)
     }
+  }
+
+  const handleRefresh = () => {
+    fetchStats()
   }
 
   const tabs = [
@@ -63,9 +71,21 @@ export const AdminDashboard: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Admin Dashboard</h1>
-          <p className="text-gray-600">Manage your XolveTech website and orders</p>
+        <div className="mb-8 flex justify-between items-start">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">Admin Dashboard</h1>
+            <p className="text-gray-600">Manage your XolveTech website and orders</p>
+          </div>
+          
+          {/* Refresh Button */}
+          <Button
+            onClick={handleRefresh}
+            disabled={isRefreshing}
+            className="flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+            <span>{isRefreshing ? 'Refreshing...' : 'Refresh Data'}</span>
+          </Button>
         </div>
 
         {/* Tabs */}

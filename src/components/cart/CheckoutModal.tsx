@@ -71,8 +71,8 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose })
     e.preventDefault()
     
     // Check if cart total is less than ₹500
-    if (total < 500) {
-      setError('Minimum order value is ₹500. Please add more items to your cart.')
+    if (total < 10) {
+      setError('Minimum order value is ₹10. Please add more items to your cart.')
       return
     }
     

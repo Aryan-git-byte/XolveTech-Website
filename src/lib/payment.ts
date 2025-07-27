@@ -116,10 +116,13 @@ const createRazorpayOrder = async (
   receipt: string,
   customerDetails: any
 ) => {
+  // Debug logging to track the amount
+  console.log('🔍 createRazorpayOrder - Amount being sent:', amount, 'paise (₹' + (amount/100) + ')')
+  
   const { data, error } = await supabase.functions.invoke('create-razorpay-order', {
     body: {
-      amount,
-      currency,
+      order_amount: amount,  // FIXED: Use order_amount to match what edge function expects
+      order_currency: currency,  // FIXED: Use order_currency to match what edge function expects
       receipt,
       customer_details: customerDetails
     }
@@ -153,7 +156,7 @@ const saveOrderToDatabase = async (
       email: shippingDetails.email,
       contact: shippingDetails.phone,
       address: shippingDetails.address,
-      total_amount: orderData.order_amount,
+      total_amount: orderData.order_amount / 100, // FIXED: Store amount in rupees in database
       currency: orderData.order_currency,
       status: 'payment_pending',
       payment_status: 'pending',
@@ -177,6 +180,14 @@ export const initiatePayment = async (
   shippingDetails: any
 ): Promise<PaymentResult> => {
   try {
+    // Debug logging
+    console.log('🔍 initiatePayment - Order data:', {
+      order_id: orderData.order_id,
+      order_amount: orderData.order_amount,
+      order_currency: orderData.order_currency,
+      amount_in_rupees: orderData.order_amount / 100
+    })
+
     // Load Razorpay script
     const scriptLoaded = await loadRazorpayScript()
     if (!scriptLoaded) {
@@ -185,11 +196,13 @@ export const initiatePayment = async (
 
     // Create Razorpay order
     const razorpayOrder = await createRazorpayOrder(
-      orderData.order_amount,
+      orderData.order_amount,  // This is already in paise from CheckoutModal
       orderData.order_currency,
       orderData.order_id,
       orderData.customer_details
     )
+
+    console.log('🔍 Razorpay order response:', razorpayOrder)
 
     // Save order to database
     await saveOrderToDatabase(

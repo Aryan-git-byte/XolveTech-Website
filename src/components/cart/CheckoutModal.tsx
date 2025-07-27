@@ -100,6 +100,11 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose })
         }
       }
 
+      // Debug logging
+      console.log('🔍 Frontend Debug - Cart total (₹):', total)
+      console.log('🔍 Frontend Debug - Sending amount (paise):', total * 100)
+      console.log('🔍 Frontend Debug - Payment order details:', paymentOrderDetails)
+
       const shippingDetails = {
         ...orderData,
         name: sanitizeInput(orderData.name),

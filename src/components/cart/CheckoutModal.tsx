@@ -70,7 +70,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose })
   const handleDetailsSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     
-    // Check if cart total is less than ₹500
+    // Check if cart total is less than ₹10
     if (total < 10) {
       setError('Minimum order value is ₹10. Please add more items to your cart.')
       return
@@ -90,7 +90,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose })
       
       const paymentOrderDetails = {
         order_id: orderId,
-        order_amount: total,
+        order_amount: total * 100, // Convert rupees to paise for Razorpay
         order_currency: 'INR',
         customer_details: {
           customer_id: user?.id || `guest_${Date.now()}`,

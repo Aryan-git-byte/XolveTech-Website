@@ -119,13 +119,17 @@ const createRazorpayOrder = async (
   // Debug logging to track the amount
   console.log('🔍 createRazorpayOrder - Amount being sent:', amount, 'paise (₹' + (amount/100) + ')')
   
+  const requestBody = {
+    order_amount: amount,  // FIXED: Use order_amount to match what edge function expects
+    order_currency: currency,  // FIXED: Use order_currency to match what edge function expects
+    receipt,
+    customer_details: customerDetails
+  };
+
+  console.log('🔍 Request body being sent to edge function:', JSON.stringify(requestBody, null, 2));
+  
   const { data, error } = await supabase.functions.invoke('create-razorpay-order', {
-    body: {
-      order_amount: amount,  // FIXED: Use order_amount to match what edge function expects
-      order_currency: currency,  // FIXED: Use order_currency to match what edge function expects
-      receipt,
-      customer_details: customerDetails
-    }
+    body: requestBody
   })
 
   if (error) {

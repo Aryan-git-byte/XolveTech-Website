@@ -117,10 +117,10 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose })
       const result = await initiatePayment(paymentOrderDetails, items, shippingDetails)
       
       if (result.success) {
-        // Payment successful - clear cart and redirect to success page
+        // Payment successful - clear cart and redirect to payment success page
         clearCart()
         onClose()
-        navigate(`/order-success?order_id=${result.orderId}`)
+        navigate(`/payment-success?order_id=${result.orderId}`)
       } else {
         setError(result.error || 'Payment gateway not configured')
       }

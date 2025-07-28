@@ -7,6 +7,7 @@ import { supabase } from '../lib/supabase'
 interface OrderDetails {
   id: string
   cf_order_id: string
+  payment_id?: string
   name: string
   email: string
   total_amount: number
@@ -24,7 +25,7 @@ export const PaymentSuccess: React.FC = () => {
   const [error, setError] = useState('')
 
   const orderId = searchParams.get('order_id')
-  const paymentId = searchParams.get('payment_id')
+  const paymentIdFromUrl = searchParams.get('payment_id')
 
   useEffect(() => {
     if (orderId) {
@@ -51,6 +52,17 @@ export const PaymentSuccess: React.FC = () => {
     } finally {
       setLoading(false)
     }
+  }
+
+  // Get the payment ID - prefer database value, fallback to URL param
+  const getPaymentId = () => {
+    if (orderDetails?.payment_id) {
+      return orderDetails.payment_id
+    }
+    if (paymentIdFromUrl && paymentIdFromUrl !== 'processing') {
+      return paymentIdFromUrl
+    }
+    return 'Processing...'
   }
 
   if (loading) {
@@ -113,7 +125,7 @@ export const PaymentSuccess: React.FC = () => {
                 </div>
                 <div>
                   <p className="text-sm text-gray-600">Payment ID</p>
-                  <p className="font-medium text-gray-900">{paymentId || 'Processing...'}</p>
+                  <p className="font-medium text-gray-900">{getPaymentId()}</p>
                 </div>
                 <div>
                   <p className="text-sm text-gray-600">Order Date</p>
@@ -126,6 +138,14 @@ export const PaymentSuccess: React.FC = () => {
                   <p className="font-medium text-green-600 text-lg">
                     ₹{orderDetails.total_amount}
                   </p>
+                </div>
+              </div>
+
+              {/* Payment Status Badge */}
+              <div className="mb-6">
+                <div className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                  <CheckCircle className="w-4 h-4 mr-2" />
+                  Payment Completed
                 </div>
               </div>
 

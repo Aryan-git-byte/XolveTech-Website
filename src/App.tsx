@@ -18,6 +18,7 @@ import { PrivacyPolicy } from './pages/PrivacyPolicy'
 import { CancellationRefundPolicy } from './pages/CancellationRefundPolicy'
 import { ShippingDeliveryPolicy } from './pages/ShippingDeliveryPolicy'
 import { OrderSuccess } from './pages/OrderSuccess'
+import { PaymentSuccess } from './pages/PaymentSuccess'
 import { AdminLogin } from './pages/admin/AdminLogin'
 import { AdminDashboard } from './pages/admin/AdminDashboard'
 import { TestOrder } from './pages/TestOrder'
@@ -61,6 +62,7 @@ function App() {
                 <Route path="/cancellation-refund" element={<CancellationRefundPolicy />} />
                 <Route path="/shipping-delivery" element={<ShippingDeliveryPolicy />} />
                 <Route path="/order-success" element={<OrderSuccess />} />
+                <Route path="/payment-success" element={<PaymentSuccess />} />
                 <Route path="/test-order" element={<TestOrder />} />
                 <Route path="/admin/login" element={<AdminLogin />} />
                 <Route

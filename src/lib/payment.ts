@@ -57,6 +57,7 @@ export interface PaymentResult {
   success: boolean
   error?: string
   orderId?: string
+  paymentData?: RazorpayResponse
 }
 
 export interface OrderData {
@@ -177,6 +178,28 @@ const saveOrderToDatabase = async (
   }
 }
 
+// Update order status after successful payment
+const updateOrderPaymentStatus = async (
+  orderId: string,
+  paymentData: RazorpayResponse
+) => {
+  const { error } = await supabase
+    .from('orders')
+    .update({
+      status: 'payment_completed',
+      payment_status: 'completed',
+      payment_id: paymentData.razorpay_payment_id,
+      payment_signature: paymentData.razorpay_signature,
+      updated_at: new Date().toISOString()
+    })
+    .eq('id', orderId)
+
+  if (error) {
+    console.error('Error updating order payment status:', error)
+    throw new Error('Failed to update order status')
+  }
+}
+
 // Razorpay payment initiation
 export const initiatePayment = async (
   orderData: OrderData,
@@ -226,13 +249,28 @@ export const initiatePayment = async (
         name: 'XolveTech',
         description: 'STEM Learning Kits',
         order_id: razorpayOrder.order_id,
-        handler: (response: RazorpayResponse) => {
-          console.log('Payment successful:', response)
-          // Payment completed successfully
-          resolve({
-            success: true,
-            orderId: orderData.order_id
-          })
+        handler: async (response: RazorpayResponse) => {
+          try {
+            console.log('Payment successful:', response)
+            
+            // Update order status in database
+            await updateOrderPaymentStatus(orderData.order_id, response)
+            
+            // Payment completed successfully
+            resolve({
+              success: true,
+              orderId: orderData.order_id,
+              paymentData: response
+            })
+          } catch (error) {
+            console.error('Error updating order after payment:', error)
+            // Still resolve as success since payment was completed
+            resolve({
+              success: true,
+              orderId: orderData.order_id,
+              paymentData: response
+            })
+          }
         },
         prefill: {
           name: orderData.customer_details.customer_name,

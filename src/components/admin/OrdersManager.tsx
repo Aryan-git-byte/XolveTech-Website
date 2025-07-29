@@ -225,87 +225,116 @@ export const OrdersManager: React.FC = () => {
         >
           <div className="space-y-4">
             <div className="border-b pb-4">
-              <h3 className="text-lg font-semibold mb-2">Product Information</h3>
+              <h3 className="text-lg font-semibold mb-2 text-gray-900">Product Information</h3>
               {selectedOrder.cart_items ? (
                 <div className="space-y-3">
                   {selectedOrder.cart_items.map((item: any, index: number) => (
                     <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                       <div>
                         <p className="font-medium text-gray-900">{item.product.title}</p>
-                        <p className="text-sm text-gray-600">Quantity: {item.quantity}</p>
-                        <p className="text-sm text-gray-600">Price: ₹{item.product.price}</p>
+                        <p className="text-sm text-gray-700">Quantity: {item.quantity}</p>
+                        <p className="text-sm text-gray-700">Price: ₹{item.product.price}</p>
                       </div>
                       <p className="font-bold text-blue-600">₹{item.product.price * item.quantity}</p>
                     </div>
                   ))}
                   <div className="border-t pt-2 flex justify-between font-bold text-lg">
-                    <span>Total:</span>
+                    <span className="text-gray-900">Total:</span>
                     <span className="text-blue-600">₹{selectedOrder.total_amount}</span>
                   </div>
                 </div>
               ) : (
                 <>
                   <p className="text-gray-900 font-medium">{selectedOrder.product?.title}</p>
-                  <p className="text-gray-600">{selectedOrder.product?.description}</p>
+                  <p className="text-gray-700">{selectedOrder.product?.description}</p>
                   <p className="text-2xl font-bold text-blue-600 mt-2">₹{selectedOrder.product?.price}</p>
                 </>
               )}
             </div>
             
             <div className="border-b pb-4">
-              <h3 className="text-lg font-semibold mb-2">Customer Information</h3>
-              <p><strong>Name:</strong> <span dangerouslySetInnerHTML={{ __html: sanitizeText(selectedOrder.name) }} /></p>
-              {selectedOrder.email && (
-                <p><strong>Email:</strong> <span dangerouslySetInnerHTML={{ __html: sanitizeText(selectedOrder.email) }} /></p>
-              )}
-              <p><strong>Contact:</strong> <span dangerouslySetInnerHTML={{ __html: sanitizeText(selectedOrder.contact) }} /></p>
-              <p><strong>Address:</strong> <span dangerouslySetInnerHTML={{ __html: sanitizeText(selectedOrder.address) }} /></p>
-              {selectedOrder.shipping_details?.notes && (
-                <p><strong>Notes:</strong> <span dangerouslySetInnerHTML={{ __html: sanitizeText(selectedOrder.shipping_details.notes) }} /></p>
-              )}
+              <h3 className="text-lg font-semibold mb-2 text-gray-900">Customer Information</h3>
+              <div className="space-y-2">
+                <p className="text-gray-900">
+                  <span className="font-semibold text-gray-800">Name:</span>{' '}
+                  <span className="text-gray-800" dangerouslySetInnerHTML={{ __html: sanitizeText(selectedOrder.name) }} />
+                </p>
+                {selectedOrder.email && (
+                  <p className="text-gray-900">
+                    <span className="font-semibold text-gray-800">Email:</span>{' '}
+                    <span className="text-gray-800" dangerouslySetInnerHTML={{ __html: sanitizeText(selectedOrder.email) }} />
+                  </p>
+                )}
+                <p className="text-gray-900">
+                  <span className="font-semibold text-gray-800">Contact:</span>{' '}
+                  <span className="text-gray-800" dangerouslySetInnerHTML={{ __html: sanitizeText(selectedOrder.contact) }} />
+                </p>
+                <p className="text-gray-900">
+                  <span className="font-semibold text-gray-800">Address:</span>{' '}
+                  <span className="text-gray-800" dangerouslySetInnerHTML={{ __html: sanitizeText(selectedOrder.address) }} />
+                </p>
+                {selectedOrder.shipping_details?.notes && (
+                  <p className="text-gray-900">
+                    <span className="font-semibold text-gray-800">Notes:</span>{' '}
+                    <span className="text-gray-800" dangerouslySetInnerHTML={{ __html: sanitizeText(selectedOrder.shipping_details.notes) }} />
+                  </p>
+                )}
+              </div>
             </div>
             
             {selectedOrder.payment_status && (
               <div className="border-b pb-4">
-                <h3 className="text-lg font-semibold mb-2">Payment Information</h3>
-                <p><strong>Payment Status:</strong> 
-                  <span className={`ml-2 px-2 py-1 text-xs rounded-full ${
-                    selectedOrder.payment_status === 'completed' ? 'bg-green-100 text-green-800' :
-                    selectedOrder.payment_status === 'failed' ? 'bg-red-100 text-red-800' :
-                    'bg-yellow-100 text-yellow-800'
-                  }`}>
-                    {selectedOrder.payment_status}
-                  </span>
-                </p>
-                {selectedOrder.payment_amount && (
-                  <p><strong>Payment Amount:</strong> ₹{selectedOrder.payment_amount}</p>
-                )}
-                {selectedOrder.payment_method && (
-                  <p><strong>Payment Method:</strong> {selectedOrder.payment_method}</p>
-                )}
-                {selectedOrder.cf_order_id && (
-                  <p><strong>Cashfree Order ID:</strong> {selectedOrder.cf_order_id}</p>
-                )}
-                <p className="text-sm text-gray-600 mt-2">
-                  <strong>Note:</strong> Amount includes kit price, packaging, and shipping. No additional charges.
-                </p>
+                <h3 className="text-lg font-semibold mb-2 text-gray-900">Payment Information</h3>
+                <div className="space-y-2">
+                  <p className="text-gray-900">
+                    <span className="font-semibold text-gray-800">Payment Status:</span>
+                    <span className={`ml-2 px-2 py-1 text-xs rounded-full ${
+                      selectedOrder.payment_status === 'completed' ? 'bg-green-100 text-green-800' :
+                      selectedOrder.payment_status === 'failed' ? 'bg-red-100 text-red-800' :
+                      'bg-yellow-100 text-yellow-800'
+                    }`}>
+                      {selectedOrder.payment_status}
+                    </span>
+                  </p>
+                  {selectedOrder.payment_amount && (
+                    <p className="text-gray-900">
+                      <span className="font-semibold text-gray-800">Payment Amount:</span>{' '}
+                      <span className="text-gray-800">₹{selectedOrder.payment_amount}</span>
+                    </p>
+                  )}
+                  {selectedOrder.payment_method && (
+                    <p className="text-gray-900">
+                      <span className="font-semibold text-gray-800">Payment Method:</span>{' '}
+                      <span className="text-gray-800">{selectedOrder.payment_method}</span>
+                    </p>
+                  )}
+                  {selectedOrder.cf_order_id && (
+                    <p className="text-gray-900">
+                      <span className="font-semibold text-gray-800">Cashfree Order ID:</span>{' '}
+                      <span className="text-gray-800">{selectedOrder.cf_order_id}</span>
+                    </p>
+                  )}
+                  <p className="text-sm text-gray-700 mt-2 bg-blue-50 p-2 rounded">
+                    <span className="font-semibold text-gray-800">Note:</span> Amount includes kit price, packaging, and shipping. No additional charges.
+                  </p>
+                </div>
               </div>
             )}
             
             <div>
-              <h3 className="text-lg font-semibold mb-2">Order Status</h3>
+              <h3 className="text-lg font-semibold mb-2 text-gray-900">Order Status</h3>
               <div className="flex items-center space-x-2">
                 <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(selectedOrder.status)}`}>
                   {getStatusIcon(selectedOrder.status)}
                   <span className="ml-1">{selectedOrder.status}</span>
                 </span>
-                <span className="text-sm text-gray-500">
+                <span className="text-sm text-gray-700">
                   Placed on {new Date(selectedOrder.created_at).toLocaleDateString()}
                 </span>
               </div>
             </div>
             
-            <div className="flex space-x-3">
+            <div className="flex space-x-3 pt-4">
               <Button
                 onClick={() => {
                   setIsModalOpen(false)

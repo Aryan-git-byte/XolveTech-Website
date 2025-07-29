@@ -273,6 +273,12 @@ export const OrdersManager: React.FC = () => {
                   <span className="font-semibold text-gray-800">Address:</span>{' '}
                   <span className="text-gray-800" dangerouslySetInnerHTML={{ __html: sanitizeText(selectedOrder.address) }} />
                 </p>
+                {selectedOrder.pincode && (
+                  <p className="text-gray-900">
+                    <span className="font-semibold text-gray-800">Pincode:</span>{' '}
+                    <span className="text-gray-800">{selectedOrder.pincode}</span>
+                  </p>
+                )}
                 {selectedOrder.shipping_details?.notes && (
                   <p className="text-gray-900">
                     <span className="font-semibold text-gray-800">Notes:</span>{' '}

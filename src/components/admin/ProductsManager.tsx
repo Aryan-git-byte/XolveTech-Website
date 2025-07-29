@@ -25,7 +25,11 @@ export const ProductsManager: React.FC<ProductsManagerProps> = ({ onUpdate }) =>
     learning_outcomes: '',
     tools_required: '',
     assembly_steps: '',
-    image_url: ''
+    image_url: '',
+    on_offer: false,
+    discount_type: 'flat' as 'flat' | 'percentage',
+    discount_value: '',
+    discount_expiry_date: ''
   })
 
   useEffect(() => {
@@ -48,6 +52,20 @@ export const ProductsManager: React.FC<ProductsManagerProps> = ({ onUpdate }) =>
     }
   }
 
+  // Calculate final price for preview
+  const calculateFinalPrice = () => {
+    const originalPrice = parseFloat(formData.price) || 0
+    const discountValue = parseFloat(formData.discount_value) || 0
+    
+    if (!formData.on_offer || !discountValue) return originalPrice
+    
+    if (formData.discount_type === 'flat') {
+      return Math.max(0, originalPrice - discountValue)
+    } else {
+      return originalPrice * (1 - discountValue / 100)
+    }
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     
@@ -60,7 +78,11 @@ export const ProductsManager: React.FC<ProductsManagerProps> = ({ onUpdate }) =>
       learning_outcomes: formData.learning_outcomes.split('\n').filter(Boolean),
       tools_required: formData.tools_required.split('\n').filter(Boolean),
       assembly_steps: formData.assembly_steps,
-      image_url: formData.image_url || null
+      image_url: formData.image_url || null,
+      on_offer: formData.on_offer,
+      discount_type: formData.on_offer ? formData.discount_type : null,
+      discount_value: formData.on_offer && formData.discount_value ? parseFloat(formData.discount_value) : null,
+      discount_expiry_date: formData.on_offer && formData.discount_expiry_date ? formData.discount_expiry_date : null
     }
 
     try {
@@ -99,7 +121,11 @@ export const ProductsManager: React.FC<ProductsManagerProps> = ({ onUpdate }) =>
       learning_outcomes: product.learning_outcomes?.join('\n') || '',
       tools_required: product.tools_required?.join('\n') || '',
       assembly_steps: product.assembly_steps || '',
-      image_url: product.image_url || ''
+      image_url: product.image_url || '',
+      on_offer: product.on_offer || false,
+      discount_type: product.discount_type || 'flat',
+      discount_value: product.discount_value?.toString() || '',
+      discount_expiry_date: product.discount_expiry_date ? product.discount_expiry_date.split('T')[0] : ''
     })
     setIsModalOpen(true)
   }
@@ -132,7 +158,11 @@ export const ProductsManager: React.FC<ProductsManagerProps> = ({ onUpdate }) =>
       learning_outcomes: '',
       tools_required: '',
       assembly_steps: '',
-      image_url: ''
+      image_url: '',
+      on_offer: false,
+      discount_type: 'flat',
+      discount_value: '',
+      discount_expiry_date: ''
     })
   }
 
@@ -187,7 +217,27 @@ export const ProductsManager: React.FC<ProductsManagerProps> = ({ onUpdate }) =>
                   className="text-gray-600 text-sm mb-2 line-clamp-2"
                   dangerouslySetInnerHTML={{ __html: sanitizeText(product.description) }}
                 />
-                <p className="text-xl font-bold text-blue-600 mb-3">₹{product.price}</p>
+                <div className="mb-3">
+                  {product.on_offer ? (
+                    <div>
+                      <p className="text-sm text-gray-500 line-through">₹{product.price}</p>
+                      <p className="text-xl font-bold text-blue-600">
+                        ₹{product.discount_type === 'flat' 
+                          ? Math.max(0, product.price - (product.discount_value || 0))
+                          : Math.round(product.price * (1 - (product.discount_value || 0) / 100))
+                        }
+                      </p>
+                      <span className="inline-block bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full">
+                        {product.discount_type === 'flat' 
+                          ? `Save ₹${product.discount_value}`
+                          : `-${product.discount_value}% Off`
+                        }
+                      </span>
+                    </div>
+                  ) : (
+                    <p className="text-xl font-bold text-blue-600">₹{product.price}</p>
+                  )}
+                </div>
                 <div className="flex space-x-2">
                   <Button
                     size="sm"
@@ -317,6 +367,74 @@ export const ProductsManager: React.FC<ProductsManagerProps> = ({ onUpdate }) =>
             onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
             placeholder="https://example.com/image.jpg"
           />
+          
+          {/* Discount Section */}
+          <div className="border-t pt-4">
+            <div className="flex items-center space-x-2 mb-4">
+              <input
+                type="checkbox"
+                id="on_offer"
+                checked={formData.on_offer}
+                onChange={(e) => setFormData({ ...formData, on_offer: e.target.checked })}
+                className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+              />
+              <label htmlFor="on_offer" className="text-sm font-medium text-gray-700">
+                Apply Discount
+              </label>
+            </div>
+            
+            {formData.on_offer && (
+              <div className="space-y-4 bg-blue-50 p-4 rounded-lg">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Discount Type
+                    </label>
+                    <select
+                      value={formData.discount_type}
+                      onChange={(e) => setFormData({ ...formData, discount_type: e.target.value as 'flat' | 'percentage' })}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                      <option value="flat">Flat ₹</option>
+                      <option value="percentage">Percentage %</option>
+                    </select>
+                  </div>
+                  
+                  <Input
+                    label="Discount Value"
+                    type="number"
+                    value={formData.discount_value}
+                    onChange={(e) => setFormData({ ...formData, discount_value: e.target.value })}
+                    placeholder={formData.discount_type === 'flat' ? '50' : '20'}
+                  />
+                </div>
+                
+                <Input
+                  label="Discount Expiry Date (Optional)"
+                  type="date"
+                  value={formData.discount_expiry_date}
+                  onChange={(e) => setFormData({ ...formData, discount_expiry_date: e.target.value })}
+                />
+                
+                {/* Price Preview */}
+                {formData.price && formData.discount_value && (
+                  <div className="bg-white p-3 rounded-md border">
+                    <h4 className="text-sm font-medium text-gray-700 mb-2">Price Preview:</h4>
+                    <div className="flex items-center space-x-3">
+                      <span className="text-sm text-gray-500 line-through">₹{formData.price}</span>
+                      <span className="text-lg font-bold text-blue-600">₹{Math.round(calculateFinalPrice())}</span>
+                      <span className="text-xs bg-red-100 text-red-800 px-2 py-1 rounded-full">
+                        {formData.discount_type === 'flat' 
+                          ? `Save ₹${formData.discount_value}`
+                          : `-${formData.discount_value}% Off`
+                        }
+                      </span>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
           
           <div className="flex space-x-3">
             <Button type="submit">

@@ -344,7 +344,7 @@ export const OrdersManager: React.FC = () => {
                 Close
               </Button>
               <a
-                href={`https://wa.me/${selectedOrder.contact.replace(/\D/g, '')}?text=Hello ${selectedOrder.name}! Your order for ${selectedOrder.product?.title} has been updated.`}
+                href={`https://wa.me/+91${selectedOrder.contact.replace(/\D/g, '')}?text=Hello ${selectedOrder.name}! Your order for ${selectedOrder.product?.title} has been updated.`}
                 className="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
                 target="_blank"
                 rel="noopener noreferrer"

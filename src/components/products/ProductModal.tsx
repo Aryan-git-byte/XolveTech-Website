@@ -6,6 +6,25 @@ import { Package, Target, PenTool as Tool, Plus } from 'lucide-react'
 import { useCart } from '../../contexts/CartContext'
 import { sanitizeText } from '../../utils/sanitize'
 
+// Helper function to calculate days remaining
+const getDaysRemaining = (expiryDate: string): number => {
+  const today = new Date()
+  const expiry = new Date(expiryDate)
+  const diffTime = expiry.getTime() - today.getTime()
+  return Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+}
+
+// Helper function to calculate final price
+const calculateFinalPrice = (product: Product): number => {
+  if (!product.on_offer || !product.discount_value) return product.price
+  
+  if (product.discount_type === 'flat') {
+    return Math.max(0, product.price - product.discount_value)
+  } else {
+    return Math.round(product.price * (1 - product.discount_value / 100))
+  }
+}
+
 interface ProductModalProps {
   product: Product
   isOpen: boolean
@@ -45,11 +64,40 @@ export const ProductModal: React.FC<ProductModalProps> = ({ product, isOpen, onC
         )}
 
         {/* Price */}
-        <div className="text-center">
-          <span className="text-3xl font-bold text-blue-600">₹{product.price}</span>
-          <p className="text-sm text-gray-600 mt-1">
-            MRP includes kit price, packaging, and shipping. No extra charges.
-          </p>
+        <div className="text-center bg-gray-50 p-4 rounded-lg">
+          {product.on_offer ? (
+            <div>
+              <div className="flex items-center justify-center space-x-3 mb-2">
+                <span className="text-lg text-gray-500 line-through">₹{product.price}</span>
+                <span className="text-3xl font-bold text-blue-600">₹{calculateFinalPrice(product)}</span>
+              </div>
+              <div className="flex items-center justify-center space-x-2 mb-2">
+                <span className="inline-block bg-red-100 text-red-800 text-sm px-3 py-1 rounded-full font-medium">
+                  {product.discount_type === 'flat' 
+                    ? `Save ₹${product.discount_value}`
+                    : `-${product.discount_value}% Off`
+                  }
+                </span>
+              </div>
+              {product.discount_expiry_date && getDaysRemaining(product.discount_expiry_date) > 0 && (
+                <div className="mb-2">
+                  <span className="text-sm text-orange-600 bg-orange-100 px-3 py-1 rounded-full font-medium">
+                    ⏳ Offer ends in {getDaysRemaining(product.discount_expiry_date)} days!
+                  </span>
+                </div>
+              )}
+              <p className="text-sm text-gray-600">
+                MRP includes kit price, packaging, and shipping. No extra charges.
+              </p>
+            </div>
+          ) : (
+            <div>
+              <span className="text-3xl font-bold text-blue-600">₹{product.price}</span>
+              <p className="text-sm text-gray-600 mt-1">
+                MRP includes kit price, packaging, and shipping. No extra charges.
+              </p>
+            </div>
+          )}
         </div>
 
         {/* Description */}

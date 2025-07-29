@@ -10,6 +10,10 @@ export interface Product {
   image_url?: string
   category: string
   created_at: string
+  on_offer?: boolean
+  discount_type?: 'flat' | 'percentage'
+  discount_value?: number
+  discount_expiry_date?: string
 }
 
 export interface Order {

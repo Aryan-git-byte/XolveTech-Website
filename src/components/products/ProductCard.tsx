@@ -5,6 +5,25 @@ import { Eye, Plus, ShoppingCart } from 'lucide-react'
 import { useCart } from '../../contexts/CartContext'
 import { sanitizeText } from '../../utils/sanitize'
 
+// Helper function to calculate days remaining
+const getDaysRemaining = (expiryDate: string): number => {
+  const today = new Date()
+  const expiry = new Date(expiryDate)
+  const diffTime = expiry.getTime() - today.getTime()
+  return Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+}
+
+// Helper function to calculate final price
+const calculateFinalPrice = (product: Product): number => {
+  if (!product.on_offer || !product.discount_value) return product.price
+  
+  if (product.discount_type === 'flat') {
+    return Math.max(0, product.price - product.discount_value)
+  } else {
+    return Math.round(product.price * (1 - product.discount_value / 100))
+  }
+}
+
 interface ProductCardProps {
   product: Product
   onViewDetails: (product: Product) => void
@@ -52,9 +71,36 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onViewDetails
           className="text-gray-600 text-sm mb-3 line-clamp-2"
           dangerouslySetInnerHTML={{ __html: sanitizeText(product.description) }}
         />
-        <div className="flex items-center justify-between mb-3">
-          <span className="text-2xl font-bold text-blue-600">₹{product.price}</span>
-          <span className="text-xs text-gray-500">All inclusive</span>
+        <div className="mb-3">
+          {product.on_offer ? (
+            <div>
+              <div className="flex items-center space-x-2 mb-1">
+                <span className="text-sm text-gray-500 line-through">₹{product.price}</span>
+                <span className="text-2xl font-bold text-blue-600">₹{calculateFinalPrice(product)}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="inline-block bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full">
+                  {product.discount_type === 'flat' 
+                    ? `Save ₹${product.discount_value}`
+                    : `-${product.discount_value}% Off`
+                  }
+                </span>
+                <span className="text-xs text-gray-500">All inclusive</span>
+              </div>
+              {product.discount_expiry_date && getDaysRemaining(product.discount_expiry_date) > 0 && (
+                <div className="mt-1">
+                  <span className="text-xs text-orange-600 bg-orange-100 px-2 py-1 rounded-full">
+                    ⏳ Offer ends in {getDaysRemaining(product.discount_expiry_date)} days!
+                  </span>
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="flex items-center justify-between">
+              <span className="text-2xl font-bold text-blue-600">₹{product.price}</span>
+              <span className="text-xs text-gray-500">All inclusive</span>
+            </div>
+          )}
         </div>
         <div className="flex space-x-2">
           <Button

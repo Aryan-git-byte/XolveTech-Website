@@ -1,260 +1,274 @@
 import React, { useState } from 'react'
-import { Product } from '../../types'
 import { Modal } from '../ui/Modal'
 import { Button } from '../ui/Button'
-import { Package, Target, PenTool as Tool, Plus, ChevronLeft, ChevronRight } from 'lucide-react'
-import { useCart } from '../../contexts/CartContext'
-import { sanitizeText } from '../../utils/sanitize'
+import { Send, AlertCircle, CheckCircle, User, Mail, Package, MessageSquare } from 'lucide-react'
+import { supabase } from '../../lib/supabase' // Adjust import path as needed
 
-// Helper function to calculate days remaining
-const getDaysRemaining = (expiryDate: string): number => {
-  const today = new Date()
-  const expiry = new Date(expiryDate)
-  const diffTime = expiry.getTime() - today.getTime()
-  return Math.ceil(diffTime / (1000 * 60 * 60 * 24))
-}
-
-// Helper function to calculate final price
-const calculateFinalPrice = (product: Product): number => {
-  if (!product.on_offer || !product.discount_value) return product.price
-  
-  if (product.discount_type === 'flat') {
-    return Math.max(0, product.price - product.discount_value)
-  } else {
-    return Math.round(product.price * (1 - product.discount_value / 100))
-  }
-}
-
-interface ProductModalProps {
-  product: Product
+interface ComponentRequestModalProps {
   isOpen: boolean
   onClose: () => void
 }
 
-export const ProductModal: React.FC<ProductModalProps> = ({ product, isOpen, onClose }) => {
-  const { addToCart } = useCart()
-  const [currentImageIndex, setCurrentImageIndex] = useState(0)
+interface FormData {
+  name: string
+  email: string
+  component: string
+  reason: string
+}
 
-  const handleAddToCart = () => {
-    addToCart(product)
-    // Show a brief success message or animation
-    const button = document.activeElement as HTMLButtonElement
-    if (button) {
-      const originalText = button.textContent
-      button.textContent = 'Added!'
-      button.disabled = true
-      setTimeout(() => {
-        button.textContent = originalText
-        button.disabled = false
-      }, 1000)
-    }
-  }
+interface FormErrors {
+  name?: string
+  email?: string
+  component?: string
+}
 
-  const nextImage = () => {
-    if (product.image_urls && product.image_urls.length > 1) {
-      setCurrentImageIndex((prev) => 
-        prev === product.image_urls!.length - 1 ? 0 : prev + 1
-      )
-    }
-  }
+export const ComponentRequestModal: React.FC<ComponentRequestModalProps> = ({ isOpen, onClose }) => {
+  const [formData, setFormData] = useState<FormData>({
+    name: '',
+    email: '',
+    component: '',
+    reason: ''
+  })
+  
+  const [errors, setErrors] = useState<FormErrors>({})
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
+  const [submitMessage, setSubmitMessage] = useState('')
 
-  const prevImage = () => {
-    if (product.image_urls && product.image_urls.length > 1) {
-      setCurrentImageIndex((prev) => 
-        prev === 0 ? product.image_urls!.length - 1 : prev - 1
-      )
-    }
-  }
-
-  // Reset image index when modal closes or product changes
+  // Reset form when modal opens/closes
   React.useEffect(() => {
-    setCurrentImageIndex(0)
-  }, [product.id, isOpen])
+    if (isOpen) {
+      setFormData({ name: '', email: '', component: '', reason: '' })
+      setErrors({})
+      setSubmitStatus('idle')
+      setSubmitMessage('')
+    }
+  }, [isOpen])
+
+  const validateForm = (): boolean => {
+    const newErrors: FormErrors = {}
+
+    if (!formData.name.trim()) {
+      newErrors.name = 'Name is required'
+    }
+
+    if (!formData.email.trim()) {
+      newErrors.email = 'Email is required'
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = 'Please enter a valid email address'
+    }
+
+    if (!formData.component.trim()) {
+      newErrors.component = 'Component name is required'
+    }
+
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
+  }
+
+  const handleInputChange = (field: keyof FormData, value: string) => {
+    setFormData(prev => ({ ...prev, [field]: value }))
+    
+    // Clear error when user starts typing
+    if (errors[field as keyof FormErrors]) {
+      setErrors(prev => ({ ...prev, [field]: undefined }))
+    }
+    
+    // Clear submit status when user makes changes
+    if (submitStatus !== 'idle') {
+      setSubmitStatus('idle')
+      setSubmitMessage('')
+    }
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    
+    if (!validateForm()) return
+
+    setIsSubmitting(true)
+    setSubmitStatus('idle')
+
+    try {
+      const { error } = await supabase
+        .from('component_requests')
+        .insert([
+          {
+            name: formData.name.trim(),
+            email: formData.email.trim(),
+            component: formData.component.trim(),
+            reason: formData.reason.trim() || null,
+            created_at: new Date().toISOString()
+          }
+        ])
+
+      if (error) {
+        throw error
+      }
+
+      setSubmitStatus('success')
+      setSubmitMessage('Your component request has been submitted successfully! We\'ll review it and get back to you soon.')
+      
+      // Auto-close modal after success
+      setTimeout(() => {
+        onClose()
+      }, 2000)
+
+    } catch (error) {
+      console.error('Error submitting component request:', error)
+      setSubmitStatus('error')
+      setSubmitMessage('Failed to submit your request. Please try again or contact support.')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title={product.title}>
+    <Modal isOpen={isOpen} onClose={onClose} title="Request a Component">
       <div className="space-y-6">
-        {/* Product Images with Carousel */}
-        {product.image_urls && product.image_urls.length > 0 && (
-          <div className="relative bg-gray-200 rounded-lg overflow-hidden">
-            <div className="aspect-w-16 aspect-h-9">
-              <img
-                src={product.image_urls[currentImageIndex]}
-                alt={`${product.title} - Image ${currentImageIndex + 1}`}
-                className="w-full h-64 object-cover"
-              />
+        <div className="text-center text-gray-600">
+          <p>Can't find the component you need? Let us know what you're looking for and we'll consider adding it to our catalog.</p>
+        </div>
+
+        {/* Success/Error Messages */}
+        {submitStatus === 'success' && (
+          <div className="bg-green-50 border border-green-200 rounded-lg p-4 flex items-start space-x-3">
+            <CheckCircle className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
+            <div>
+              <p className="text-green-800 font-medium">Request Submitted!</p>
+              <p className="text-green-700 text-sm mt-1">{submitMessage}</p>
             </div>
-            
-            {/* Navigation arrows - only show if more than one image */}
-            {product.image_urls.length > 1 && (
-              <>
-                <button
-                  onClick={prevImage}
-                  className="absolute left-2 top-1/2 -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-70 text-white p-2 rounded-full transition-all"
-                  aria-label="Previous image"
-                >
-                  <ChevronLeft className="w-5 h-5" />
-                </button>
-                <button
-                  onClick={nextImage}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-70 text-white p-2 rounded-full transition-all"
-                  aria-label="Next image"
-                >
-                  <ChevronRight className="w-5 h-5" />
-                </button>
-                
-                {/* Image indicators */}
-                <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex space-x-2">
-                  {product.image_urls.map((_, index) => (
-                    <button
-                      key={index}
-                      onClick={() => setCurrentImageIndex(index)}
-                      className={`w-2 h-2 rounded-full transition-all ${
-                        index === currentImageIndex 
-                          ? 'bg-white' 
-                          : 'bg-white bg-opacity-50 hover:bg-opacity-75'
-                      }`}
-                      aria-label={`Go to image ${index + 1}`}
-                    />
-                  ))}
-                </div>
-                
-                {/* Image counter */}
-                <div className="absolute top-3 right-3 bg-black bg-opacity-60 text-white text-sm px-3 py-1 rounded-full">
-                  {currentImageIndex + 1} / {product.image_urls.length}
-                </div>
-              </>
+          </div>
+        )}
+
+        {submitStatus === 'error' && (
+          <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-start space-x-3">
+            <AlertCircle className="w-5 h-5 text-red-600 mt-0.5 flex-shrink-0" />
+            <div>
+              <p className="text-red-800 font-medium">Submission Failed</p>
+              <p className="text-red-700 text-sm mt-1">{submitMessage}</p>
+            </div>
+          </div>
+        )}
+
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Name Field */}
+          <div>
+            <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2 flex items-center">
+              <User className="w-4 h-4 mr-2 text-gray-500" />
+              Your Name *
+            </label>
+            <input
+              type="text"
+              id="name"
+              value={formData.name}
+              onChange={(e) => handleInputChange('name', e.target.value)}
+              className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                errors.name ? 'border-red-300 bg-red-50' : 'border-gray-300'
+              }`}
+              placeholder="Enter your full name"
+              disabled={isSubmitting}
+            />
+            {errors.name && (
+              <p className="mt-1 text-sm text-red-600">{errors.name}</p>
             )}
           </div>
-        )}
 
-        {/* Price */}
-        <div className="text-center bg-gray-50 p-4 rounded-lg">
-          {product.on_offer ? (
-            <div>
-              <div className="flex items-center justify-center space-x-3 mb-2">
-                <span className="text-lg text-gray-500 line-through">₹{product.price}</span>
-                <span className="text-3xl font-bold text-blue-600">₹{calculateFinalPrice(product)}</span>
-              </div>
-              <div className="flex items-center justify-center space-x-2 mb-2">
-                <span className="inline-block bg-red-100 text-red-800 text-sm px-3 py-1 rounded-full font-medium">
-                  {product.discount_type === 'flat' 
-                    ? `Save ₹${product.discount_value}`
-                    : `-${product.discount_value}% Off`
-                  }
-                </span>
-              </div>
-              {product.discount_expiry_date && getDaysRemaining(product.discount_expiry_date) > 0 && (
-                <div className="mb-2">
-                  <span className="text-sm text-orange-600 bg-orange-100 px-3 py-1 rounded-full font-medium">
-                    ⏳ Offer ends in {getDaysRemaining(product.discount_expiry_date)} days!
-                  </span>
-                </div>
-              )}
-              <p className="text-sm text-gray-600">
-                MRP includes kit price, packaging, and shipping. No extra charges.
-              </p>
-            </div>
-          ) : (
-            <div>
-              <span className="text-3xl font-bold text-blue-600">₹{product.price}</span>
-              <p className="text-sm text-gray-600 mt-1">
-                MRP includes kit price, packaging, and shipping. No extra charges.
-              </p>
-            </div>
-          )}
-        </div>
-
-        {/* Description */}
-        <div>
-          <h4 className="text-lg font-semibold mb-2">Description</h4>
-          <p 
-            className="text-gray-600"
-            dangerouslySetInnerHTML={{ __html: sanitizeText(product.description) }}
-          />
-        </div>
-
-        {/* Kit Contents */}
-        {product.kit_contents && product.kit_contents.length > 0 && (
+          {/* Email Field */}
           <div>
-            <h4 className="text-lg font-semibold mb-2 flex items-center">
-              <Package className="w-5 h-5 mr-2 text-blue-600" />
-              What's Included
-            </h4>
-            <ul className="space-y-1">
-              {product.kit_contents.map((item, index) => (
-                <li key={index} className="text-gray-600 flex items-center">
-                  <span className="w-2 h-2 bg-blue-600 rounded-full mr-2"></span>
-                  <span dangerouslySetInnerHTML={{ __html: sanitizeText(item) }} />
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-
-        {/* Learning Outcomes */}
-        {product.learning_outcomes && product.learning_outcomes.length > 0 && (
-          <div>
-            <h4 className="text-lg font-semibold mb-2 flex items-center">
-              <Target className="w-5 h-5 mr-2 text-green-600" />
-              Learning Outcomes
-            </h4>
-            <ul className="space-y-1">
-              {product.learning_outcomes.map((outcome, index) => (
-                <li key={index} className="text-gray-600 flex items-center">
-                  <span className="w-2 h-2 bg-green-600 rounded-full mr-2"></span>
-                  <span dangerouslySetInnerHTML={{ __html: sanitizeText(outcome) }} />
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-
-        {/* Tools Required */}
-        {product.tools_required && product.tools_required.length > 0 && (
-          <div>
-            <h4 className="text-lg font-semibold mb-2 flex items-center">
-              <Tool className="w-5 h-5 mr-2 text-orange-600" />
-              Tools Needed
-            </h4>
-            <p className="text-sm text-gray-500 mb-2">You'll need these common household items:</p>
-            <ul className="space-y-1">
-              {product.tools_required.map((tool, index) => (
-                <li key={index} className="text-gray-600 flex items-center">
-                  <span className="w-2 h-2 bg-orange-600 rounded-full mr-2"></span>
-                  <span dangerouslySetInnerHTML={{ __html: sanitizeText(tool) }} />
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-
-        {/* Assembly Steps */}
-        {product.assembly_steps && (
-          <div>
-            <h4 className="text-lg font-semibold mb-2">Basic Assembly Steps</h4>
-            <p 
-              className="text-gray-600"
-              dangerouslySetInnerHTML={{ __html: sanitizeText(product.assembly_steps) }}
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2 flex items-center">
+              <Mail className="w-4 h-4 mr-2 text-gray-500" />
+              Email Address *
+            </label>
+            <input
+              type="email"
+              id="email"
+              value={formData.email}
+              onChange={(e) => handleInputChange('email', e.target.value)}
+              className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                errors.email ? 'border-red-300 bg-red-50' : 'border-gray-300'
+              }`}
+              placeholder="Enter your email address"
+              disabled={isSubmitting}
             />
-            <p className="text-sm text-blue-600 mt-2">
-              📖 Detailed step-by-step instructions included in your 12-page guidebook
-            </p>
+            {errors.email && (
+              <p className="mt-1 text-sm text-red-600">{errors.email}</p>
+            )}
           </div>
-        )}
 
-        {/* Action Buttons */}
-        <div className="flex space-x-3">
-          <Button
-            onClick={handleAddToCart}
-            className="flex items-center space-x-2 bg-orange-600 hover:bg-orange-700"
-          >
-            <Plus className="w-4 h-4" />
-            <span>Add to Cart</span>
-          </Button>
-          <Button variant="outline" onClick={onClose}>
-            Close
-          </Button>
+          {/* Component Field */}
+          <div>
+            <label htmlFor="component" className="block text-sm font-medium text-gray-700 mb-2 flex items-center">
+              <Package className="w-4 h-4 mr-2 text-gray-500" />
+              Component Requested *
+            </label>
+            <input
+              type="text"
+              id="component"
+              value={formData.component}
+              onChange={(e) => handleInputChange('component', e.target.value)}
+              className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                errors.component ? 'border-red-300 bg-red-50' : 'border-gray-300'
+              }`}
+              placeholder="e.g., Arduino Uno, Servo Motor, LED Matrix"
+              disabled={isSubmitting}
+            />
+            {errors.component && (
+              <p className="mt-1 text-sm text-red-600">{errors.component}</p>
+            )}
+          </div>
+
+          {/* Reason Field (Optional) */}
+          <div>
+            <label htmlFor="reason" className="block text-sm font-medium text-gray-700 mb-2 flex items-center">
+              <MessageSquare className="w-4 h-4 mr-2 text-gray-500" />
+              Reason for Request (Optional)
+            </label>
+            <textarea
+              id="reason"
+              value={formData.reason}
+              onChange={(e) => handleInputChange('reason', e.target.value)}
+              rows={3}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+              placeholder="Tell us why you need this component or how you plan to use it..."
+              disabled={isSubmitting}
+            />
+          </div>
+
+          {/* Submit Button */}
+          <div className="flex space-x-3 pt-4">
+            <Button
+              type="submit"
+              disabled={isSubmitting || submitStatus === 'success'}
+              className="flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isSubmitting ? (
+                <>
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  <span>Submitting...</span>
+                </>
+              ) : (
+                <>
+                  <Send className="w-4 h-4" />
+                  <span>Submit Request</span>
+                </>
+              )}
+            </Button>
+            <Button 
+              type="button" 
+              variant="outline" 
+              onClick={onClose}
+              disabled={isSubmitting}
+            >
+              Cancel
+            </Button>
+          </div>
+        </form>
+
+        {/* Help Text */}
+        <div className="text-center text-sm text-gray-500 pt-4 border-t">
+          <p>We review all component requests and will email you when new components are available.</p>
         </div>
       </div>
     </Modal>

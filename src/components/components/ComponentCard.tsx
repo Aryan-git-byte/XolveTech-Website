@@ -29,7 +29,8 @@ interface ProductCardProps {
   onViewDetails: (product: Product) => void
 }
 
-export const ProductCard: React.FC<ProductCardProps> = ({ product, onViewDetails }) => {
+export const ComponentCard: React.FC<ComponentCardProps> = ({ component }) => {
+  
   const { addToCart } = useCart()
 
   const handleAddToCart = (e: React.MouseEvent) => {

@@ -25,7 +25,7 @@ export const ProductsManager: React.FC<ProductsManagerProps> = ({ onUpdate }) =>
     learning_outcomes: '',
     tools_required: '',
     assembly_steps: '',
-    image_url: '',
+    image_urls: '', // Changed from image_url to image_urls
     on_offer: false,
     discount_type: 'flat' as 'flat' | 'percentage',
     discount_value: '',
@@ -69,6 +69,12 @@ export const ProductsManager: React.FC<ProductsManagerProps> = ({ onUpdate }) =>
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     
+    // Convert newline-separated URLs to array
+    const imageUrls = formData.image_urls
+      .split('\n')
+      .map(url => url.trim())
+      .filter(url => url.length > 0)
+    
     const productData = {
       title: formData.title,
       description: formData.description,
@@ -78,7 +84,7 @@ export const ProductsManager: React.FC<ProductsManagerProps> = ({ onUpdate }) =>
       learning_outcomes: formData.learning_outcomes.split('\n').filter(Boolean),
       tools_required: formData.tools_required.split('\n').filter(Boolean),
       assembly_steps: formData.assembly_steps,
-      image_url: formData.image_url || null,
+      image_urls: imageUrls.length > 0 ? imageUrls : null, // Store as array
       on_offer: formData.on_offer,
       discount_type: formData.on_offer ? formData.discount_type : null,
       discount_value: formData.on_offer && formData.discount_value ? parseFloat(formData.discount_value) : null,
@@ -121,7 +127,7 @@ export const ProductsManager: React.FC<ProductsManagerProps> = ({ onUpdate }) =>
       learning_outcomes: product.learning_outcomes?.join('\n') || '',
       tools_required: product.tools_required?.join('\n') || '',
       assembly_steps: product.assembly_steps || '',
-      image_url: product.image_url || '',
+      image_urls: product.image_urls?.join('\n') || '', // Join array to newline-separated string
       on_offer: product.on_offer || false,
       discount_type: product.discount_type || 'flat',
       discount_value: product.discount_value?.toString() || '',
@@ -158,7 +164,7 @@ export const ProductsManager: React.FC<ProductsManagerProps> = ({ onUpdate }) =>
       learning_outcomes: '',
       tools_required: '',
       assembly_steps: '',
-      image_url: '',
+      image_urls: '', // Reset to empty string
       on_offer: false,
       discount_type: 'flat',
       discount_value: '',
@@ -201,12 +207,19 @@ export const ProductsManager: React.FC<ProductsManagerProps> = ({ onUpdate }) =>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {products.map((product) => (
             <div key={product.id} className="border border-gray-200 rounded-lg overflow-hidden">
-              {product.image_url && (
-                <img
-                  src={product.image_url}
-                  alt={product.title}
-                  className="w-full h-48 object-cover"
-                />
+              {product.image_urls && product.image_urls.length > 0 && (
+                <div className="relative">
+                  <img
+                    src={product.image_urls[0]} // Display first image
+                    alt={product.title}
+                    className="w-full h-48 object-cover"
+                  />
+                  {product.image_urls.length > 1 && (
+                    <div className="absolute top-2 right-2 bg-black bg-opacity-60 text-white text-xs px-2 py-1 rounded">
+                      +{product.image_urls.length - 1} more
+                    </div>
+                  )}
+                </div>
               )}
               <div className="p-4">
                 <h3 
@@ -361,12 +374,21 @@ export const ProductsManager: React.FC<ProductsManagerProps> = ({ onUpdate }) =>
             />
           </div>
           
-          <Input
-            label="Image URL (optional)"
-            value={formData.image_url}
-            onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
-            placeholder="https://example.com/image.jpg"
-          />
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Product Images (one URL per line)
+            </label>
+            <textarea
+              value={formData.image_urls}
+              onChange={(e) => setFormData({ ...formData, image_urls: e.target.value })}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              rows={4}
+              placeholder="https://example.com/image1.jpg&#10;https://example.com/image2.jpg&#10;https://example.com/image3.jpg"
+            />
+            <p className="text-xs text-gray-500 mt-1">
+              Add multiple image URLs, one per line. The first image will be used as the main product image.
+            </p>
+          </div>
           
           {/* Discount Section */}
           <div className="border-t pt-4">

@@ -1,35 +1,40 @@
 import React from 'react'
-import { Component } from '../../types'
+import { Product } from '../../types'
 import { Button } from '../ui/Button'
-import { Plus, ShoppingCart } from 'lucide-react'
+import { Eye, Plus, ShoppingCart } from 'lucide-react'
 import { useCart } from '../../contexts/CartContext'
 import { sanitizeText } from '../../utils/sanitize'
 
-interface ComponentCardProps {
-  component: Component
+// Helper function to calculate days remaining
+const getDaysRemaining = (expiryDate: string): number => {
+  const today = new Date()
+  const expiry = new Date(expiryDate)
+  const diffTime = expiry.getTime() - today.getTime()
+  return Math.ceil(diffTime / (1000 * 60 * 60 * 24))
 }
 
-export const ComponentCard: React.FC<ComponentCardProps> = ({ component }) => {
+// Helper function to calculate final price
+const calculateFinalPrice = (product: Product): number => {
+  if (!product.on_offer || !product.discount_value) return product.price
+  
+  if (product.discount_type === 'flat') {
+    return Math.max(0, product.price - product.discount_value)
+  } else {
+    return Math.round(product.price * (1 - product.discount_value / 100))
+  }
+}
+
+interface ProductCardProps {
+  product: Product
+  onViewDetails: (product: Product) => void
+}
+
+export const ProductCard: React.FC<ProductCardProps> = ({ product, onViewDetails }) => {
   const { addToCart } = useCart()
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.stopPropagation()
-    // Convert component to product format for cart compatibility
-    const productFormat = {
-      id: component.id,
-      title: component.name,
-      description: component.description,
-      price: component.price,
-      category: component.category,
-      kit_contents: [],
-      learning_outcomes: [],
-      tools_required: [],
-      assembly_steps: '',
-      image_url: component.image_url,
-      created_at: component.created_at
-    }
-    
-    addToCart(productFormat)
+    addToCart(product)
     
     // Show brief success feedback
     const button = e.currentTarget as HTMLButtonElement
@@ -44,13 +49,20 @@ export const ComponentCard: React.FC<ComponentCardProps> = ({ component }) => {
 
   return (
     <div className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow group">
-      <div className="aspect-w-16 aspect-h-9 bg-gray-200 rounded-t-lg overflow-hidden">
-        {component.image_url ? (
-          <img
-            src={component.image_url}
-            alt={component.name}
-            className="w-full h-48 object-cover group-hover:scale-105 transition-transform"
-          />
+      <div className="aspect-w-16 aspect-h-9 bg-gray-200 rounded-t-lg overflow-hidden relative">
+        {product.image_urls && product.image_urls.length > 0 ? (
+          <>
+            <img
+              src={product.image_urls[0]} // Display first image
+              alt={product.title}
+              className="w-full h-48 object-cover group-hover:scale-105 transition-transform"
+            />
+            {product.image_urls.length > 1 && (
+              <div className="absolute top-2 right-2 bg-black bg-opacity-60 text-white text-xs px-2 py-1 rounded">
+                +{product.image_urls.length - 1} more
+              </div>
+            )}
+          </>
         ) : (
           <div className="w-full h-48 bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center">
             <ShoppingCart className="w-12 h-12 text-blue-400" />
@@ -58,44 +70,64 @@ export const ComponentCard: React.FC<ComponentCardProps> = ({ component }) => {
         )}
       </div>
       <div className="p-4">
-        <div className="flex items-center justify-between mb-2">
-          <h3 
-            className="text-lg font-semibold text-gray-900"
-            dangerouslySetInnerHTML={{ __html: sanitizeText(component.name) }}
-          />
-          <span className={`px-2 py-1 text-xs rounded-full ${
-            component.stock_status 
-              ? 'bg-green-100 text-green-800' 
-              : 'bg-red-100 text-red-800'
-          }`}>
-            {component.stock_status ? 'In Stock' : 'Out of Stock'}
-          </span>
-        </div>
-        
+        <h3 
+          className="text-lg font-semibold text-gray-900 mb-2"
+          dangerouslySetInnerHTML={{ __html: sanitizeText(product.title) }}
+        />
         <p 
           className="text-gray-600 text-sm mb-3 line-clamp-2"
-          dangerouslySetInnerHTML={{ __html: sanitizeText(component.description) }}
+          dangerouslySetInnerHTML={{ __html: sanitizeText(product.description) }}
         />
-        
-        <div className="flex items-center justify-between mb-3">
-          <span className="text-2xl font-bold text-blue-600">₹{component.price}</span>
-          <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
-            {component.category}
-          </span>
+        <div className="mb-3">
+          {product.on_offer ? (
+            <div>
+              <div className="flex items-center space-x-2 mb-1">
+                <span className="text-sm text-gray-500 line-through">₹{product.price}</span>
+                <span className="text-2xl font-bold text-blue-600">₹{calculateFinalPrice(product)}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="inline-block bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full">
+                  {product.discount_type === 'flat' 
+                    ? `Save ₹${product.discount_value}`
+                    : `-${product.discount_value}% Off`
+                  }
+                </span>
+                <span className="text-xs text-gray-500">All inclusive</span>
+              </div>
+              {product.discount_expiry_date && getDaysRemaining(product.discount_expiry_date) > 0 && (
+                <div className="mt-1">
+                  <span className="text-xs text-orange-600 bg-orange-100 px-2 py-1 rounded-full">
+                    ⏳ Offer ends in {getDaysRemaining(product.discount_expiry_date)} days!
+                  </span>
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="flex items-center justify-between">
+              <span className="text-2xl font-bold text-blue-600">₹{product.price}</span>
+              <span className="text-xs text-gray-500">All inclusive</span>
+            </div>
+          )}
         </div>
-        
-        <Button
-          onClick={handleAddToCart}
-          disabled={!component.stock_status}
-          className={`w-full flex items-center justify-center space-x-2 ${
-            component.stock_status 
-              ? 'bg-orange-600 hover:bg-orange-700' 
-              : 'bg-gray-400 cursor-not-allowed'
-          }`}
-        >
-          <Plus className="w-4 h-4" />
-          <span>{component.stock_status ? 'Add to Cart' : 'Out of Stock'}</span>
-        </Button>
+        <div className="flex space-x-2">
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => onViewDetails(product)}
+            className="flex items-center space-x-1 flex-1"
+          >
+            <Eye className="w-4 h-4" />
+            <span>View Details</span>
+          </Button>
+          <Button
+            size="sm"
+            onClick={handleAddToCart}
+            className="flex items-center space-x-1 bg-orange-600 hover:bg-orange-700"
+          >
+            <Plus className="w-4 h-4" />
+            <span>Add to Cart</span>
+          </Button>
+        </div>
       </div>
     </div>
   )

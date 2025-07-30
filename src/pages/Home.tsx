@@ -61,38 +61,71 @@ export const Home: React.FC = () => {
         <script type="application/ld+json">
           {JSON.stringify({
             "@context": "https://schema.org",
-            "@type": "Organization",
-            "name": "XolveTech",
-            "url": "https://xolvetech.com",
-            "logo": "https://xolvetech.com/logo.png",
-            "description": "Leading STEM education company providing affordable Arduino, electronics, and programming learning kits for students across India",
-            "foundingDate": "2024",
-            "foundingLocation": {
-              "@type": "Place",
-              "address": {
-                "@type": "PostalAddress",
-                "addressLocality": "Patna",
-                "addressRegion": "Bihar",
-                "addressCountry": "IN"
+            "@graph": [
+              {
+                "@type": "Organization",
+                "@id": "https://xolvetech.com/#organization",
+                "name": "XolveTech",
+                "url": "https://xolvetech.com",
+                "logo": "https://xolvetech.com/logo.png",
+                "description": "Leading STEM education company providing affordable Arduino, electronics, and programming learning kits for students across India",
+                "foundingDate": "2024",
+                "foundingLocation": {
+                  "@type": "Place",
+                  "address": {
+                    "@type": "PostalAddress",
+                    "addressLocality": "Patna",
+                    "addressRegion": "Bihar",
+                    "addressCountry": "IN"
+                  }
+                },
+                "contactPoint": {
+                  "@type": "ContactPoint",
+                  "telephone": "+91-9386387397",
+                  "contactType": "customer service",
+                  "availableLanguage": ["English", "Hindi"]
+                },
+                "sameAs": [
+                  "https://www.instagram.com/xolvetech",
+                  "https://www.linkedin.com/company/xolvetech"
+                ],
+                "offers": {
+                  "@type": "AggregateOffer",
+                  "priceCurrency": "INR",
+                  "lowPrice": "299",
+                  "highPrice": "2999",
+                  "availability": "https://schema.org/InStock"
+                }
+              },
+              {
+                "@type": "WebSite",
+                "@id": "https://xolvetech.com/#website",
+                "url": "https://xolvetech.com",
+                "name": "XolveTech",
+                "description": "Arduino STEM Learning Kits and Electronics Education Solutions",
+                "publisher": {
+                  "@id": "https://xolvetech.com/#organization"
+                },
+                "potentialAction": {
+                  "@type": "SearchAction",
+                  "target": "https://xolvetech.com/products?search={search_term_string}",
+                  "query-input": "required name=search_term_string"
+                }
+              },
+              {
+                "@type": "WebPage",
+                "@id": "https://xolvetech.com/#webpage",
+                "url": "https://xolvetech.com",
+                "name": "XolveTech - Best STEM Learning Kits India",
+                "isPartOf": {
+                  "@id": "https://xolvetech.com/#website"
+                },
+                "about": {
+                  "@id": "https://xolvetech.com/#organization"
+                },
+                "description": "Buy affordable STEM learning kits in India. Arduino electronics, programming, robotics kits for students. DIY projects, hands-on learning, Bihar innovation."
               }
-            },
-            "contactPoint": {
-              "@type": "ContactPoint",
-              "telephone": "+91-9386387397",
-              "contactType": "customer service",
-              "availableLanguage": ["English", "Hindi"]
-            },
-            "sameAs": [
-              "https://www.instagram.com/xolvetech",
-              "https://www.linkedin.com/company/xolvetech"
-            ],
-            "offers": {
-              "@type": "AggregateOffer",
-              "priceCurrency": "INR",
-              "lowPrice": "299",
-              "highPrice": "2999",
-              "availability": "https://schema.org/InStock"
-            }
+            ]
           })}
         </script>
       </Helmet>
@@ -183,14 +216,12 @@ export const Home: React.FC = () => {
               <div
                 key={index}
                 className="bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow group cursor-pointer"
-                itemScope
-                itemType="https://schema.org/Product"
               >
                 <div className="flex items-center justify-center w-16 h-16 bg-gray-100 rounded-lg mb-4 group-hover:bg-blue-50 transition-colors">
                   {category.icon}
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2" itemProp="name">{category.title}</h3>
-                <p className="text-gray-600" itemProp="description">{category.description}</p>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">{category.title}</h3>
+                <p className="text-gray-600">{category.description}</p>
               </div>
             ))}
           </div>

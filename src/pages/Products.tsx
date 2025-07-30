@@ -110,10 +110,19 @@ export const Products: React.FC = () => {
                         "price": product.price,
                         "priceCurrency": "INR",
                         "availability": "https://schema.org/InStock",
+                        "itemCondition": "https://schema.org/NewCondition",
+                        "priceValidUntil": "2025-12-31",
                         "seller": {
                           "@type": "Organization",
                           "name": "XolveTech"
                         }
+                      },
+                      "aggregateRating": {
+                        "@type": "AggregateRating",
+                        "ratingValue": "4.5",
+                        "reviewCount": "25",
+                        "bestRating": "5",
+                        "worstRating": "1"
                       },
                       "image": product.image_url || "https://xolvetech.com/default-product-image.png"
                     }

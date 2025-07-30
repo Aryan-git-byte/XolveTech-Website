@@ -81,26 +81,73 @@ export const Products: React.FC = () => {
         <script type="application/ld+json">
           {JSON.stringify({
             "@context": "https://schema.org",
-            "@type": "CollectionPage",
-            "name": "Arduino STEM Learning Kits",
-            "description": "Complete collection of Arduino, electronics, programming, and robotics STEM learning kits for students in India",
-            "url": "https://xolvetech.com/products",
-            "mainEntity": {
-              "@type": "ItemList",
-              "numberOfItems": products.length,
-              "itemListElement": products.map((product, index) => ({
-                "@type": "Product",
-                "position": index + 1,
-                "name": product.title,
-                "description": product.description,
-                "offers": {
-                  "@type": "Offer",
-                  "price": product.price,
-                  "priceCurrency": "INR",
-                  "availability": "https://schema.org/InStock"
+            "@graph": [
+              {
+                "@type": "CollectionPage",
+                "@id": "https://xolvetech.com/products",
+                "name": "Arduino STEM Learning Kits",
+                "description": "Complete collection of Arduino, electronics, programming, and robotics STEM learning kits for students in India",
+                "url": "https://xolvetech.com/products",
+                "mainEntity": {
+                  "@type": "ItemList",
+                  "numberOfItems": products.length,
+                  "itemListElement": products.map((product, index) => ({
+                    "@type": "ListItem",
+                    "position": index + 1,
+                    "item": {
+                      "@type": "Product",
+                      "@id": `https://xolvetech.com/products/${product.id}`,
+                      "name": product.title,
+                      "description": product.description,
+                      "category": product.category,
+                      "brand": {
+                        "@type": "Brand",
+                        "name": "XolveTech"
+                      },
+                      "offers": {
+                        "@type": "Offer",
+                        "url": `https://xolvetech.com/products/${product.id}`,
+                        "price": product.price,
+                        "priceCurrency": "INR",
+                        "availability": "https://schema.org/InStock",
+                        "seller": {
+                          "@type": "Organization",
+                          "name": "XolveTech"
+                        }
+                      },
+                      "image": product.image_url || "https://xolvetech.com/default-product-image.png"
+                    }
+                  }))
                 }
-              }))
-            }
+              },
+              {
+                "@type": "Organization",
+                "@id": "https://xolvetech.com/#organization",
+                "name": "XolveTech",
+                "url": "https://xolvetech.com",
+                "description": "Leading provider of Arduino STEM learning kits and electronics education solutions in India",
+                "sameAs": [
+                  "https://www.facebook.com/xolvetech",
+                  "https://www.twitter.com/xolvetech",
+                  "https://www.instagram.com/xolvetech"
+                ]
+              },
+              {
+                "@type": "WebSite",
+                "@id": "https://xolvetech.com/#website",
+                "url": "https://xolvetech.com",
+                "name": "XolveTech",
+                "description": "Arduino STEM Learning Kits and Electronics Education Solutions",
+                "publisher": {
+                  "@id": "https://xolvetech.com/#organization"
+                },
+                "potentialAction": {
+                  "@type": "SearchAction",
+                  "target": "https://xolvetech.com/products?search={search_term_string}",
+                  "query-input": "required name=search_term_string"
+                }
+              }
+            ]
           })}
         </script>
       </Helmet>

@@ -110,6 +110,30 @@ export const sanitizeInput = (input: string): string => {
   return input.trim().replace(/[<>\"'&]/g, '')
 }
 
+// Calculate delivery charge based on simplified logic
+export const calculateDeliveryCharge = (cartItems: any[]): number => {
+  // If cart is empty, no delivery charge
+  if (cartItems.length === 0) {
+    return 0
+  }
+
+  // Check if any item in the cart is a kit
+  for (const item of cartItems) {
+    const product = item.product
+    
+    // Check if item is a kit (has kit_contents with elements or assembly_steps with content)
+    if (
+      (product.kit_contents && product.kit_contents.length > 0) ||
+      (product.assembly_steps && product.assembly_steps.trim().length > 0)
+    ) {
+      return 0 // Free delivery for kits
+    }
+  }
+
+  // If we reach here, cart contains only components
+  return 80
+}
+
 // Create Razorpay order via Supabase Edge Function
 const createRazorpayOrder = async (
   amount: number,

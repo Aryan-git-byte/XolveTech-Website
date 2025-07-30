@@ -14,7 +14,8 @@ import {
   validateEmail, 
   validatePincode,
   sanitizeInput,
-  initiatePayment
+  initiatePayment,
+  calculateDeliveryCharge
 } from '../../lib/payment'
 
 interface CheckoutModalProps {
@@ -39,6 +40,10 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose })
 
   const [error, setError] = useState('')
   const [validationErrors, setValidationErrors] = useState<{[key: string]: string}>({})
+
+  // Calculate delivery charge
+  const deliveryCharge = calculateDeliveryCharge(items)
+  const totalWithDelivery = total + deliveryCharge
 
   const validateForm = () => {
     const errors: {[key: string]: string} = {}
@@ -70,7 +75,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose })
   const handleDetailsSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     
-    // Check if cart total is less than ₹500
+    // Check if cart total is less than ₹500 (product total, excluding delivery charge)
     if (total < 500) {
       setError('Minimum order value is ₹500. Please add more items to your cart.')
       return
@@ -90,7 +95,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose })
       
       const paymentOrderDetails = {
         order_id: orderId,
-        order_amount: total * 100, // Convert rupees to paise for Razorpay
+        order_amount: totalWithDelivery * 100, // Convert rupees to paise for Razorpay
         order_currency: 'INR',
         customer_details: {
           customer_id: user?.id || `guest_${Date.now()}`,
@@ -102,7 +107,9 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose })
 
       // Debug logging
       console.log('🔍 Frontend Debug - Cart total (₹):', total)
-      console.log('🔍 Frontend Debug - Sending amount (paise):', total * 100)
+      console.log('🔍 Frontend Debug - Delivery charge (₹):', deliveryCharge)
+      console.log('🔍 Frontend Debug - Total with delivery (₹):', totalWithDelivery)
+      console.log('🔍 Frontend Debug - Sending amount (paise):', totalWithDelivery * 100)
       console.log('🔍 Frontend Debug - Payment order details:', paymentOrderDetails)
 
       const shippingDetails = {
@@ -192,12 +199,27 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose })
                       <span>₹{item.product.price * item.quantity}</span>
                     </div>
                   ))}
-                  <div className="border-t pt-2 flex justify-between font-semibold">
-                    <span className="text-black">Total:</span>
-                    <span className="text-blue-800">₹{total}</span>
+                  <div className="border-t pt-2">
+                    <div className="flex justify-between text-sm text-black">
+                      <span>Subtotal:</span>
+                      <span>₹{total}</span>
+                    </div>
+                    {deliveryCharge > 0 && (
+                      <div className="flex justify-between text-sm text-black">
+                        <span>Delivery Charge:</span>
+                        <span>₹{deliveryCharge}</span>
+                      </div>
+                    )}
+                    <div className="flex justify-between font-semibold text-black mt-1">
+                      <span>Total:</span>
+                      <span className="text-blue-800">₹{totalWithDelivery}</span>
+                    </div>
                   </div>
                   <p className="text-sm text-black text-center mt-2">
-                    (Includes kit, packaging & shipping)
+                    {deliveryCharge > 0 
+                      ? '(Includes product price, delivery & packaging)'
+                      : '(Includes kit, packaging & free shipping)'
+                    }
                   </p>
                 </div>
               </div>
@@ -332,12 +354,27 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose })
                       <span>₹{item.product.price * item.quantity}</span>
                     </div>
                   ))}
-                  <div className="border-t pt-2 flex justify-between font-semibold">
-                    <span className="text-black">Total:</span>
-                    <span className="text-blue-800">₹{total}</span>
+                  <div className="border-t pt-2">
+                    <div className="flex justify-between text-sm text-black">
+                      <span>Subtotal:</span>
+                      <span>₹{total}</span>
+                    </div>
+                    {deliveryCharge > 0 && (
+                      <div className="flex justify-between text-sm text-black">
+                        <span>Delivery Charge:</span>
+                        <span>₹{deliveryCharge}</span>
+                      </div>
+                    )}
+                    <div className="flex justify-between font-semibold text-black mt-1">
+                      <span>Total:</span>
+                      <span className="text-blue-800">₹{totalWithDelivery}</span>
+                    </div>
                   </div>
                   <p className="text-sm text-black text-center mt-2">
-                    MRP includes kit price, packaging, and shipping. No extra charges.
+                    {deliveryCharge > 0 
+                      ? 'Total includes product price, delivery & packaging. No extra charges.'
+                      : 'MRP includes kit price, packaging, and shipping. No extra charges.'
+                    }
                   </p>
                 </div>
               </div>

@@ -1,4 +1,7 @@
-import React, { useState, useEffect } from 'react'
+const handleViewDetails = (component: Component) => {
+    // Handle view details - you can implement modal or navigation here
+    console.log('View details for:', component.name)
+  }import React, { useState, useEffect } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { Search, ShoppingCart, Filter, Plus, MessageSquare } from 'lucide-react'
 import { Component } from '../types'
@@ -139,10 +142,10 @@ export const Components: React.FC = () => {
         
         <meta property="og:title" content="Arduino Electronics Components Online India - XolveTech" />
         <meta property="og:description" content="Buy Arduino sensors, motors, LEDs, breadboards, and electronics components online in India. DIY parts for students." />
-        <meta property="og:image" content="https://xolvetech.in/components-og.png" />
-        <meta property="og:url" content="https://xolvetech.in/components" />
+        <meta property="og:image" content="https://xolvetech.com/components-og.png" />
+        <meta property="og:url" content="https://xolvetech.com/components" />
         
-        <link rel="canonical" href="https://xolvetech.in/components" />
+        <link rel="canonical" href="https://xolvetech.com/components" />
         
         <script type="application/ld+json">
           {JSON.stringify({
@@ -253,7 +256,6 @@ export const Components: React.FC = () => {
                 <ComponentCard
                   key={component.id}
                   component={component}
-                  onViewDetails={handleViewDetails}
                 />
               ))}
             </div>

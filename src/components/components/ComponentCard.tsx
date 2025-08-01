@@ -1,7 +1,11 @@
-import React from 'react'
+const handleViewDetails = () => {
+    if (onViewDetails) {
+      onViewDetails(component)
+    }
+  }import React from 'react'
 import { Component } from '../../types'
 import { Button } from '../ui/Button'
-import { Eye, Plus, ShoppingCart } from 'lucide-react'
+import { Plus, ShoppingCart } from 'lucide-react'
 import { useCart } from '../../contexts/CartContext'
 import { sanitizeText } from '../../utils/sanitize'
 
@@ -26,10 +30,9 @@ const calculateFinalPrice = (component: Component): number => {
 
 interface ComponentCardProps {
   component: Component
-  onViewDetails?: (component: Component) => void
 }
 
-export const ComponentCard: React.FC<ComponentCardProps> = ({ component, onViewDetails }) => {
+export const ComponentCard: React.FC<ComponentCardProps> = ({ component }) => {
   const { addToCart } = useCart()
 
   const handleAddToCart = (e: React.MouseEvent) => {
@@ -120,20 +123,11 @@ export const ComponentCard: React.FC<ComponentCardProps> = ({ component, onViewD
             </div>
           )}
         </div>
-        <div className="flex space-x-2">
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={handleViewDetails}
-            className="flex items-center space-x-1 flex-1"
-          >
-            <Eye className="w-4 h-4" />
-            <span>View Details</span>
-          </Button>
+        <div className="flex">
           <Button
             size="sm"
             onClick={handleAddToCart}
-            className="flex items-center space-x-1 bg-orange-600 hover:bg-orange-700"
+            className="flex items-center space-x-1 bg-orange-600 hover:bg-orange-700 w-full justify-center"
           >
             <Plus className="w-4 h-4" />
             <span>Add to Cart</span>

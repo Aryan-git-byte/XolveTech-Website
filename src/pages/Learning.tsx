@@ -148,6 +148,7 @@ export const Learning: React.FC = () => {
                     
                     <Button
                       onClick={() => handleDownload(resource)}
+                      aria-label={`${resource.type === 'pdf' ? 'Download PDF' : 'Watch video'}: ${resource.title}`}
                       className="w-full flex items-center justify-center space-x-2"
                     >
                       <Download className="w-4 h-4" />

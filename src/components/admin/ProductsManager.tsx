@@ -212,6 +212,9 @@ export const ProductsManager: React.FC<ProductsManagerProps> = ({ onUpdate }) =>
                   <img
                     src={product.image_urls[0]} // Display first image
                     alt={product.title}
+                    width="320"
+                    height="192"
+                    loading="lazy"
                     className="w-full h-48 object-cover"
                   />
                   {product.image_urls.length > 1 && (

@@ -58,6 +58,9 @@ export const ProductModal: React.FC<ProductModalProps> = ({ product, isOpen, onC
             <img
               src={product.image_url}
               alt={product.title}
+              width="512"
+              height="256"
+              loading="lazy"
               className="w-full h-64 object-cover"
             />
           </div>

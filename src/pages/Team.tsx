@@ -45,10 +45,10 @@ export const Team: React.FC = () => {
         
         <meta property="og:title" content="Meet XolveTech Team - Aryan Kumar, Ayush & Shubham | Young STEM Innovators from Bihar" />
         <meta property="og:description" content="Meet the passionate student entrepreneurs from Patna, Bihar behind XolveTech's Arduino STEM education revolution - Aryan Kumar (Founder), Ayush (Hardware Engineer), and Shubham (Outreach Lead)." />
-        <meta property="og:image" content="https://xolvetech.com/team-og.png" />
-        <meta property="og:url" content="https://xolvetech.com/team" />
+        <meta property="og:image" content="https://xolvetech.in/team-og.png" />
+        <meta property="og:url" content="https://xolvetech.in/team" />
         
-        <link rel="canonical" href="https://xolvetech.com/team" />
+        <link rel="canonical" href="https://xolvetech.in/team" />
         
         <script type="application/ld+json">
           {JSON.stringify({
@@ -56,7 +56,7 @@ export const Team: React.FC = () => {
             "@type": "AboutPage",
             "name": "XolveTech Team - Arduino STEM Education Innovators",
             "description": "Meet Aryan Kumar, Ayush, and Shubham - the young STEM innovators and student entrepreneurs behind XolveTech's Arduino education mission in India",
-            "url": "https://xolvetech.com/team",
+            "url": "https://xolvetech.in/team",
             "mainEntity": {
               "@type": "Organization",
               "name": "XolveTech",

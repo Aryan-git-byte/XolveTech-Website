@@ -3,7 +3,7 @@
   [headers.values]
     Content-Security-Policy = """
       default-src   'self';
-      script-src    'self' https://*.razorpay.com https://api.razorpay.com;
+      script-src    'self' 'unsafe-eval' https://*.razorpay.com https://api.razorpay.com;
       connect-src   'self' https://*.supabase.co https://api.razorpay.com https://*.razorpay.com;
       img-src       'self' data: https:;
       style-src     'self' 'unsafe-inline';

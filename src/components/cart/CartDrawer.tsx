@@ -65,6 +65,9 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose }) => {
                           <img
                             src={item.product.image_url}
                             alt={item.product.title}
+                            width="64"
+                            height="64"
+                            loading="lazy"
                             className="w-16 h-16 object-cover rounded-md"
                           />
                         )}
@@ -78,6 +81,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose }) => {
                             <div className="flex items-center space-x-2">
                               <button
                                 onClick={() => updateQuantity(item.product.id, item.quantity - 1)}
+                                aria-label={`Decrease quantity of ${item.product.title}`}
                                 className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 text-black"
                               >
                                 <Minus className="w-4 h-4" />
@@ -87,6 +91,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose }) => {
                               </span>
                               <button
                                 onClick={() => updateQuantity(item.product.id, item.quantity + 1)}
+                                aria-label={`Increase quantity of ${item.product.title}`}
                                 className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-50 text-black"
                               >
                                 <Plus className="w-4 h-4" />
@@ -95,6 +100,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose }) => {
                             
                             <button
                               onClick={() => removeFromCart(item.product.id)}
+                              aria-label={`Remove ${item.product.title} from cart`}
                               className="text-red-900 hover:text-red-800 transition-colors"
                             >
                               <Trash2 className="w-4 h-4" />

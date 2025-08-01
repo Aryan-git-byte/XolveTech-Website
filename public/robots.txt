@@ -1,0 +1,25 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://xolvetech.in/sitemap.xml
+
+# Crawl-delay for polite crawling
+Crawl-delay: 1
+
+# Disallow admin areas
+Disallow: /admin/
+Disallow: /test-order
+
+# Allow all other pages
+Allow: /products
+Allow: /components
+Allow: /custom-projects
+Allow: /how-it-works
+Allow: /learning
+Allow: /team
+Allow: /contact
+Allow: /terms
+Allow: /privacy
+Allow: /cancellation-refund
+Allow: /shipping-delivery

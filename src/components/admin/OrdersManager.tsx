@@ -184,6 +184,7 @@ export const OrdersManager: React.FC = () => {
                       <Button
                         size="sm"
                         variant="outline"
+                        aria-label={`View details for order ${order.id}`}
                         onClick={() => {
                           setSelectedOrder(order)
                           setIsModalOpen(true)
@@ -194,6 +195,7 @@ export const OrdersManager: React.FC = () => {
                       <select
                         value={order.status}
                         onChange={(e) => updateOrderStatus(order.id, e.target.value)}
+                        aria-label={`Update status for order ${order.id}`}
                         className="text-sm border border-gray-300 rounded-md px-2 py-1"
                         disabled={order.status === 'delivered'}
                       >

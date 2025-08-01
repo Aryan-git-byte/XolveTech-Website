@@ -40,6 +40,7 @@ export const Footer: React.FC = () => {
                     const event = new CustomEvent('openComponentRequest');
                     window.dispatchEvent(event);
                   }}
+                  aria-label="Request a specific component not in our catalog"
                   className="text-gray-400 hover:text-white transition-colors text-left"
                 >
                   Request a Component

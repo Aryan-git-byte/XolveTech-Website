@@ -39,8 +39,8 @@ export const Home: React.FC = () => {
         {/* Open Graph Tags */}
         <meta property="og:title" content="XolveTech - Best STEM Learning Kits India | Arduino Electronics Programming" />
         <meta property="og:description" content="Affordable STEM learning kits from Bihar's young innovators. Arduino, electronics, programming kits for students. Free shipping across India." />
-        <meta property="og:image" content="https://xolvetech.com/og-image.png" />
-        <meta property="og:url" content="https://xolvetech.com/" />
+        <meta property="og:image" content="https://xolvetech.in/og-image.png" />
+        <meta property="og:url" content="https://xolvetech.in/" />
         <meta property="og:type" content="website" />
         <meta property="og:site_name" content="XolveTech" />
         
@@ -48,14 +48,14 @@ export const Home: React.FC = () => {
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="XolveTech - Best STEM Learning Kits India" />
         <meta name="twitter:description" content="Affordable Arduino, electronics, programming kits for students. Bihar innovation, free shipping India." />
-        <meta name="twitter:image" content="https://xolvetech.com/og-image.png" />
+        <meta name="twitter:image" content="https://xolvetech.in/og-image.png" />
         
         {/* Additional SEO Tags */}
         <meta name="robots" content="index, follow, max-image-preview:large" />
         <meta name="author" content="XolveTech" />
         <meta name="geo.region" content="IN-BR" />
         <meta name="geo.placename" content="Patna, Bihar, India" />
-        <link rel="canonical" href="https://xolvetech.com/" />
+        <link rel="canonical" href="https://xolvetech.in/" />
         
         {/* Structured Data */}
         <script type="application/ld+json">
@@ -64,10 +64,10 @@ export const Home: React.FC = () => {
             "@graph": [
               {
                 "@type": "Organization",
-                "@id": "https://xolvetech.com/#organization",
+                "@id": "https://xolvetech.in/#organization",
                 "name": "XolveTech",
-                "url": "https://xolvetech.com",
-                "logo": "https://xolvetech.com/logo.png",
+                "url": "https://xolvetech.in",
+                "logo": "https://xolvetech.in/logo.png",
                 "description": "Leading STEM education company providing affordable Arduino, electronics, and programming learning kits for students across India",
                 "foundingDate": "2024",
                 "foundingLocation": {
@@ -99,29 +99,29 @@ export const Home: React.FC = () => {
               },
               {
                 "@type": "WebSite",
-                "@id": "https://xolvetech.com/#website",
-                "url": "https://xolvetech.com",
+                "@id": "https://xolvetech.in/#website",
+                "url": "https://xolvetech.in",
                 "name": "XolveTech",
                 "description": "Arduino STEM Learning Kits and Electronics Education Solutions",
                 "publisher": {
-                  "@id": "https://xolvetech.com/#organization"
+                  "@id": "https://xolvetech.in/#organization"
                 },
                 "potentialAction": {
                   "@type": "SearchAction",
-                  "target": "https://xolvetech.com/products?search={search_term_string}",
+                  "target": "https://xolvetech.in/products?search={search_term_string}",
                   "query-input": "required name=search_term_string"
                 }
               },
               {
                 "@type": "WebPage",
-                "@id": "https://xolvetech.com/#webpage",
-                "url": "https://xolvetech.com",
+                "@id": "https://xolvetech.in/#webpage",
+                "url": "https://xolvetech.in",
                 "name": "XolveTech - Best STEM Learning Kits India",
                 "isPartOf": {
-                  "@id": "https://xolvetech.com/#website"
+                  "@id": "https://xolvetech.in/#website"
                 },
                 "about": {
-                  "@id": "https://xolvetech.com/#organization"
+                  "@id": "https://xolvetech.in/#organization"
                 },
                 "description": "Buy affordable STEM learning kits in India. Arduino electronics, programming, robotics kits for students. DIY projects, hands-on learning, Bihar innovation."
               }
@@ -173,7 +173,15 @@ export const Home: React.FC = () => {
           <div className="md:w-1/2 bg-white/5 p-6 md:p-8 rounded-2xl shadow-2xl backdrop-blur-sm border border-white/10">
             {/* Logo Block */}
             <div className="bg-white rounded-xl p-6 shadow-md mb-6">
-              <img src={XolveLogo} alt="XolveTech STEM Education Logo - Arduino Learning Kits Bihar India" className="w-56 h-auto mx-auto" itemProp="logo" />
+              <img 
+                src={XolveLogo} 
+                alt="XolveTech STEM Education Logo - Arduino Learning Kits Bihar India" 
+                className="w-56 h-auto mx-auto" 
+                itemProp="logo"
+                width="224"
+                height="auto"
+                loading="eager"
+              />
               <p className="text-center text-black mt-4 font-medium">
                 Hands-on Arduino STEM Learning Kits India
               </p>

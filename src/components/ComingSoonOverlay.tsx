@@ -186,6 +186,7 @@ export const ComingSoonOverlay: React.FC = () => {
               </div>
               <Button
                 onClick={() => window.open('https://wa.me/919386387397', '_blank')}
+                aria-label="Chat with XolveTech team on WhatsApp"
                 className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200"
               >
                 <MessageSquare className="w-4 h-4 mr-2 inline" />

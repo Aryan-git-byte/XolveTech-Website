@@ -70,13 +70,13 @@ export const Products: React.FC = () => {
         
         <meta property="og:title" content="Buy Arduino STEM Learning Kits Online India - XolveTech" />
         <meta property="og:description" content="Shop best Arduino, electronics, programming, robotics STEM kits for students. DIY projects, hands-on learning. Free shipping India." />
-        <meta property="og:image" content="https://xolvetech.com/products-og.png" />
-        <meta property="og:url" content="https://xolvetech.com/products" />
+        <meta property="og:image" content="https://xolvetech.in/products-og.png" />
+        <meta property="og:url" content="https://xolvetech.in/products" />
         
         <meta name="twitter:title" content="Arduino STEM Learning Kits India - XolveTech" />
         <meta name="twitter:description" content="Best Arduino, electronics, programming kits for students. DIY projects, free shipping India." />
         
-        <link rel="canonical" href="https://xolvetech.com/products" />
+        <link rel="canonical" href="https://xolvetech.in/products" />
         
         <script type="application/ld+json">
           {JSON.stringify({
@@ -84,10 +84,10 @@ export const Products: React.FC = () => {
             "@graph": [
               {
                 "@type": "CollectionPage",
-                "@id": "https://xolvetech.com/products",
+                "@id": "https://xolvetech.in/products",
                 "name": "Arduino STEM Learning Kits",
                 "description": "Complete collection of Arduino, electronics, programming, and robotics STEM learning kits for students in India",
-                "url": "https://xolvetech.com/products",
+                "url": "https://xolvetech.in/products",
                 "mainEntity": {
                   "@type": "ItemList",
                   "numberOfItems": products.length,
@@ -96,7 +96,7 @@ export const Products: React.FC = () => {
                     "position": index + 1,
                     "item": {
                       "@type": "Product",
-                      "@id": `https://xolvetech.com/products/${product.id}`,
+                      "@id": `https://xolvetech.in/products/${product.id}`,
                       "name": product.title,
                       "description": product.description,
                       "category": product.category,
@@ -106,7 +106,7 @@ export const Products: React.FC = () => {
                       },
                       "offers": {
                         "@type": "Offer",
-                        "url": `https://xolvetech.com/products/${product.id}`,
+                        "url": `https://xolvetech.in/products/${product.id}`,
                         "price": product.price,
                         "priceCurrency": "INR",
                         "availability": "https://schema.org/InStock",
@@ -124,16 +124,16 @@ export const Products: React.FC = () => {
                         "bestRating": "5",
                         "worstRating": "1"
                       },
-                      "image": product.image_url || "https://xolvetech.com/default-product-image.png"
+                      "image": product.image_url || "https://xolvetech.in/default-product-image.png"
                     }
                   }))
                 }
               },
               {
                 "@type": "Organization",
-                "@id": "https://xolvetech.com/#organization",
+                "@id": "https://xolvetech.in/#organization",
                 "name": "XolveTech",
-                "url": "https://xolvetech.com",
+                "url": "https://xolvetech.in",
                 "description": "Leading provider of Arduino STEM learning kits and electronics education solutions in India",
                 "sameAs": [
                   "https://www.facebook.com/xolvetech",
@@ -143,16 +143,16 @@ export const Products: React.FC = () => {
               },
               {
                 "@type": "WebSite",
-                "@id": "https://xolvetech.com/#website",
-                "url": "https://xolvetech.com",
+                "@id": "https://xolvetech.in/#website",
+                "url": "https://xolvetech.in",
                 "name": "XolveTech",
                 "description": "Arduino STEM Learning Kits and Electronics Education Solutions",
                 "publisher": {
-                  "@id": "https://xolvetech.com/#organization"
+                  "@id": "https://xolvetech.in/#organization"
                 },
                 "potentialAction": {
                   "@type": "SearchAction",
-                  "target": "https://xolvetech.com/products?search={search_term_string}",
+                  "target": "https://xolvetech.in/products?search={search_term_string}",
                   "query-input": "required name=search_term_string"
                 }
               }

@@ -169,6 +169,9 @@ export const OrderSuccess: React.FC = () => {
                       <img
                         src={item.product.image_url}
                         alt={item.product.title}
+                        width="48"
+                        height="48"
+                        loading="lazy"
                         className="w-12 h-12 object-cover rounded-md"
                       />
                     )}

@@ -53,6 +53,9 @@ export const ComponentCard: React.FC<ComponentCardProps> = ({ component }) => {
           <img
             src={component.image_url}
             alt={component.name || 'Component image'}
+            width="320"
+            height="192"
+            loading="lazy"
             className="w-full h-48 object-cover group-hover:scale-105 transition-transform"
             onError={(e) => {
               // Hide image on error and show fallback

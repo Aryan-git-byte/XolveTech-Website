@@ -179,6 +179,7 @@ export const CustomProjectsManager: React.FC<CustomProjectsManagerProps> = ({ on
                       <Button
                         size="sm"
                         variant="outline"
+                        aria-label={`View details for project by ${project.name}`}
                         onClick={() => {
                           setSelectedProject(project)
                           setIsModalOpen(true)
@@ -189,6 +190,7 @@ export const CustomProjectsManager: React.FC<CustomProjectsManagerProps> = ({ on
                       <select
                         value={project.status}
                         onChange={(e) => updateProjectStatus(project.id, e.target.value)}
+                        aria-label={`Update status for project by ${project.name}`}
                         className="text-sm border border-gray-300 rounded-md px-2 py-1"
                       >
                         <option value="pending">Pending</option>
@@ -242,6 +244,9 @@ export const CustomProjectsManager: React.FC<CustomProjectsManagerProps> = ({ on
                     <img
                       src={selectedProject.image_url}
                       alt="Project sketch"
+                      width="400"
+                      height="auto"
+                      loading="lazy"
                       className="max-w-full h-auto rounded-lg border"
                     />
                   </div>

@@ -160,6 +160,9 @@ export const PaymentSuccess: React.FC = () => {
                           <img
                             src={item.product.image_url}
                             alt={item.product.title}
+                            width="64"
+                            height="64"
+                            loading="lazy"
                             className="w-16 h-16 object-cover rounded-md"
                           />
                         )}

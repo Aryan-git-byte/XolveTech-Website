@@ -199,6 +199,9 @@ export const ComponentsManager: React.FC<ComponentsManagerProps> = ({ onUpdate }
                     <img
                       src={component.image_url}
                       alt={component.name}
+                      width="320"
+                      height="192"
+                      loading="lazy"
                       className="w-full h-48 object-cover"
                     />
                   )}

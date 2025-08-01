@@ -1,5 +1,5 @@
 import React from 'react'
-import { Product } from '../../types'
+import { Component } from '../../types'
 import { Button } from '../ui/Button'
 import { Eye, Plus, ShoppingCart } from 'lucide-react'
 import { useCart } from '../../contexts/CartContext'
@@ -14,28 +14,28 @@ const getDaysRemaining = (expiryDate: string): number => {
 }
 
 // Helper function to calculate final price
-const calculateFinalPrice = (product: Product): number => {
-  if (!product.on_offer || !product.discount_value) return product.price
+const calculateFinalPrice = (component: Component): number => {
+  if (!component.on_offer || !component.discount_value) return component.price
   
-  if (product.discount_type === 'flat') {
-    return Math.max(0, product.price - product.discount_value)
+  if (component.discount_type === 'flat') {
+    return Math.max(0, component.price - component.discount_value)
   } else {
-    return Math.round(product.price * (1 - product.discount_value / 100))
+    return Math.round(component.price * (1 - component.discount_value / 100))
   }
 }
 
-interface ProductCardProps {
-  product: Product
-  onViewDetails: (product: Product) => void
+interface ComponentCardProps {
+  component: Component
+  onViewDetails?: (component: Component) => void
 }
 
-export const ComponentCard: React.FC<ComponentCardProps> = ({ component }) => {
+export const ComponentCard: React.FC<ComponentCardProps> = ({ component, onViewDetails }) => {
   
   const { addToCart } = useCart()
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.stopPropagation()
-    addToCart(product)
+    addToCart(component)
     
     // Show brief success feedback
     const button = e.currentTarget as HTMLButtonElement
@@ -48,19 +48,25 @@ export const ComponentCard: React.FC<ComponentCardProps> = ({ component }) => {
     }, 1000)
   }
 
+  const handleViewDetails = () => {
+    if (onViewDetails) {
+      onViewDetails(component)
+    }
+  }
+
   return (
     <div className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow group">
       <div className="aspect-w-16 aspect-h-9 bg-gray-200 rounded-t-lg overflow-hidden relative">
-        {product.image_urls && product.image_urls.length > 0 ? (
+        {component.image_urls && component.image_urls.length > 0 ? (
           <>
             <img
-              src={product.image_urls[0]} // Display first image
-              alt={product.title}
+              src={component.image_urls[0]} // Display first image
+              alt={component.name}
               className="w-full h-48 object-cover group-hover:scale-105 transition-transform"
             />
-            {product.image_urls.length > 1 && (
+            {component.image_urls.length > 1 && (
               <div className="absolute top-2 right-2 bg-black bg-opacity-60 text-white text-xs px-2 py-1 rounded">
-                +{product.image_urls.length - 1} more
+                +{component.image_urls.length - 1} more
               </div>
             )}
           </>
@@ -73,39 +79,39 @@ export const ComponentCard: React.FC<ComponentCardProps> = ({ component }) => {
       <div className="p-4">
         <h3 
           className="text-lg font-semibold text-gray-900 mb-2"
-          dangerouslySetInnerHTML={{ __html: sanitizeText(product.title) }}
+          dangerouslySetInnerHTML={{ __html: sanitizeText(component.name) }}
         />
         <p 
           className="text-gray-600 text-sm mb-3 line-clamp-2"
-          dangerouslySetInnerHTML={{ __html: sanitizeText(product.description) }}
+          dangerouslySetInnerHTML={{ __html: sanitizeText(component.description) }}
         />
         <div className="mb-3">
-          {product.on_offer ? (
+          {component.on_offer ? (
             <div>
               <div className="flex items-center space-x-2 mb-1">
-                <span className="text-sm text-gray-500 line-through">₹{product.price}</span>
-                <span className="text-2xl font-bold text-blue-600">₹{calculateFinalPrice(product)}</span>
+                <span className="text-sm text-gray-500 line-through">₹{component.price}</span>
+                <span className="text-2xl font-bold text-blue-600">₹{calculateFinalPrice(component)}</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="inline-block bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full">
-                  {product.discount_type === 'flat' 
-                    ? `Save ₹${product.discount_value}`
-                    : `-${product.discount_value}% Off`
+                  {component.discount_type === 'flat' 
+                    ? `Save ₹${component.discount_value}`
+                    : `-${component.discount_value}% Off`
                   }
                 </span>
                 <span className="text-xs text-gray-500">All inclusive</span>
               </div>
-              {product.discount_expiry_date && getDaysRemaining(product.discount_expiry_date) > 0 && (
+              {component.discount_expiry_date && getDaysRemaining(component.discount_expiry_date) > 0 && (
                 <div className="mt-1">
                   <span className="text-xs text-orange-600 bg-orange-100 px-2 py-1 rounded-full">
-                    ⏳ Offer ends in {getDaysRemaining(product.discount_expiry_date)} days!
+                    ⏳ Offer ends in {getDaysRemaining(component.discount_expiry_date)} days!
                   </span>
                 </div>
               )}
             </div>
           ) : (
             <div className="flex items-center justify-between">
-              <span className="text-2xl font-bold text-blue-600">₹{product.price}</span>
+              <span className="text-2xl font-bold text-blue-600">₹{component.price}</span>
               <span className="text-xs text-gray-500">All inclusive</span>
             </div>
           )}
@@ -114,7 +120,7 @@ export const ComponentCard: React.FC<ComponentCardProps> = ({ component }) => {
           <Button
             size="sm"
             variant="outline"
-            onClick={() => onViewDetails(product)}
+            onClick={handleViewDetails}
             className="flex items-center space-x-1 flex-1"
           >
             <Eye className="w-4 h-4" />

@@ -11,6 +11,7 @@ import { Button } from '../components/ui/Button'
 export const Components: React.FC = () => {
   const [components, setComponents] = useState<Component[]>([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('all')
   const [stockFilter, setStockFilter] = useState('all')
@@ -22,23 +23,61 @@ export const Components: React.FC = () => {
 
   const fetchComponents = async () => {
     try {
+      setError(null)
+      
+      // Clear any invalid session first
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session) {
+        // If no session, try to refresh or clear auth state
+        await supabase.auth.signOut()
+      }
+
+      // Fetch components without authentication if it's public data
+      // or handle the auth requirement appropriately
       const { data, error } = await supabase
         .from('components')
         .select('*')
         .order('created_at', { ascending: false })
 
-      if (error) throw error
-      setComponents(data || [])
-    } catch (error) {
+      if (error) {
+        console.error('Supabase error:', error)
+        
+        // Handle specific auth errors
+        if (error.message.includes('Invalid Refresh Token') || 
+            error.message.includes('refresh_token_not_found')) {
+          // Clear the session and try again without auth
+          await supabase.auth.signOut()
+          
+          // Retry the query
+          const { data: retryData, error: retryError } = await supabase
+            .from('components')
+            .select('*')
+            .order('created_at', { ascending: false })
+          
+          if (retryError) {
+            throw retryError
+          }
+          setComponents(retryData || [])
+        } else {
+          throw error
+        }
+      } else {
+        setComponents(data || [])
+      }
+    } catch (error: any) {
       console.error('Error fetching components:', error)
+      setError(`Failed to load components: ${error.message}`)
+      
+      // Set some mock data for development/testing
+      setComponents([])
     } finally {
       setLoading(false)
     }
   }
 
   const filteredComponents = components.filter(component => {
-    const matchesSearch = component.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         component.description.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchesSearch = component.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         component.description?.toLowerCase().includes(searchTerm.toLowerCase())
     const matchesCategory = selectedCategory === 'all' || component.category === selectedCategory
     const matchesStock = stockFilter === 'all' || 
                         (stockFilter === 'in-stock' && component.stock_status) ||
@@ -47,7 +86,12 @@ export const Components: React.FC = () => {
     return matchesSearch && matchesCategory && matchesStock
   })
 
-  const categories = ['all', ...Array.from(new Set(components.map(c => c.category)))]
+  const categories = ['all', ...Array.from(new Set(components.map(c => c.category).filter(Boolean)))]
+
+  const handleViewDetails = (component: Component) => {
+    // Handle view details - you can implement modal or navigation here
+    console.log('View details for:', component.name)
+  }
 
   if (loading) {
     return (
@@ -55,6 +99,29 @@ export const Components: React.FC = () => {
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
           <p className="mt-4 text-gray-600">Loading components...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center max-w-md">
+          <div className="text-red-500 mb-4">
+            <ShoppingCart className="w-12 h-12 mx-auto" />
+          </div>
+          <h3 className="text-xl font-medium text-gray-900 mb-2">Unable to Load Components</h3>
+          <p className="text-gray-600 mb-4">{error}</p>
+          <Button
+            onClick={() => {
+              setLoading(true)
+              fetchComponents()
+            }}
+            className="bg-blue-600 hover:bg-blue-700"
+          >
+            Try Again
+          </Button>
         </div>
       </div>
     )
@@ -183,6 +250,7 @@ export const Components: React.FC = () => {
                 <ComponentCard
                   key={component.id}
                   component={component}
+                  onViewDetails={handleViewDetails}
                 />
               ))}
             </div>

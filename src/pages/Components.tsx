@@ -136,10 +136,10 @@ export const Components: React.FC = () => {
         
         <meta property="og:title" content="Arduino Electronics Components Online India - XolveTech" />
         <meta property="og:description" content="Buy Arduino sensors, motors, LEDs, breadboards, and electronics components online in India. DIY parts for students." />
-        <meta property="og:image" content="https://xolvetech.com/components-og.png" />
-        <meta property="og:url" content="https://xolvetech.com/components" />
+        <meta property="og:image" content="https://xolvetech.in/components-og.png" />
+        <meta property="og:url" content="https://xolvetech.in/components" />
         
-        <link rel="canonical" href="https://xolvetech.com/components" />
+        <link rel="canonical" href="https://xolvetech.in/components" />
         
         <script type="application/ld+json">
           {JSON.stringify({
@@ -147,7 +147,7 @@ export const Components: React.FC = () => {
             "@type": "CollectionPage",
             "name": "Arduino Electronics Components",
             "description": "Complete collection of Arduino electronics components, sensors, motors, LEDs, and DIY parts for students and makers in India",
-            "url": "https://xolvetech.com/components"
+            "url": "https://xolvetech.in/components"
           })}
         </script>
       </Helmet>

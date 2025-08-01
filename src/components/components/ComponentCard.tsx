@@ -1,8 +1,4 @@
-const handleViewDetails = () => {
-    if (onViewDetails) {
-      onViewDetails(component)
-    }
-  }import React from 'react'
+import React from 'react'
 import { Component } from '../../types'
 import { Button } from '../ui/Button'
 import { Plus, ShoppingCart } from 'lucide-react'
@@ -48,12 +44,6 @@ export const ComponentCard: React.FC<ComponentCardProps> = ({ component }) => {
       button.textContent = originalText
       button.disabled = false
     }, 1000)
-  }
-
-  const handleViewDetails = () => {
-    if (onViewDetails) {
-      onViewDetails(component)
-    }
   }
 
   return (

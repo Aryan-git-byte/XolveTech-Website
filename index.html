@@ -11,13 +11,33 @@
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="shortcut icon" href="/favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    
+    <!-- PWA Apple Touch Icons -->
+    <link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png" />
+    <link rel="apple-touch-icon" sizes="60x60" href="/apple-touch-icon-60x60.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png" />
+    <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon-76x76.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png" />
+    <link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png" />
+    <link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144x144.png" />
+    <link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon-152x152.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-180x180.png" />
+    
+    <!-- Standard Favicon Sizes -->
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png" />
+    <link rel="icon" type="image/png" sizes="512x512" href="/android-chrome-512x512.png" />
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json" />
     
     <!-- Viewport and Basic Meta -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no" />
     <meta name="theme-color" content="#2563eb" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#2563eb" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1d4ed8" />
     <meta name="color-scheme" content="light dark" />
     
     <!-- Primary Meta Tags -->
@@ -133,9 +153,11 @@
     <meta property="og:title" content="XolveTech - STEM Learning Kits for Young Innovators" />
     <meta property="og:description" content="Affordable, eco-friendly STEM learning kits from Bihar's young innovators. Build, learn, and innovate with XolveTech's hands-on educational products." />
     <meta property="og:image" content="https://xolvetech.in/og-image.png" />
+    <meta property="og:image:secure_url" content="https://xolvetech.in/og-image.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content="XolveTech STEM Learning Kits - Educational Electronics and Programming" />
+    <meta property="og:image:type" content="image/png" />
     <meta property="og:locale" content="en_US" />
     <meta property="og:locale:alternate" content="en_IN" />
     <meta property="og:updated_time" content="2024-12-01T10:00:00+00:00" />
@@ -149,11 +171,12 @@
     <meta name="twitter:title" content="XolveTech - STEM Learning Kits for Young Innovators" />
     <meta name="twitter:description" content="Affordable, eco-friendly STEM learning kits from Bihar's young innovators. Build, learn, and innovate with XolveTech." />
     <meta name="twitter:image" content="https://xolvetech.in/og-image.png" />
+    <meta name="twitter:image:width" content="1200" />
+    <meta name="twitter:image:height" content="630" />
     <meta name="twitter:image:alt" content="XolveTech STEM Learning Kits - Educational Electronics and Programming" />
     <meta name="twitter:domain" content="xolvetech.in" />
     
     <!-- LinkedIn Meta Tags (Removed invalid company link) -->
-    <meta property="og:image:secure_url" content="https://xolvetech.in/og-image.png" />
     <meta property="article:section" content="Education Technology" />
     <meta property="article:tag" content="STEM Education" />
     <meta property="article:tag" content="Electronics Learning" />
@@ -161,11 +184,7 @@
     
     <!-- Pinterest Meta Tags -->
     <meta name="pinterest-rich-pin" content="true" />
-    <meta property="og:see_also" content="https://xolvetech.in/products" />
     <meta name="pinterest:description" content="Discover innovative STEM learning kits designed by young innovators from Bihar. Perfect for students, educators, and makers!" />
-    
-    <!-- WhatsApp Meta Tags -->
-    <meta property="og:image:type" content="image/png" />
     
     <!-- Instagram Meta Tags -->
     <meta property="instapp:owner_user_id" content="xolvetech" />
@@ -353,7 +372,7 @@
     }
     </script>
     
-    <!-- Canonical URL -->
+    <!-- Canonical URL (Fixed to absolute URL) -->
     <link rel="canonical" href="https://xolvetech.in/" />
     
     <!-- Alternative Language Pages -->
@@ -387,12 +406,15 @@
     <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
     <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=()" />
     
-    <!-- Mobile Web App Meta -->
+    <!-- PWA Mobile Web App Meta -->
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="XolveTech" />
     <meta name="application-name" content="XolveTech" />
+    <meta name="apple-touch-fullscreen" content="yes" />
+    
+    <!-- Microsoft Tile Configuration -->
     <meta name="msapplication-TileColor" content="#2563eb" />
     <meta name="msapplication-config" content="/browserconfig.xml" />
     <meta name="msapplication-TileImage" content="/mstile-144x144.png" />
@@ -400,10 +422,6 @@
     <meta name="msapplication-square150x150logo" content="/mstile-150x150.png" />
     <meta name="msapplication-wide310x150logo" content="/mstile-310x150.png" />
     <meta name="msapplication-square310x310logo" content="/mstile-310x310.png" />
-    
-    <!-- Chrome Mobile -->
-    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#2563eb" />
-    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1d4ed8" />
     
     <!-- Safari Pinned Tab -->
     <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#2563eb" />
@@ -424,12 +442,14 @@
     </script> -->
   </head>
   <body>
-    <!-- ✅ 4. SEMANTIC NAVIGATION STRUCTURE -->
-    <nav role="navigation" aria-label="Main navigation">
-      <a href="/">Home</a>
-      <a href="/products">Products</a>
-      <a href="/team">Team</a>
-      <a href="/contact">Contact</a>
+    <!-- ✅ 4. SEMANTIC NAVIGATION STRUCTURE WITH ACCESSIBILITY -->
+    <nav role="navigation" aria-label="Main site navigation">
+      <ul style="list-style: none; margin: 0; padding: 0; display: flex; gap: 1rem;">
+        <li><a href="/" aria-label="Home page" style="color: #1f2937; text-decoration: none;">Home</a></li>
+        <li><a href="/products" aria-label="Our STEM learning products" style="color: #1f2937; text-decoration: none;">Products</a></li>
+        <li><a href="/team" aria-label="Meet our team" style="color: #1f2937; text-decoration: none;">Team</a></li>
+        <li><a href="/contact" aria-label="Contact us" style="color: #1f2937; text-decoration: none;">Contact</a></li>
+      </ul>
     </nav>
     
     <div id="root"></div>

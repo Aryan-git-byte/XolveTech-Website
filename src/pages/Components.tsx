@@ -1,7 +1,4 @@
-const handleViewDetails = (component: Component) => {
-    // Handle view details - you can implement modal or navigation here
-    console.log('View details for:', component.name)
-  }import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { Search, ShoppingCart, Filter, Plus, MessageSquare } from 'lucide-react'
 import { Component } from '../types'
@@ -93,11 +90,6 @@ export const Components: React.FC = () => {
   })
 
   const categories = ['all', ...Array.from(new Set(components.map(c => c.category).filter(Boolean)))]
-
-  const handleViewDetails = (component: Component) => {
-    // Handle view details - you can implement modal or navigation here
-    console.log('View details for:', component.name)
-  }
 
   if (loading) {
     return (
@@ -254,21 +246,3 @@ export const Components: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {filteredComponents.map((component) => (
                 <ComponentCard
-                  key={component.id}
-                  component={component}
-                />
-              ))}
-            </div>
-          )}
-        </div>
-      </section>
-
-      {/* Component Request Modal */}
-      <ComponentRequestModal
-        isOpen={isRequestModalOpen}
-        onClose={() => setIsRequestModalOpen(false)}
-      />
-    </div>
-    </>
-  )
-}

@@ -32,8 +32,7 @@ export const Components: React.FC = () => {
         await supabase.auth.signOut()
       }
 
-      // Fetch components without authentication if it's public data
-      // or handle the auth requirement appropriately
+      // Fetch components - using the same query structure as ComponentsManager
       const { data, error } = await supabase
         .from('components')
         .select('*')
@@ -64,11 +63,15 @@ export const Components: React.FC = () => {
       } else {
         setComponents(data || [])
       }
+
+      // Debug: Log the data structure to see what we're getting
+      console.log('Fetched components:', data)
+      
     } catch (error: any) {
       console.error('Error fetching components:', error)
       setError(`Failed to load components: ${error.message}`)
       
-      // Set some mock data for development/testing
+      // Set empty array on error
       setComponents([])
     } finally {
       setLoading(false)
@@ -147,7 +150,7 @@ export const Components: React.FC = () => {
             "@type": "CollectionPage",
             "name": "Arduino Electronics Components",
             "description": "Complete collection of Arduino electronics components, sensors, motors, LEDs, and DIY parts for students and makers in India",
-            "url": "https://xolvetech.in/components"
+            "url": "https://xolvetech.com/components"
           })}
         </script>
       </Helmet>

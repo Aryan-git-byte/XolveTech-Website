@@ -150,99 +150,117 @@ export const Components: React.FC = () => {
         </script>
       </Helmet>
       
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <section className="bg-white shadow-sm" role="banner">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="text-center">
-            <h1 className="text-3xl font-bold text-gray-900 mb-4">Arduino Electronics Components India</h1>
-            <p className="text-lg text-gray-600 mb-6">
-              Explore a range of essential Arduino electronic parts – sensors, servo motors, LED modules, breadboards, and more. 
-              Perfect for your DIY electronics builds, Arduino projects, and school STEM assignments across India.
-            </p>
-            
-            {/* Call-to-action buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button
-                onClick={() => setIsRequestModalOpen(true)}
-                className="flex items-center space-x-2 bg-orange-600 hover:bg-orange-700"
-                aria-label="Request specific Arduino electronics component"
-              >
-                <MessageSquare className="w-4 h-4" />
-                <span>🔧 Want a specific Arduino component? Request it here!</span>
-              </Button>
-              <a
-                href="/custom-projects"
-                className="inline-flex items-center space-x-2 px-6 py-3 border border-blue-600 text-blue-600 rounded-md hover:bg-blue-50 transition-colors"
-                aria-label="Submit custom Arduino robotics project request"
-              >
-                <Plus className="w-4 h-4" />
-                <span>📦 Custom Arduino Robotics Projects</span>
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Filters */}
-      <section className="py-6 bg-white border-b" role="search">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row gap-4 items-center">
-            <div className="w-full md:w-96">
-              <SearchBar
-                value={searchTerm}
-                onChange={setSearchTerm}
-                placeholder="Search Arduino sensors, motors, LEDs..."
-              />
-            </div>
-            <div className="flex items-center space-x-4">
-              <Filter className="w-5 h-5 text-gray-400" />
-              <select
-                value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                aria-label="Filter components by category"
-              >
-                {categories.map(category => (
-                  <option key={category} value={category}>
-                    {category === 'all' ? 'All Categories' : category.charAt(0).toUpperCase() + category.slice(1)}
-                  </option>
-                ))}
-              </select>
-              <select
-                value={stockFilter}
-                onChange={(e) => setStockFilter(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                aria-label="Filter components by stock availability"
-              >
-                <option value="all">All Stock</option>
-                <option value="in-stock">In Stock</option>
-                <option value="out-of-stock">Out of Stock</option>
-              </select>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Components Grid */}
-      <section className="py-8" role="main">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {filteredComponents.length === 0 ? (
-            <div className="text-center py-12">
-              <div className="text-gray-400 mb-4">
-                <ShoppingCart className="w-12 h-12 mx-auto" />
+      <div className="min-h-screen bg-gray-50">
+        {/* Header */}
+        <section className="bg-white shadow-sm" role="banner">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div className="text-center">
+              <h1 className="text-3xl font-bold text-gray-900 mb-4">Arduino Electronics Components India</h1>
+              <p className="text-lg text-gray-600 mb-6">
+                Explore a range of essential Arduino electronic parts – sensors, servo motors, LED modules, breadboards, and more. 
+                Perfect for your DIY electronics builds, Arduino projects, and school STEM assignments across India.
+              </p>
+              
+              {/* Call-to-action buttons */}
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button
+                  onClick={() => setIsRequestModalOpen(true)}
+                  className="flex items-center space-x-2 bg-orange-600 hover:bg-orange-700"
+                  aria-label="Request specific Arduino electronics component"
+                >
+                  <MessageSquare className="w-4 h-4" />
+                  <span>🔧 Want a specific Arduino component? Request it here!</span>
+                </Button>
+                <a
+                  href="/custom-projects"
+                  className="inline-flex items-center space-x-2 px-6 py-3 border border-blue-600 text-blue-600 rounded-md hover:bg-blue-50 transition-colors"
+                  aria-label="Submit custom Arduino robotics project request"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span>📦 Custom Arduino Robotics Projects</span>
+                </a>
               </div>
-              <h3 className="text-xl font-medium text-gray-900 mb-2">No Arduino components found</h3>
-              <p className="text-gray-600 mb-4">Try adjusting your search for sensors, motors, LEDs, or breadboards</p>
-              <Button
-                onClick={() => setIsRequestModalOpen(true)}
-                className="bg-orange-600 hover:bg-orange-700"
-                aria-label="Request Arduino component not found"
-              >
-                Request Arduino Component
-              </Button>
             </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {filteredComponents.map((component) => (
-                <ComponentCard
+          </div>
+        </section>
+
+        {/* Filters */}
+        <section className="py-6 bg-white border-b" role="search">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col md:flex-row gap-4 items-center">
+              <div className="w-full md:w-96">
+                <SearchBar
+                  value={searchTerm}
+                  onChange={setSearchTerm}
+                  placeholder="Search Arduino sensors, motors, LEDs..."
+                />
+              </div>
+              <div className="flex items-center space-x-4">
+                <Filter className="w-5 h-5 text-gray-400" />
+                <select
+                  value={selectedCategory}
+                  onChange={(e) => setSelectedCategory(e.target.value)}
+                  className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  aria-label="Filter components by category"
+                >
+                  {categories.map(category => (
+                    <option key={category} value={category}>
+                      {category === 'all' ? 'All Categories' : category.charAt(0).toUpperCase() + category.slice(1)}
+                    </option>
+                  ))}
+                </select>
+                <select
+                  value={stockFilter}
+                  onChange={(e) => setStockFilter(e.target.value)}
+                  className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  aria-label="Filter components by stock availability"
+                >
+                  <option value="all">All Stock</option>
+                  <option value="in-stock">In Stock</option>
+                  <option value="out-of-stock">Out of Stock</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Components Grid */}
+        <section className="py-8" role="main">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            {filteredComponents.length === 0 ? (
+              <div className="text-center py-12">
+                <div className="text-gray-400 mb-4">
+                  <ShoppingCart className="w-12 h-12 mx-auto" />
+                </div>
+                <h3 className="text-xl font-medium text-gray-900 mb-2">No Arduino components found</h3>
+                <p className="text-gray-600 mb-4">Try adjusting your search for sensors, motors, LEDs, or breadboards</p>
+                <Button
+                  onClick={() => setIsRequestModalOpen(true)}
+                  className="bg-orange-600 hover:bg-orange-700"
+                  aria-label="Request Arduino component not found"
+                >
+                  Request Arduino Component
+                </Button>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {filteredComponents.map((component) => (
+                  <ComponentCard
+                    key={component.id}
+                    component={component}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+        </section>
+
+        {/* Component Request Modal */}
+        <ComponentRequestModal
+          isOpen={isRequestModalOpen}
+          onClose={() => setIsRequestModalOpen(false)}
+        />
+      </div>
+    </>
+  )
+}

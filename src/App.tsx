@@ -2,7 +2,8 @@ import React from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { AuthProvider } from './contexts/AuthContext'
 import { CartProvider } from './contexts/CartContext'
-import { ComingSoonOverlay } from './components/ComingSoonOverlay'
+// Remove this import - no longer needed
+// import { ComingSoonOverlay } from './components/ComingSoonOverlay'
 import { Header } from './components/layout/Header'
 import { Footer } from './components/layout/Footer'
 import { Home } from './pages/Home'
@@ -25,26 +26,26 @@ import { TestOrder } from './pages/TestOrder'
 import { ProtectedRoute } from './components/auth/ProtectedRoute'
 
 function App() {
-  const [showOverlay, setShowOverlay] = React.useState(() => {
-    // Check if user has previewed the site
-    return !localStorage.getItem('xolve_preview')
-  })
-
-  // Listen for storage changes to update overlay state
-  React.useEffect(() => {
-    const handleStorageChange = () => {
-      setShowOverlay(!localStorage.getItem('xolve_preview'))
-    }
-
-    window.addEventListener('storage', handleStorageChange)
-    return () => window.removeEventListener('storage', handleStorageChange)
-  }, [])
+  // Remove all overlay-related state and localStorage logic
+  // const [showOverlay, setShowOverlay] = React.useState(() => {
+  //   return !localStorage.getItem('xolve_preview')
+  // })
+  
+  // Remove storage event listener
+  // React.useEffect(() => {
+  //   const handleStorageChange = () => {
+  //     setShowOverlay(!localStorage.getItem('xolve_preview'))
+  //   }
+  //   window.addEventListener('storage', handleStorageChange)
+  //   return () => window.removeEventListener('storage', handleStorageChange)
+  // }, [])
 
   return (
     <AuthProvider>
       <CartProvider>
         <Router>
-          {showOverlay && <ComingSoonOverlay />}
+          {/* Remove this line - no more overlay */}
+          {/* {showOverlay && <ComingSoonOverlay />} */}
           <div className="min-h-screen flex flex-col">
             <Header />
             <main className="flex-grow">

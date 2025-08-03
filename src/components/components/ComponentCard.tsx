@@ -59,8 +59,9 @@ export const ComponentCard: React.FC<ComponentCardProps> = ({ component }) => {
             className="w-full h-48 object-cover group-hover:scale-105 transition-transform"
             onError={(e) => {
               // Hide image on error and show fallback
-              e.currentTarget.style.display = 'none'
-              const fallback = e.currentTarget.nextElementSibling
+              const target = e.currentTarget as HTMLImageElement
+              target.style.display = 'none'
+              const fallback = target.nextElementSibling as HTMLElement
               if (fallback) fallback.style.display = 'flex'
             }}
           />

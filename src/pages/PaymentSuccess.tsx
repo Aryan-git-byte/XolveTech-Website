@@ -156,9 +156,9 @@ export const PaymentSuccess: React.FC = () => {
                   {orderDetails.cart_items?.map((item, index) => (
                     <div key={index} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
                       <div className="flex items-center space-x-4">
-                        {item.product.image_url && (
+                        {item.product.image_urls && item.product.image_urls.length > 0 && (
                           <img
-                            src={item.product.image_url}
+                            src={item.product.image_urls[0]}
                             alt={item.product.title}
                             width="64"
                             height="64"

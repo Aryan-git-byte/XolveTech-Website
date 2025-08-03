@@ -194,9 +194,27 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose })
                 <h4 className="font-semibold text-black mb-3">Order Summary</h4>
                 <div className="space-y-2">
                   {items.map((item) => (
-                    <div key={item.product.id} className="flex justify-between text-sm text-black">
-                      <span>{item.product.title} x{item.quantity}</span>
-                      <span>₹{item.product.price * item.quantity}</span>
+                    <div key={item.product.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                      <div className="flex items-center space-x-4">
+                        {item.product.image_urls && item.product.image_urls.length > 0 && (
+                          <img
+                            src={item.product.image_urls[0]}
+                            alt={item.product.title}
+                            width="64"
+                            height="64"
+                            loading="lazy"
+                            className="w-16 h-16 object-cover rounded-md"
+                          />
+                        )}
+                        <div>
+                          <h5 className="font-medium text-black">{item.product.title}</h5>
+                          <p className="text-sm text-gray-600">Quantity: {item.quantity}</p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="font-semibold text-black">₹{item.product.price * item.quantity}</p>
+                        <p className="text-sm text-gray-600">₹{item.product.price} each</p>
+                      </div>
                     </div>
                   ))}
                   <div className="border-t pt-2">

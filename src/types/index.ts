@@ -7,7 +7,7 @@ export interface Product {
   learning_outcomes: string[]
   assembly_steps: string
   tools_required: string[]
-  image_urls?: string[] // Changed from image_url to image_urls array
+  image_urls?: string[]
   category: string
   created_at: string
   on_offer?: boolean

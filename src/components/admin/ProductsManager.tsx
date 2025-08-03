@@ -26,7 +26,7 @@ export const ProductsManager: React.FC<ProductsManagerProps> = ({ onUpdate }) =>
     learning_outcomes: '',
     tools_required: '',
     assembly_steps: '',
-    image_urls: '', // Changed from image_url to image_urls
+    image_urls: '',
     on_offer: false,
     discount_type: 'flat' as 'flat' | 'percentage',
     discount_value: '',
@@ -70,9 +70,22 @@ export const ProductsManager: React.FC<ProductsManagerProps> = ({ onUpdate }) =>
   const validateForm = (): boolean => {
     const newFormErrors: {[key: string]: string} = {}
     
+    // Required field validation
+    if (!formData.title.trim()) {
+      newFormErrors.title = 'Product title is required'
+    }
+    
+    if (!formData.description.trim()) {
+      newFormErrors.description = 'Description is required'
+    }
+    
+    if (!formData.category.trim()) {
+      newFormErrors.category = 'Category is required'
+    }
+    
     // Validate price
-    const priceValue = parseInt(formData.price)
-    if (isNaN(priceValue) || priceValue <= 0) {
+    const priceValue = parseFloat(formData.price)
+    if (!formData.price || isNaN(priceValue) || priceValue <= 0) {
       newFormErrors.price = 'Price must be a positive number'
     }
     
@@ -107,15 +120,15 @@ export const ProductsManager: React.FC<ProductsManagerProps> = ({ onUpdate }) =>
       .filter(url => url.length > 0)
     
     const productData = {
-      title: formData.title,
-      description: formData.description,
-      price: parseInt(formData.price),
-      category: formData.category,
-      kit_contents: formData.kit_contents.split('\n').filter(Boolean),
-      learning_outcomes: formData.learning_outcomes.split('\n').filter(Boolean),
-      tools_required: formData.tools_required.split('\n').filter(Boolean),
-      assembly_steps: formData.assembly_steps,
-      image_urls: imageUrls.length > 0 ? imageUrls : null, // Store as array
+      title: formData.title.trim(),
+      description: formData.description.trim(),
+      price: parseFloat(formData.price), // Changed from parseInt to parseFloat for decimal prices
+      category: formData.category.trim(),
+      kit_contents: formData.kit_contents.split('\n').map(item => item.trim()).filter(Boolean),
+      learning_outcomes: formData.learning_outcomes.split('\n').map(item => item.trim()).filter(Boolean),
+      tools_required: formData.tools_required.split('\n').map(item => item.trim()).filter(Boolean),
+      assembly_steps: formData.assembly_steps.trim(),
+      image_urls: imageUrls.length > 0 ? imageUrls : null,
       on_offer: formData.on_offer,
       discount_type: formData.on_offer ? formData.discount_type : null,
       discount_value: formData.on_offer && formData.discount_value ? parseFloat(formData.discount_value) : null,
@@ -144,34 +157,35 @@ export const ProductsManager: React.FC<ProductsManagerProps> = ({ onUpdate }) =>
       resetForm()
     } catch (error) {
       console.error('Error saving product:', error)
+      // You might want to show an error message to the user here
     }
   }
 
   const handleEdit = (product: Product) => {
     setEditingProduct(product)
     setFormData({
-      title: product.title,
-      description: product.description,
-      price: product.price.toString(),
-      category: product.category,
+      title: product.title || '',
+      description: product.description || '',
+      price: product.price?.toString() || '',
+      category: product.category || '',
       kit_contents: Array.isArray(product.kit_contents) ? product.kit_contents.join('\n') : '',
       learning_outcomes: Array.isArray(product.learning_outcomes) ? product.learning_outcomes.join('\n') : '',
       tools_required: Array.isArray(product.tools_required) ? product.tools_required.join('\n') : '',
       assembly_steps: product.assembly_steps || '',
-      image_urls: Array.isArray(product.image_urls) ? product.image_urls.join('\n') : '', // Join array to newline-separated string
+      image_urls: Array.isArray(product.image_urls) ? product.image_urls.join('\n') : '',
       on_offer: product.on_offer || false,
       discount_type: product.discount_type || 'flat',
       discount_value: product.discount_value?.toString() || '',
       discount_expiry_date: product.discount_expiry_date ? product.discount_expiry_date.split('T')[0] : ''
     })
-    setFormErrors({}) // Clear any previous errors
+    setFormErrors({})
     setIsModalOpen(true)
   }
 
   const handleDelete = async (id: string) => {
-    if (confirm('Are you sure you want to delete this product?')) {
+    if (window.confirm('Are you sure you want to delete this product?')) {
       try {
-        const { error } = await supabase
+        const { error } = await subaase
           .from('products')
           .delete()
           .eq('id', id)
@@ -197,7 +211,7 @@ export const ProductsManager: React.FC<ProductsManagerProps> = ({ onUpdate }) =>
       learning_outcomes: '',
       tools_required: '',
       assembly_steps: '',
-      image_urls: '', // Reset to empty string
+      image_urls: '',
       on_offer: false,
       discount_type: 'flat',
       discount_value: '',
@@ -240,15 +254,16 @@ export const ProductsManager: React.FC<ProductsManagerProps> = ({ onUpdate }) =>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {products.map((product) => (
             <div key={product.id} className="border border-gray-200 rounded-lg overflow-hidden">
-              {product.image_urls && product.image_urls.length > 0 && (
+              {product.image_urls && Array.isArray(product.image_urls) && product.image_urls.length > 0 && (
                 <div className="relative">
                   <img
-                    src={product.image_urls[0]} // Display first image
+                    src={product.image_urls[0]}
                     alt={product.title}
-                    width="320"
-                    height="192"
-                    loading="lazy"
                     className="w-full h-48 object-cover"
+                    onError={(e) => {
+                      // Hide image if it fails to load
+                      e.currentTarget.style.display = 'none'
+                    }}
                   />
                   {product.image_urls.length > 1 && (
                     <div className="absolute top-2 right-2 bg-black bg-opacity-60 text-white text-xs px-2 py-1 rounded">
@@ -267,7 +282,7 @@ export const ProductsManager: React.FC<ProductsManagerProps> = ({ onUpdate }) =>
                   dangerouslySetInnerHTML={{ __html: sanitizeText(product.description) }}
                 />
                 <div className="mb-3">
-                  {product.on_offer ? (
+                  {product.on_offer && product.discount_value ? (
                     <div>
                       <p className="text-sm text-gray-500 line-through">₹{product.price}</p>
                       <p className="text-xl font-bold text-blue-600">
@@ -326,6 +341,7 @@ export const ProductsManager: React.FC<ProductsManagerProps> = ({ onUpdate }) =>
             label="Product Title"
             value={formData.title}
             onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+            error={formErrors.title}
             required
           />
           
@@ -336,24 +352,32 @@ export const ProductsManager: React.FC<ProductsManagerProps> = ({ onUpdate }) =>
             <textarea
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                formErrors.description ? 'border-red-500' : 'border-gray-300'
+              }`}
               rows={3}
               required
             />
+            {formErrors.description && (
+              <p className="mt-1 text-sm text-red-600">{formErrors.description}</p>
+            )}
           </div>
           
           <div className="grid grid-cols-2 gap-4">
             <Input
               label="Price (₹)"
               type="number"
+              step="0.01"
               value={formData.price}
               onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+              error={formErrors.price}
               required
             />
             <Input
               label="Category"
               value={formData.category}
               onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+              error={formErrors.category}
               required
             />
           </div>
@@ -434,7 +458,6 @@ export const ProductsManager: React.FC<ProductsManagerProps> = ({ onUpdate }) =>
                 id="on_offer"
                 checked={formData.on_offer}
                 onChange={(e) => setFormData({ ...formData, on_offer: e.target.checked })}
-                error={formErrors.price}
                 className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
               />
               <label htmlFor="on_offer" className="text-sm font-medium text-gray-700">
@@ -462,6 +485,7 @@ export const ProductsManager: React.FC<ProductsManagerProps> = ({ onUpdate }) =>
                   <Input
                     label="Discount Value"
                     type="number"
+                    step="0.01"
                     value={formData.discount_value}
                     onChange={(e) => setFormData({ ...formData, discount_value: e.target.value })}
                     error={formErrors.discount_value}

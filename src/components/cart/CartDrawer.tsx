@@ -61,9 +61,9 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose }) => {
                   {items.map((item) => (
                     <div key={item.product.id} className="border border-gray-200 rounded-lg p-4">
                       <div className="flex items-start space-x-3">
-                        {item.product.image_url && (
+                        {item.product.image_urls && item.product.image_urls.length > 0 && (
                           <img
-                            src={item.product.image_url}
+                            src={item.product.image_urls[0]}
                             alt={item.product.title}
                             width="64"
                             height="64"

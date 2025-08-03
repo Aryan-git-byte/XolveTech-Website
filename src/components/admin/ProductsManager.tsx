@@ -16,6 +16,7 @@ export const ProductsManager: React.FC<ProductsManagerProps> = ({ onUpdate }) =>
   const [loading, setLoading] = useState(true)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingProduct, setEditingProduct] = useState<Product | null>(null)
+  const [formErrors, setFormErrors] = useState<{[key: string]: string}>({})
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -66,8 +67,38 @@ export const ProductsManager: React.FC<ProductsManagerProps> = ({ onUpdate }) =>
     }
   }
 
+  const validateForm = (): boolean => {
+    const newFormErrors: {[key: string]: string} = {}
+    
+    // Validate price
+    const priceValue = parseInt(formData.price)
+    if (isNaN(priceValue) || priceValue <= 0) {
+      newFormErrors.price = 'Price must be a positive number'
+    }
+    
+    // Validate discount value if offer is enabled
+    if (formData.on_offer && formData.discount_value) {
+      const discountValue = parseFloat(formData.discount_value)
+      if (isNaN(discountValue) || discountValue <= 0) {
+        newFormErrors.discount_value = 'Discount value must be a positive number'
+      } else if (formData.discount_type === 'percentage' && discountValue > 100) {
+        newFormErrors.discount_value = 'Percentage discount cannot exceed 100%'
+      } else if (formData.discount_type === 'flat' && discountValue >= priceValue) {
+        newFormErrors.discount_value = 'Flat discount cannot be greater than or equal to the price'
+      }
+    }
+    
+    setFormErrors(newFormErrors)
+    return Object.keys(newFormErrors).length === 0
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    
+    // Validate form before submission
+    if (!validateForm()) {
+      return
+    }
     
     // Convert newline-separated URLs to array
     const imageUrls = formData.image_urls
@@ -123,16 +154,17 @@ export const ProductsManager: React.FC<ProductsManagerProps> = ({ onUpdate }) =>
       description: product.description,
       price: product.price.toString(),
       category: product.category,
-      kit_contents: product.kit_contents?.join('\n') || '',
-      learning_outcomes: product.learning_outcomes?.join('\n') || '',
-      tools_required: product.tools_required?.join('\n') || '',
+      kit_contents: Array.isArray(product.kit_contents) ? product.kit_contents.join('\n') : '',
+      learning_outcomes: Array.isArray(product.learning_outcomes) ? product.learning_outcomes.join('\n') : '',
+      tools_required: Array.isArray(product.tools_required) ? product.tools_required.join('\n') : '',
       assembly_steps: product.assembly_steps || '',
-      image_urls: product.image_urls?.join('\n') || '', // Join array to newline-separated string
+      image_urls: Array.isArray(product.image_urls) ? product.image_urls.join('\n') : '', // Join array to newline-separated string
       on_offer: product.on_offer || false,
       discount_type: product.discount_type || 'flat',
       discount_value: product.discount_value?.toString() || '',
       discount_expiry_date: product.discount_expiry_date ? product.discount_expiry_date.split('T')[0] : ''
     })
+    setFormErrors({}) // Clear any previous errors
     setIsModalOpen(true)
   }
 
@@ -155,6 +187,7 @@ export const ProductsManager: React.FC<ProductsManagerProps> = ({ onUpdate }) =>
 
   const resetForm = () => {
     setEditingProduct(null)
+    setFormErrors({})
     setFormData({
       title: '',
       description: '',
@@ -401,6 +434,7 @@ export const ProductsManager: React.FC<ProductsManagerProps> = ({ onUpdate }) =>
                 id="on_offer"
                 checked={formData.on_offer}
                 onChange={(e) => setFormData({ ...formData, on_offer: e.target.checked })}
+                error={formErrors.price}
                 className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
               />
               <label htmlFor="on_offer" className="text-sm font-medium text-gray-700">
@@ -430,6 +464,7 @@ export const ProductsManager: React.FC<ProductsManagerProps> = ({ onUpdate }) =>
                     type="number"
                     value={formData.discount_value}
                     onChange={(e) => setFormData({ ...formData, discount_value: e.target.value })}
+                    error={formErrors.discount_value}
                     placeholder={formData.discount_type === 'flat' ? '50' : '20'}
                   />
                 </div>

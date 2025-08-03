@@ -50,9 +50,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onViewDetails
   return (
     <div className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow group">
       <div className="aspect-w-16 aspect-h-9 bg-gray-200 rounded-t-lg overflow-hidden">
-        {product.image_url ? (
+        {product.image_urls && product.image_urls.length > 0 ? (
           <img
-            src={product.image_url}
+            src={product.image_urls[0]}
             alt={product.title}
             width="320"
             height="192"

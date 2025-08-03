@@ -53,10 +53,10 @@ export const ProductModal: React.FC<ProductModalProps> = ({ product, isOpen, onC
     <Modal isOpen={isOpen} onClose={onClose} title={product.title}>
       <div className="space-y-6">
         {/* Product Image */}
-        {product.image_url && (
+        {product.image_urls && product.image_urls.length > 0 && (
           <div className="aspect-w-16 aspect-h-9 bg-gray-200 rounded-lg overflow-hidden">
             <img
-              src={product.image_url}
+              src={product.image_urls[0]}
               alt={product.title}
               width="512"
               height="256"

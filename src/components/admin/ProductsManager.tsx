@@ -201,20 +201,21 @@ export const ProductsManager: React.FC<ProductsManagerProps> = ({ onUpdate }) =>
   }
 
   const handleEdit = (product: Product) => {
-    console.log('Full product object:', product) // Debug log
-    console.log('product.image_urls type:', typeof product.image_urls) // Debug log
-    console.log('product.image_urls value:', product.image_urls) // Debug log
-    console.log('Is array?:', Array.isArray(product.image_urls)) // Debug log
+    console.log('🔍 Full product object:', product) // Debug log
+    console.log('🔍 product.image_urls type:', typeof product.image_urls) // Debug log
+    console.log('🔍 product.image_urls value:', product.image_urls) // Debug log
+    console.log('🔍 Is array?:', Array.isArray(product.image_urls)) // Debug log
     
     setEditingProduct(product)
     
-    // Handle different possible formats of image_urls
+    // Handle the JSON string format that's coming from the database
     let imageUrlsString = ''
     if (product.image_urls) {
       if (Array.isArray(product.image_urls)) {
+        // If it's already an array (shouldn't happen based on your logs)
         imageUrlsString = product.image_urls.join('\n')
       } else if (typeof product.image_urls === 'string') {
-        // If it's stored as a string, try to parse it
+        // This is what's happening - it's a JSON string
         try {
           const parsed = JSON.parse(product.image_urls)
           if (Array.isArray(parsed)) {
@@ -223,21 +224,25 @@ export const ProductsManager: React.FC<ProductsManagerProps> = ({ onUpdate }) =>
             imageUrlsString = product.image_urls
           }
         } catch {
+          // If parsing fails, treat it as a single URL
           imageUrlsString = product.image_urls
         }
       }
     }
     
-    console.log('Final imageUrlsString:', imageUrlsString) // Debug log
+    console.log('🔍 Final imageUrlsString:', imageUrlsString) // Debug log
     
     setFormData({
       title: product.title || '',
       description: product.description || '',
       price: product.price?.toString() || '',
       category: product.category || '',
-      kit_contents: Array.isArray(product.kit_contents) ? product.kit_contents.join('\n') : '',
-      learning_outcomes: Array.isArray(product.learning_outcomes) ? product.learning_outcomes.join('\n') : '',
-      tools_required: Array.isArray(product.tools_required) ? product.tools_required.join('\n') : '',
+      kit_contents: Array.isArray(product.kit_contents) ? product.kit_contents.join('\n') : 
+                   typeof product.kit_contents === 'string' ? JSON.parse(product.kit_contents).join('\n') : '',
+      learning_outcomes: Array.isArray(product.learning_outcomes) ? product.learning_outcomes.join('\n') : 
+                        typeof product.learning_outcomes === 'string' ? JSON.parse(product.learning_outcomes).join('\n') : '',
+      tools_required: Array.isArray(product.tools_required) ? product.tools_required.join('\n') : 
+                     typeof product.tools_required === 'string' ? JSON.parse(product.tools_required).join('\n') : '',
       assembly_steps: product.assembly_steps || '',
       image_urls: imageUrlsString,
       on_offer: product.on_offer || false,
@@ -321,23 +326,39 @@ export const ProductsManager: React.FC<ProductsManagerProps> = ({ onUpdate }) =>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {products.map((product) => (
             <div key={product.id} className="border border-gray-200 rounded-lg overflow-hidden">
-              {product.image_urls && Array.isArray(product.image_urls) && product.image_urls.length > 0 && (
-                <div className="relative">
-                  <img
-                    src={product.image_urls[0]}
-                    alt={product.title}
-                    className="w-full h-48 object-cover"
-                    onError={(e) => {
-                      // Hide image if it fails to load
-                      e.currentTarget.style.display = 'none'
-                    }}
-                  />
-                  {product.image_urls.length > 1 && (
-                    <div className="absolute top-2 right-2 bg-black bg-opacity-60 text-white text-xs px-2 py-1 rounded">
-                      +{product.image_urls.length - 1} more
+              {product.image_urls && (
+                (() => {
+                  // Handle both array and JSON string formats
+                  let imageArray = []
+                  if (Array.isArray(product.image_urls)) {
+                    imageArray = product.image_urls
+                  } else if (typeof product.image_urls === 'string') {
+                    try {
+                      imageArray = JSON.parse(product.image_urls)
+                    } catch {
+                      imageArray = [product.image_urls] // Treat as single URL
+                    }
+                  }
+                  
+                  return imageArray.length > 0 && (
+                    <div className="relative">
+                      <img
+                        src={imageArray[0]}
+                        alt={product.title}
+                        className="w-full h-48 object-cover"
+                        onError={(e) => {
+                          // Hide image if it fails to load
+                          e.currentTarget.style.display = 'none'
+                        }}
+                      />
+                      {imageArray.length > 1 && (
+                        <div className="absolute top-2 right-2 bg-black bg-opacity-60 text-white text-xs px-2 py-1 rounded">
+                          +{imageArray.length - 1} more
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
+                  )
+                })()
               )}
               <div className="p-4">
                 <h3 

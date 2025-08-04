@@ -1,27 +1,9 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import { vitePrerender } from 'vite-prerender-plugin' // ✅ named import
-import path from 'path'
 
+// https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [
-    react(),
-    vitePrerender({
-      staticDir: path.resolve(__dirname, 'dist'),
-      routes: [
-        '/', 
-        '/contact', 
-        '/how-it-works', 
-        '/team', 
-        '/shipping-delivery', 
-        '/privacy', 
-        '/terms', 
-        '/cancellation-refund', 
-        '/learning', 
-        '/custom-projects'
-      ]
-    })
-  ],
+  plugins: [react()],
   optimizeDeps: {
     exclude: ['lucide-react'],
   },

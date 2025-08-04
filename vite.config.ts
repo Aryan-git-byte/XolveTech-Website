@@ -1,7 +1,6 @@
-// vite.config.ts
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import vitePrerender from 'vite-prerender-plugin'
+import { vitePrerender } from 'vite-prerender-plugin' // ✅ named import
 import path from 'path'
 
 export default defineConfig({

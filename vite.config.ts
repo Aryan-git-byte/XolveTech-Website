@@ -1,15 +1,15 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
-import prerender from 'vite-plugin-prerender'
+import prerenderSpa from 'vite-plugin-prerender-spa-plugin'
 
-// [https://vitejs.dev/config/](https://vitejs.dev/config/)
+// https://vitejs.dev/config/
 export default defineConfig({
-plugins: \[
+plugins: [
 react(),
-prerender({
-staticDir: path.resolve(\_\_dirname, 'dist'),
-routes: \[
+prerenderSpa({
+staticDir: path.resolve(__dirname, 'dist'),
+routes: [
 '/',
 '/contact',
 '/privacy',
@@ -26,12 +26,13 @@ routes: \[
 }),
 ],
 optimizeDeps: {
-exclude: \['lucide-react'],
+exclude: ['lucide-react'],
 },
 server: {
 headers: {
 'X-Frame-Options': 'SAMEORIGIN',
-'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-eval' [https://api.razorpay.com](https://api.razorpay.com) [https://checkout.razorpay.com](https://checkout.razorpay.com); frame-src [https://api.razorpay.com](https://api.razorpay.com) [https://checkout.razorpay.com](https://checkout.razorpay.com) https\://\*.razorpay.com;"
+'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-eval' https://api.razorpay.com https://checkout.razorpay.com; frame-src https://api.razorpay.com https://checkout.razorpay.com https://*.razorpay.com;"
 }
 }
 })
+

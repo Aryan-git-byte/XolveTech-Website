@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Product } from '../../types'
 import { Modal } from '../ui/Modal'
 import { Button } from '../ui/Button'
-import { Package, Target, PenTool as Tool, Plus } from 'lucide-react'
+import { Package, Target, PenTool as Tool, Plus, ChevronLeft, ChevronRight } from 'lucide-react'
 import { useCart } from '../../contexts/CartContext'
 import { sanitizeText } from '../../utils/sanitize'
 
@@ -25,6 +25,29 @@ const calculateFinalPrice = (product: Product): number => {
   }
 }
 
+// Helper function to normalize image URLs
+const getImageUrls = (imageUrls: any): string[] => {
+  if (!imageUrls) return []
+  
+  if (Array.isArray(imageUrls)) {
+    return imageUrls.filter(url => url && url.trim())
+  }
+  
+  if (typeof imageUrls === 'string') {
+    try {
+      const parsed = JSON.parse(imageUrls)
+      if (Array.isArray(parsed)) {
+        return parsed.filter(url => url && url.trim())
+      }
+      return imageUrls.trim() ? [imageUrls.trim()] : []
+    } catch {
+      return imageUrls.trim() ? [imageUrls.trim()] : []
+    }
+  }
+  
+  return []
+}
+
 interface ProductModalProps {
   product: Product
   isOpen: boolean
@@ -33,6 +56,10 @@ interface ProductModalProps {
 
 export const ProductModal: React.FC<ProductModalProps> = ({ product, isOpen, onClose }) => {
   const { addToCart } = useCart()
+  const [currentImageIndex, setCurrentImageIndex] = useState(0)
+  
+  const imageUrls = getImageUrls(product.image_urls)
+  const hasMultipleImages = imageUrls.length > 1
 
   const handleAddToCart = () => {
     addToCart(product)
@@ -49,20 +76,88 @@ export const ProductModal: React.FC<ProductModalProps> = ({ product, isOpen, onC
     }
   }
 
+  const handlePreviousImage = () => {
+    setCurrentImageIndex((prev) => (prev === 0 ? imageUrls.length - 1 : prev - 1))
+  }
+
+  const handleNextImage = () => {
+    setCurrentImageIndex((prev) => (prev === imageUrls.length - 1 ? 0 : prev + 1))
+  }
+
+  const handleImageIndicatorClick = (index: number) => {
+    setCurrentImageIndex(index)
+  }
+
+  // Reset image index when modal opens with a new product
+  React.useEffect(() => {
+    setCurrentImageIndex(0)
+  }, [product.id])
+
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={product.title}>
       <div className="space-y-6">
-        {/* Product Image */}
-        {product.image_urls && product.image_urls.length > 0 && (
-          <div className="aspect-w-16 aspect-h-9 bg-gray-200 rounded-lg overflow-hidden">
-            <img
-              src={product.image_urls[0]}
-              alt={product.title}
-              width="512"
-              height="256"
-              loading="lazy"
-              className="w-full h-64 object-cover"
-            />
+        {/* Product Image Carousel */}
+        {imageUrls.length > 0 && (
+          <div className="relative bg-gray-200 rounded-lg overflow-hidden">
+            <div className="aspect-w-16 aspect-h-9">
+              <img
+                src={imageUrls[currentImageIndex]}
+                alt={`${product.title} - Image ${currentImageIndex + 1}`}
+                width="512"
+                height="256"
+                loading="lazy"
+                className="w-full h-64 object-cover"
+                onError={(e) => {
+                  // If image fails to load, try to show a placeholder or hide
+                  e.currentTarget.style.display = 'none'
+                }}
+              />
+            </div>
+            
+            {/* Navigation Arrows */}
+            {hasMultipleImages && (
+              <>
+                <button
+                  onClick={handlePreviousImage}
+                  className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-75 text-white p-2 rounded-full transition-opacity"
+                  aria-label="Previous image"
+                >
+                  <ChevronLeft className="w-5 h-5" />
+                </button>
+                <button
+                  onClick={handleNextImage}
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 hover:bg-opacity-75 text-white p-2 rounded-full transition-opacity"
+                  aria-label="Next image"
+                >
+                  <ChevronRight className="w-5 h-5" />
+                </button>
+              </>
+            )}
+            
+            {/* Image Counter */}
+            {hasMultipleImages && (
+              <div className="absolute top-2 right-2 bg-black bg-opacity-60 text-white text-sm px-3 py-1 rounded-full">
+                {currentImageIndex + 1} / {imageUrls.length}
+              </div>
+            )}
+            
+            {/* Image Indicators */}
+            {hasMultipleImages && (
+              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+                {imageUrls.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => handleImageIndicatorClick(index)}
+                    className={`w-2 h-2 rounded-full transition-colors ${
+                      index === currentImageIndex 
+                        ? 'bg-white' 
+                        : 'bg-white bg-opacity-50 hover:bg-opacity-75'
+                    }`}
+                    aria-label={`View image ${index + 1}`}
+                  />
+                ))}
+              </div>
+            )}
           </div>
         )}
 

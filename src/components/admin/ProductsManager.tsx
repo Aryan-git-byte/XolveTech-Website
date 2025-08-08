@@ -233,17 +233,6 @@ export const ProductsManager: React.FC<ProductsManagerProps> = ({ onUpdate }) =>
     
     // Handle the JSON string format that's coming from the database
     const imageUrls = getImageUrls(product.image_urls)
-    const imageUrlsString = imageUrls.join('\n') // Re-typing this line to ensure no hidden characters
-
-    setFormData({
-      title: product.title,
-      description: product.description,
-      price: product.price.toString(),
-      category: product.category,
-      // Join array fields for display in textarea
-      kit_contents: product.kit_contents ? product.kit_contents.join('\n') : '',
-      learning_outcomes: product.learning_outcomes ? product.learning_outcomes.join('\n') : '',
-      tools_required: product.tools_required ? product.tools_required.join('\n') : '',
-      assembly_steps: product.assembly_steps || '',
-      image_urls: imageUrlsString,
-      on_offer: product.on_offer || false,
+    const imageUrlsString = imageUrls.join('\n')
+  }
+}

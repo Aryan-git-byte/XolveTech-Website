@@ -1,7 +1,7 @@
 import React from 'react'
 import { Product } from '../../types'
 import { Button } from '../ui/Button'
-import { Eye, Plus, ShoppingCart } from 'lucide-react'
+import { Eye, Plus, ShoppingCart, Images } from 'lucide-react'
 import { useCart } from '../../contexts/CartContext'
 import { sanitizeText } from '../../utils/sanitize'
 
@@ -24,6 +24,29 @@ const calculateFinalPrice = (product: Product): number => {
   }
 }
 
+// Helper function to normalize image URLs
+const getImageUrls = (imageUrls: any): string[] => {
+  if (!imageUrls) return []
+  
+  if (Array.isArray(imageUrls)) {
+    return imageUrls.filter(url => url && url.trim())
+  }
+  
+  if (typeof imageUrls === 'string') {
+    try {
+      const parsed = JSON.parse(imageUrls)
+      if (Array.isArray(parsed)) {
+        return parsed.filter(url => url && url.trim())
+      }
+      return imageUrls.trim() ? [imageUrls.trim()] : []
+    } catch {
+      return imageUrls.trim() ? [imageUrls.trim()] : []
+    }
+  }
+  
+  return []
+}
+
 interface ProductCardProps {
   product: Product
   onViewDetails: (product: Product) => void
@@ -31,6 +54,8 @@ interface ProductCardProps {
 
 export const ProductCard: React.FC<ProductCardProps> = ({ product, onViewDetails }) => {
   const { addToCart } = useCart()
+  const imageUrls = getImageUrls(product.image_urls)
+  const hasMultipleImages = imageUrls.length > 1
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.stopPropagation()
@@ -49,16 +74,25 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onViewDetails
 
   return (
     <div className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow group">
-      <div className="aspect-w-16 aspect-h-9 bg-gray-200 rounded-t-lg overflow-hidden">
-        {product.image_urls && product.image_urls.length > 0 ? (
-          <img
-            src={product.image_urls[0]}
-            alt={product.title}
-            width="320"
-            height="192"
-            loading="lazy"
-            className="w-full h-48 object-cover group-hover:scale-105 transition-transform"
-          />
+      <div className="relative aspect-w-16 aspect-h-9 bg-gray-200 rounded-t-lg overflow-hidden">
+        {imageUrls.length > 0 ? (
+          <>
+            <img
+              src={imageUrls[0]}
+              alt={product.title}
+              width="320"
+              height="192"
+              loading="lazy"
+              className="w-full h-48 object-cover group-hover:scale-105 transition-transform"
+            />
+            {/* Multiple Images Indicator */}
+            {hasMultipleImages && (
+              <div className="absolute top-2 left-2 bg-black bg-opacity-60 text-white text-xs px-2 py-1 rounded-full flex items-center space-x-1">
+                <Images className="w-3 h-3" />
+                <span>{imageUrls.length}</span>
+              </div>
+            )}
+          </>
         ) : (
           <div className="w-full h-48 bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center">
             <ShoppingCart className="w-12 h-12 text-blue-400" />

@@ -62,22 +62,29 @@ export const ProductsManager: React.FC<ProductsManagerProps> = ({ onUpdate }) =>
 
   const fetchProducts = async () => {
     try {
+      console.log('🔍 Fetching products...')
       const { data, error } = await supabase
         .from('products')
         .select('*')
         .order('created_at', { ascending: false })
 
-      if (error) throw error
+      if (error) {
+        console.error('❌ Supabase error:', error)
+        throw error
+      }
       
-      // Debug logging to see the actual data structure
+      console.log('✅ Fetched products successfully:', data?.length || 0, 'products')
       console.log('🔍 Raw data from database:', data)
+      
       if (data && data.length > 0) {
         const firstProduct = data[0]
-        console.log('🔍 First product:', firstProduct)
-        console.log('🔍 image_urls value:', firstProduct.image_urls)
-        console.log('🔍 image_urls type:', typeof firstProduct.image_urls)
-        console.log('🔍 Is image_urls an array?:', Array.isArray(firstProduct.image_urls))
-        console.log('🔍 image_urls length:', firstProduct.image_urls?.length)
+        console.log('🔍 First product sample:', {
+          id: firstProduct.id,
+          title: firstProduct.title,
+          image_urls: firstProduct.image_urls,
+          image_urls_type: typeof firstProduct.image_urls,
+          image_urls_length: firstProduct.image_urls?.length
+        })
         
         // Check if it's a JSON string that needs parsing
         if (typeof firstProduct.image_urls === 'string') {
@@ -89,11 +96,15 @@ export const ProductsManager: React.FC<ProductsManagerProps> = ({ onUpdate }) =>
             console.log('🔍 image_urls is not valid JSON:', e.message)
           }
         }
+      } else {
+        console.log('ℹ️ No products found in database')
       }
       
       setProducts(data || [])
     } catch (error) {
       console.error('❌ Error fetching products:', error)
+      // Set empty array on error so the UI doesn't break
+      setProducts([])
     } finally {
       setLoading(false)
     }
@@ -234,5 +245,3 @@ export const ProductsManager: React.FC<ProductsManagerProps> = ({ onUpdate }) =>
     // Handle the JSON string format that's coming from the database
     const imageUrls = getImageUrls(product.image_urls)
     const imageUrlsString = imageUrls.join('\n')
-  }
-}

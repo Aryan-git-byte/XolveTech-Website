@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Product } from '../../types'
 import { Modal } from '../ui/Modal'
 import { Button } from '../ui/Button'

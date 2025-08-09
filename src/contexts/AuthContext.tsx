@@ -26,10 +26,9 @@ export const useAuth = () => {
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
-  
+
   // Derive email confirmation status from user object
   const isEmailConfirmed = Boolean(user?.email_confirmed_at)
-
   useEffect(() => {
     const getSession = async () => {
       const { data: { session } } = await supabase.auth.getSession()
@@ -59,7 +58,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       email, 
       password,
       options: {
-        emailRedirectTo: 'https://xolvetech.in/admin/login',
+        emailRedirectTo: 'https://xolvetech.in/',
         data: {
           full_name: name
         }
@@ -74,15 +73,27 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }
 
   const resendConfirmation = async () => {
-    if (!user?.email) {
-      throw new Error('No user email found')
+  if (!user?.email) {
+    throw new Error('No user email found')
+  }
+  console.log('DEBUG: Value of supabase.auth.resend:', supabase.auth.resend); // Add this line
+  const { error } = await supabase.auth.resend({
+    type: 'signup',
+    email: user.email,
+    options: {
+      emailRedirectTo: 'https://xolvetech.in/'
     }
+  })
+
+  if (error) throw error
+}
+
     
     const { error } = await supabase.auth.resend({
       type: 'signup',
       email: user.email,
       options: {
-        emailRedirectTo: 'https://xolvetech.in/admin/login'
+        emailRedirectTo: 'https://xolvetech.in/'
       }
     })
     

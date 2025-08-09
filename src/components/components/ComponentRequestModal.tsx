@@ -2,7 +2,9 @@ import React, { useState } from 'react'
 import { Modal } from '../ui/Modal'
 import { Button } from '../ui/Button'
 import { Send, AlertCircle, CheckCircle, User, Mail, Package, MessageSquare } from 'lucide-react'
-import { supabase } from '../../lib/supabase' // Adjust import path as needed
+import { supabase } from '../../lib/supabase'
+import { useAuth } from '../../contexts/AuthContext'
+import { EmailConfirmationGuard } from '../auth/EmailConfirmationGuard'
 
 interface ComponentRequestModalProps {
   isOpen: boolean
@@ -23,9 +25,10 @@ interface FormErrors {
 }
 
 export const ComponentRequestModal: React.FC<ComponentRequestModalProps> = ({ isOpen, onClose }) => {
+  const { user } = useAuth()
   const [formData, setFormData] = useState<FormData>({
-    name: '',
-    email: '',
+    name: user?.user_metadata?.full_name || '',
+    email: user?.email || '',
     component: '',
     reason: ''
   })
@@ -38,12 +41,17 @@ export const ComponentRequestModal: React.FC<ComponentRequestModalProps> = ({ is
   // Reset form when modal opens/closes
   React.useEffect(() => {
     if (isOpen) {
-      setFormData({ name: '', email: '', component: '', reason: '' })
+      setFormData({ 
+        name: user?.user_metadata?.full_name || '', 
+        email: user?.email || '', 
+        component: '', 
+        reason: '' 
+      })
       setErrors({})
       setSubmitStatus('idle')
       setSubmitMessage('')
     }
-  }, [isOpen])
+  }, [isOpen, user])
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {}
@@ -126,150 +134,152 @@ export const ComponentRequestModal: React.FC<ComponentRequestModalProps> = ({ is
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Request a Component">
       <div className="space-y-6">
-        <div className="text-center text-gray-600">
-          <p>Can't find the component you need? Let us know what you're looking for and we'll consider adding it to our catalog.</p>
-        </div>
+        <EmailConfirmationGuard message="Please confirm your email address to request components.">
+          <div className="text-center text-gray-600">
+            <p>Can't find the component you need? Let us know what you're looking for and we'll consider adding it to our catalog.</p>
+          </div>
 
-        {/* Success/Error Messages */}
-        {submitStatus === 'success' && (
-          <div className="bg-green-50 border border-green-200 rounded-lg p-4 flex items-start space-x-3">
-            <CheckCircle className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
-            <div>
-              <p className="text-green-800 font-medium">Request Submitted!</p>
-              <p className="text-green-700 text-sm mt-1">{submitMessage}</p>
+          {/* Success/Error Messages */}
+          {submitStatus === 'success' && (
+            <div className="bg-green-50 border border-green-200 rounded-lg p-4 flex items-start space-x-3">
+              <CheckCircle className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
+              <div>
+                <p className="text-green-800 font-medium">Request Submitted!</p>
+                <p className="text-green-700 text-sm mt-1">{submitMessage}</p>
+              </div>
             </div>
-          </div>
-        )}
+          )}
 
-        {submitStatus === 'error' && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-start space-x-3">
-            <AlertCircle className="w-5 h-5 text-red-600 mt-0.5 flex-shrink-0" />
-            <div>
-              <p className="text-red-800 font-medium">Submission Failed</p>
-              <p className="text-red-700 text-sm mt-1">{submitMessage}</p>
+          {submitStatus === 'error' && (
+            <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-start space-x-3">
+              <AlertCircle className="w-5 h-5 text-red-600 mt-0.5 flex-shrink-0" />
+              <div>
+                <p className="text-red-800 font-medium">Submission Failed</p>
+                <p className="text-red-700 text-sm mt-1">{submitMessage}</p>
+              </div>
             </div>
-          </div>
-        )}
+          )}
 
-        {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Name Field */}
-          <div>
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2 flex items-center">
-              <User className="w-4 h-4 mr-2 text-gray-500" />
-              Your Name *
-            </label>
-            <input
-              type="text"
-              id="name"
-              value={formData.name}
-              onChange={(e) => handleInputChange('name', e.target.value)}
-              className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                errors.name ? 'border-red-300 bg-red-50' : 'border-gray-300'
-              }`}
-              placeholder="Enter your full name"
-              disabled={isSubmitting}
-            />
-            {errors.name && (
-              <p className="mt-1 text-sm text-red-600">{errors.name}</p>
-            )}
-          </div>
-
-          {/* Email Field */}
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2 flex items-center">
-              <Mail className="w-4 h-4 mr-2 text-gray-500" />
-              Email Address *
-            </label>
-            <input
-              type="email"
-              id="email"
-              value={formData.email}
-              onChange={(e) => handleInputChange('email', e.target.value)}
-              className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                errors.email ? 'border-red-300 bg-red-50' : 'border-gray-300'
-              }`}
-              placeholder="Enter your email address"
-              disabled={isSubmitting}
-            />
-            {errors.email && (
-              <p className="mt-1 text-sm text-red-600">{errors.email}</p>
-            )}
-          </div>
-
-          {/* Component Field */}
-          <div>
-            <label htmlFor="component" className="block text-sm font-medium text-gray-700 mb-2 flex items-center">
-              <Package className="w-4 h-4 mr-2 text-gray-500" />
-              Component Requested *
-            </label>
-            <input
-              type="text"
-              id="component"
-              value={formData.component}
-              onChange={(e) => handleInputChange('component', e.target.value)}
-              className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                errors.component ? 'border-red-300 bg-red-50' : 'border-gray-300'
-              }`}
-              placeholder="e.g., Arduino Uno, Servo Motor, LED Matrix"
-              disabled={isSubmitting}
-            />
-            {errors.component && (
-              <p className="mt-1 text-sm text-red-600">{errors.component}</p>
-            )}
-          </div>
-
-          {/* Reason Field (Optional) */}
-          <div>
-            <label htmlFor="reason" className="block text-sm font-medium text-gray-700 mb-2 flex items-center">
-              <MessageSquare className="w-4 h-4 mr-2 text-gray-500" />
-              Reason for Request (Optional)
-            </label>
-            <textarea
-              id="reason"
-              value={formData.reason}
-              onChange={(e) => handleInputChange('reason', e.target.value)}
-              rows={3}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-              placeholder="Tell us why you need this component or how you plan to use it..."
-              disabled={isSubmitting}
-            />
-          </div>
-
-          {/* Submit Button */}
-          <div className="flex space-x-3 pt-4">
-            <Button
-              type="submit"
-              disabled={isSubmitting || submitStatus === 'success'}
-              className="flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {isSubmitting ? (
-                <>
-                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                  <span>Submitting...</span>
-                </>
-              ) : (
-                <>
-                  <Send className="w-4 h-4" />
-                  <span>Submit Request</span>
-                </>
+          {/* Form */}
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Name Field */}
+            <div>
+              <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2 flex items-center">
+                <User className="w-4 h-4 mr-2 text-gray-500" />
+                Your Name *
+              </label>
+              <input
+                type="text"
+                id="name"
+                value={formData.name}
+                onChange={(e) => handleInputChange('name', e.target.value)}
+                disabled={isSubmitting || Boolean(user?.user_metadata?.full_name)}
+                className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed ${
+                  errors.name ? 'border-red-300 bg-red-50' : 'border-gray-300'
+                }`}
+                placeholder="Enter your full name"
+              />
+              {errors.name && (
+                <p className="mt-1 text-sm text-red-600">{errors.name}</p>
               )}
-            </Button>
-            <Button 
-              type="button" 
-              variant="outline" 
-              onClick={onClose}
-              disabled={isSubmitting}
-            >
-              Cancel
-            </Button>
-          </div>
-        </form>
+            </div>
 
-        {/* Help Text */}
-        <div className="text-center text-sm text-gray-500 pt-4 border-t">
-          <p>We review all component requests and will email you when new components are available.</p>
-        </div>
+            {/* Email Field */}
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2 flex items-center">
+                <Mail className="w-4 h-4 mr-2 text-gray-500" />
+                Email Address *
+              </label>
+              <input
+                type="email"
+                id="email"
+                value={formData.email}
+                onChange={(e) => handleInputChange('email', e.target.value)}
+                disabled={isSubmitting || Boolean(user?.email)}
+                className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed ${
+                  errors.email ? 'border-red-300 bg-red-50' : 'border-gray-300'
+                }`}
+                placeholder="Enter your email address"
+              />
+              {errors.email && (
+                <p className="mt-1 text-sm text-red-600">{errors.email}</p>
+              )}
+            </div>
+
+            {/* Component Field */}
+            <div>
+              <label htmlFor="component" className="block text-sm font-medium text-gray-700 mb-2 flex items-center">
+                <Package className="w-4 h-4 mr-2 text-gray-500" />
+                Component Requested *
+              </label>
+              <input
+                type="text"
+                id="component"
+                value={formData.component}
+                onChange={(e) => handleInputChange('component', e.target.value)}
+                className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                  errors.component ? 'border-red-300 bg-red-50' : 'border-gray-300'
+                }`}
+                placeholder="e.g., Arduino Uno, Servo Motor, LED Matrix"
+                disabled={isSubmitting}
+              />
+              {errors.component && (
+                <p className="mt-1 text-sm text-red-600">{errors.component}</p>
+              )}
+            </div>
+
+            {/* Reason Field (Optional) */}
+            <div>
+              <label htmlFor="reason" className="block text-sm font-medium text-gray-700 mb-2 flex items-center">
+                <MessageSquare className="w-4 h-4 mr-2 text-gray-500" />
+                Reason for Request (Optional)
+              </label>
+              <textarea
+                id="reason"
+                value={formData.reason}
+                onChange={(e) => handleInputChange('reason', e.target.value)}
+                rows={3}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                placeholder="Tell us why you need this component or how you plan to use it..."
+                disabled={isSubmitting}
+              />
+            </div>
+
+            {/* Submit Button */}
+            <div className="flex space-x-3 pt-4">
+              <Button
+                type="submit"
+                disabled={isSubmitting || submitStatus === 'success'}
+                className="flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isSubmitting ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    <span>Submitting...</span>
+                  </>
+                ) : (
+                  <>
+                    <Send className="w-4 h-4" />
+                    <span>Submit Request</span>
+                  </>
+                )}
+              </Button>
+              <Button 
+                type="button" 
+                variant="outline" 
+                onClick={onClose}
+                disabled={isSubmitting}
+              >
+                Cancel
+              </Button>
+            </div>
+          </form>
+
+          {/* Help Text */}
+          <div className="text-center text-sm text-gray-500 pt-4 border-t">
+            <p>We review all component requests and will email you when new components are available.</p>
+          </div>
+        </EmailConfirmationGuard>
       </div>
     </Modal>
   )

@@ -259,6 +259,31 @@ export const ProductsManager: React.FC<ProductsManagerProps> = ({ onUpdate }) =>
     
     setIsModalOpen(true)
   }
+    
+    setFormData({
+      title: product.title || '',
+      description: product.description || '',
+      price: product.price?.toString() || '',
+      category: product.category || '',
+      kit_contents: Array.isArray(product.kit_contents) 
+        ? product.kit_contents.join('\n') 
+        : product.kit_contents || '',
+      learning_outcomes: Array.isArray(product.learning_outcomes) 
+        ? product.learning_outcomes.join('\n') 
+        : product.learning_outcomes || '',
+      tools_required: Array.isArray(product.tools_required) 
+        ? product.tools_required.join('\n') 
+        : product.tools_required || '',
+      assembly_steps: product.assembly_steps || '',
+      image_urls: imageUrlsString,
+      on_offer: product.on_offer || false,
+      discount_type: product.discount_type || 'flat',
+      discount_value: product.discount_value?.toString() || '',
+      discount_expiry_date: product.discount_expiry_date || ''
+    })
+    
+    setIsModalOpen(true)
+  }
 
   const handleDelete = async (productId: string) => {
     if (!confirm('Are you sure you want to delete this product?')) {

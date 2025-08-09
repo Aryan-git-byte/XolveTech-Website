@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Modal } from '../ui/Modal'
 import { Button } from '../ui/Button'
 import { Send, AlertCircle, CheckCircle, User, Mail, Package, MessageSquare } from 'lucide-react'

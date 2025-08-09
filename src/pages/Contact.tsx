@@ -1,18 +1,30 @@
 import React, { useState } from 'react'
+import { Helmet } from 'react-helmet-async'
 import { Mail, Phone, Instagram, MapPin, Send } from 'lucide-react'
 import { Button } from '../components/ui/Button'
 import { Input } from '../components/ui/Input'
 import { supabase } from '../lib/supabase'
+import { useAuth } from '../contexts/AuthContext'
+import { EmailConfirmationGuard } from '../components/auth/EmailConfirmationGuard'
 
 export const Contact: React.FC = () => {
+  const { user } = useAuth()
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
+    name: user?.user_metadata?.full_name || '',
+    email: user?.email || '',
     message: ''
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
 
+  // Update form data when user changes
+  React.useEffect(() => {
+    setFormData(prev => ({
+      ...prev,
+      name: user?.user_metadata?.full_name || prev.name,
+      email: user?.email || prev.email
+    }))
+  }, [user])
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
@@ -43,6 +55,12 @@ export const Contact: React.FC = () => {
   }
 
   return (
+    <>
+      <Helmet>
+        <title>Contact XolveTech - STEM Education Support | Arduino Kit Help India</title>
+        <meta name="description" content="Contact XolveTech team for Arduino STEM kit support, custom project inquiries, and educational assistance. Email, WhatsApp, and Instagram support available." />
+      </Helmet>
+      
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-blue-600 to-blue-700 text-white py-16">
@@ -64,59 +82,63 @@ export const Contact: React.FC = () => {
             <div className="bg-white rounded-lg shadow-sm p-8">
               <h2 className="text-2xl font-bold text-gray-900 mb-6">Send us a Message</h2>
               
-              {submitStatus === 'success' && (
-                <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-md">
-                  <p className="text-green-800">Thank you for your message! We'll get back to you soon.</p>
-                </div>
-              )}
-              
-              {submitStatus === 'error' && (
-                <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-md">
-                  <p className="text-red-800">There was an error sending your message. Please try again.</p>
-                </div>
-              )}
-              
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <Input
-                  label="Full Name"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                />
+              <EmailConfirmationGuard message="Please confirm your email address to send us a message.">
+                {submitStatus === 'success' && (
+                  <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-md">
+                    <p className="text-green-800">Thank you for your message! We'll get back to you soon.</p>
+                  </div>
+                )}
                 
-                <Input
-                  label="Email Address"
-                  name="email"
-                  type="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                />
+                {submitStatus === 'error' && (
+                  <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-md">
+                    <p className="text-red-800">There was an error sending your message. Please try again.</p>
+                  </div>
+                )}
                 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Message
-                  </label>
-                  <textarea
-                    name="message"
-                    value={formData.message}
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <Input
+                    label="Full Name"
+                    name="name"
+                    value={formData.name}
                     onChange={handleChange}
-                    rows={6}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    disabled={Boolean(user?.user_metadata?.full_name)}
                     required
                   />
-                </div>
-                
-                <Button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="w-full flex items-center justify-center space-x-2"
-                >
-                  <Send className="w-4 h-4" />
-                  <span>{isSubmitting ? 'Sending...' : 'Send Message'}</span>
-                </Button>
-              </form>
+                  
+                  <Input
+                    label="Email Address"
+                    name="email"
+                    type="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    disabled={Boolean(user?.email)}
+                    required
+                  />
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Message
+                    </label>
+                    <textarea
+                      name="message"
+                      value={formData.message}
+                      onChange={handleChange}
+                      rows={6}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      required
+                    />
+                  </div>
+                  
+                  <Button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="w-full flex items-center justify-center space-x-2"
+                  >
+                    <Send className="w-4 h-4" />
+                    <span>{isSubmitting ? 'Sending...' : 'Send Message'}</span>
+                  </Button>
+                </form>
+              </EmailConfirmationGuard>
             </div>
 
             {/* Contact Information */}
@@ -232,5 +254,6 @@ export const Contact: React.FC = () => {
         </div>
       </section>
     </div>
+    </>
   )
 }

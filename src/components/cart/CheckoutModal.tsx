@@ -6,6 +6,7 @@ import { useAuth } from '../../contexts/AuthContext'
 import { Button } from '../ui/Button'
 import { Input } from '../ui/Input'
 import { supabase } from '../../lib/supabase'
+import { EmailConfirmationGuard } from '../auth/EmailConfirmationGuard'
 import { 
   generateOrderId, 
   validateOrderId, 
@@ -38,6 +39,14 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose })
     notes: ''
   })
 
+  // Update form data when user changes
+  useEffect(() => {
+    setOrderData(prev => ({
+      ...prev,
+      name: user?.user_metadata?.full_name || prev.name,
+      email: user?.email || prev.email
+    }))
+  }, [user])
   const [error, setError] = useState('')
   const [validationErrors, setValidationErrors] = useState<{[key: string]: string}>({})
 
@@ -187,6 +196,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose })
             </button>
           </div>
 
+          <EmailConfirmationGuard message="Please confirm your email address to place an order.">
           {paymentStep === 'details' ? (
             <>
               {/* Order Summary */}
@@ -252,6 +262,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose })
                       placeholder="Full Name"
                       value={orderData.name}
                       onChange={handleChange}
+                      disabled={Boolean(user?.user_metadata?.full_name)}
                       className="pl-10"
                       error={validationErrors.name}
                       required
@@ -266,6 +277,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose })
                       placeholder="Email Address"
                       value={orderData.email}
                       onChange={handleChange}
+                      disabled={Boolean(user?.email)}
                       className="pl-10"
                       error={validationErrors.email}
                       required
@@ -445,6 +457,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose })
               </div>
             </>
           )}
+          </EmailConfirmationGuard>
         </div>
       </div>
     </div>

@@ -5,9 +5,10 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   base: '/',
   plugins: [react()],
-  optimizeDeps: {
-    exclude: ['lucide-react'],
-  },
+  // Remove the optimizeDeps exclusion - this is likely causing the issue
+  // optimizeDeps: {
+  //   exclude: ['lucide-react'],
+  // },
   server: {
     headers: {
       'X-Frame-Options': 'SAMEORIGIN',

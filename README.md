@@ -119,3 +119,136 @@ Row Level Security (RLS): Enforced at the database level to control data access 
 Webhook Signature Verification: The razorpay-webhook Edge Function verifies the signature of incoming webhooks to ensure they originate from Razorpay and have not been tampered with.
 Environment Variables: Sensitive API keys and secrets are stored as environment variables (e.g., RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET, RAZORPAY_WEBHOOK_SECRET) and accessed securely by Edge Functions, never exposed to the client-side.
 Input Sanitization: Frontend utility functions (src/utils/sanitize.ts) are used to sanitize user inputs before display or submission to prevent XSS vulnerabilities.
+
+
+Project Strucutre:
+.bolt/
+    ├── supabase_discarded_migrations/
+        ├── 20250803134109_navy_temple.sql
+        └── 20250921044450_add_partners_log_feature.sql
+    ├── config.json
+    └── prompt
+public/
+    ├── _headers
+    ├── _redirects
+    ├── apple-touch-icon-180x180.png
+    ├── favicon.ico
+    ├── favicon.png
+    ├── manifest.json
+    ├── robots.txt
+    ├── sitemap.xml
+    └── sw.js
+src/
+    ├── assets/
+        └── xolvetech-logo.png
+    ├── components/
+        ├── admin/
+            ├── AdminDashboard.tsx
+            ├── AdminStats.tsx
+            ├── BillMaker.tsx
+            ├── ComponentsManager.tsx
+            ├── ContactsManager.tsx
+            ├── CustomProjectsManager.tsx
+            ├── OrdersManager.tsx
+            ├── ProductsManager.tsx
+            └── ResourcesManager.tsx
+        ├── auth/
+            ├── AuthModal.tsx
+            ├── EmailConfirmationGuard.tsx
+            └── ProtectedRoute.tsx
+        ├── cart/
+            ├── CartDrawer.tsx
+            └── CheckoutModal.tsx
+        ├── components/
+            ├── ComponentCard.tsx
+            └── ComponentRequestModal.tsx
+        ├── layout/
+            ├── Footer.tsx
+            └── Header.tsx
+        ├── partners/
+            ├── AnalyticsDashboard.tsx
+            ├── LogDetailModal.tsx
+            ├── LogFormModal.tsx
+            ├── LogsManager.tsx
+            ├── NotificationsPanel.tsx
+            ├── PartnerDashboard.tsx
+            ├── TaskDetailModal.tsx
+            ├── TaskFormModal.tsx
+            └── TasksManager.tsx
+        ├── payment/
+            └── PaymentStatus.tsx
+        ├── products/
+            ├── ProductCard.tsx
+            └── ProductModal.tsx
+        └── ui/
+            ├── Button.tsx
+            ├── Input.tsx
+            ├── Modal.tsx
+            └── SearchBar.tsx
+    ├── contexts/
+        ├── AuthContext.tsx
+        └── CartContext.tsx
+    ├── lib/
+        ├── payment.ts
+        ├── paymentLogger.ts
+        └── supabase.ts
+    ├── pages/
+        ├── admin/
+            ├── AdminDashboard.tsx
+            └── AdminLogin.tsx
+        ├── CancellationRefundPolicy.tsx
+        ├── Components.tsx
+        ├── Contact.tsx
+        ├── CustomProjects.tsx
+        ├── Home.tsx
+        ├── HowItWorks.tsx
+        ├── Learning.tsx
+        ├── OrderSuccess.tsx
+        ├── PartnerLogin.tsx
+        ├── Partners.tsx
+        ├── PaymentSuccess.tsx
+        ├── PrivacyPolicy.tsx
+        ├── Products.tsx
+        ├── ShippingDeliveryPolicy.tsx
+        ├── Team.tsx
+        ├── TermsOfService.tsx
+        └── TestOrder.tsx
+    ├── types/
+        └── index.ts
+    ├── utils/
+        └── sanitize.ts
+    ├── App.tsx
+    ├── index.css
+    ├── main.tsx
+    └── vite-env.d.ts
+supabase/
+    ├── functions/
+        ├── create-razorpay-order/
+            └── index.ts
+        └── razorpay-webhook/
+            └── index.ts
+    └── migrations/
+        ├── 20250703131212_foggy_river.sql
+        ├── 20250703132818_silent_ocean.sql
+        ├── 20250703133334_jolly_glitter.sql
+        ├── 20250712014254_dawn_stream.sql
+        ├── 20250713043107_broken_gate.sql
+        ├── 20250713044624_mellow_island.sql
+        ├── 20250714114649_scarlet_pond.sql
+        ├── 20250720040831_fragrant_hall.sql
+        └── 20250921050852_still_spring.sql
+.gitignore
+eslint.config.js
+guide.txt
+index.html
+netlify.toml
+package-lock.json
+package.json
+postcss.config.js
+README.md
+sitemap.xml
+tailwind.config.js
+tsconfig.app.json
+tsconfig.json
+tsconfig.node.json
+vite.config.ts

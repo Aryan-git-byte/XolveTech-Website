@@ -1,5 +1,4 @@
-// Simple service worker for PWA functionality
-const CACHE_NAME = 'xolvetech-v1';
+const CACHE_NAME = 'xolvetech-v2';
 const urlsToCache = [
   '/',
   '/products',
@@ -8,42 +7,38 @@ const urlsToCache = [
   '/learning',
   '/team',
   '/contact',
-  '/manifest.json'
+  '/manifest.json',
+  '/assets/xolvetech-logo.png' // add other important assets if needed
 ];
 
-// Install event - cache resources
+// Install - cache resources
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then((cache) => {
-        return cache.addAll(urlsToCache);
-      })
+    caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache))
   );
 });
 
-// Fetch event - serve from cache when offline
+// Fetch - serve assets correctly
 self.addEventListener('fetch', (event) => {
+  const requestURL = new URL(event.request.url);
+
+  // Always fetch /index.html fresh for SPA routes
+  if (requestURL.origin === location.origin && requestURL.pathname !== '/' && !requestURL.pathname.startsWith('/assets/')) {
+    event.respondWith(fetch(event.request).catch(() => caches.match('/')));
+    return;
+  }
+
+  // Serve cached assets if available
   event.respondWith(
-    caches.match(event.request)
-      .then((response) => {
-        // Return cached version or fetch from network
-        return response || fetch(event.request);
-      }
-    )
+    caches.match(event.request).then(response => response || fetch(event.request))
   );
 });
 
-// Activate event - clean up old caches
+// Activate - clean old caches
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
-        cacheNames.map((cacheName) => {
-          if (cacheName !== CACHE_NAME) {
-            return caches.delete(cacheName);
-          }
-        })
-      );
-    })
+    caches.keys().then(keys => Promise.all(
+      keys.map(key => key !== CACHE_NAME ? caches.delete(key) : null)
+    ))
   );
 });

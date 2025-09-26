@@ -11,13 +11,23 @@ const urlsToCache = [
   '/assets/xolvetech-logo.png'
 ];
 
-// Install - cache resources
+// Install - cache resources with error handling
 self.addEventListener('install', (event) => {
   // Skip waiting to activate immediately
   self.skipWaiting();
   
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache))
+    caches.open(CACHE_NAME).then(cache => {
+      // Cache URLs individually to handle failures gracefully
+      return Promise.allSettled(
+        urlsToCache.map(url => {
+          return cache.add(url).catch(error => {
+            console.warn(`Failed to cache ${url}:`, error);
+            return null; // Continue with other URLs even if one fails
+          });
+        })
+      );
+    })
   );
 });
 

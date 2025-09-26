@@ -28,11 +28,16 @@ if ('serviceWorker' in navigator) {
                     return Promise.all(
                       cacheNames.map(cacheName => {
                         console.log('Deleting cache:', cacheName);
-                        return caches.delete(cacheName);
+                        return caches.delete(cacheName).catch(err => {
+                          console.warn('Failed to delete cache:', cacheName, err);
+                        });
                       })
                     );
                   }).then(() => {
                     console.log('All caches cleared, reloading page...');
+                    window.location.reload();
+                  }).catch(err => {
+                    console.warn('Cache clearing had some failures, reloading anyway:', err);
                     window.location.reload();
                   });
                 } else if (newWorker.state === 'activated' && !navigator.serviceWorker.controller) {
@@ -51,12 +56,15 @@ if ('serviceWorker' in navigator) {
 
           // Check for updates periodically
           setInterval(() => {
-            registration.update();
+            registration.update().catch(err => {
+              console.warn('Service worker update check failed:', err);
+            });
           }, 60000); // Check every minute for updates
 
         })
         .catch((registrationError) => {
-          console.log('SW registration failed: ', registrationError);
+          console.warn('SW registration failed: ', registrationError);
+          // Don't throw error, just log it - app should still work without SW
         });
     });
 
@@ -72,9 +80,13 @@ if ('serviceWorker' in navigator) {
               .filter(cacheName => cacheName !== currentCacheName)
               .map(cacheName => {
                 console.log('Clearing old cache:', cacheName);
-                return caches.delete(cacheName);
+                return caches.delete(cacheName).catch(err => {
+                  console.warn('Failed to clear cache:', cacheName, err);
+                });
               })
           );
+        }).catch(err => {
+          console.warn('Cache clearing operation failed:', err);
         });
       }
     });
@@ -112,24 +124,41 @@ if (import.meta.env.PROD) {
   (window as any).forceHardRefresh = async () => {
     console.log('Forcing hard refresh...');
     
-    // Clear all caches
-    if ('caches' in window) {
-      const cacheNames = await caches.keys();
-      await Promise.all(cacheNames.map(name => caches.delete(name)));
+    try {
+      // Clear all caches
+      if ('caches' in window) {
+        const cacheNames = await caches.keys();
+        await Promise.allSettled(cacheNames.map(name => caches.delete(name)));
+        console.log('All caches cleared');
+      }
+      
+      // Clear localStorage and sessionStorage
+      try {
+        localStorage.clear();
+        sessionStorage.clear();
+        console.log('Storage cleared');
+      } catch (e) {
+        console.warn('Storage clearing failed:', e);
+      }
+      
+      // Unregister service worker
+      if ('serviceWorker' in navigator) {
+        try {
+          const registrations = await navigator.serviceWorker.getRegistrations();
+          await Promise.allSettled(registrations.map(reg => reg.unregister()));
+          console.log('Service workers unregistered');
+        } catch (e) {
+          console.warn('Service worker unregistration failed:', e);
+        }
+      }
+      
+      console.log('Hard refresh complete, reloading...');
+    } catch (error) {
+      console.error('Force refresh error:', error);
+    } finally {
+      // Force reload with cache bypass
+      window.location.reload();
     }
-    
-    // Clear localStorage and sessionStorage
-    localStorage.clear();
-    sessionStorage.clear();
-    
-    // Unregister service worker
-    if ('serviceWorker' in navigator) {
-      const registrations = await navigator.serviceWorker.getRegistrations();
-      await Promise.all(registrations.map(reg => reg.unregister()));
-    }
-    
-    // Force reload with cache bypass
-    window.location.reload();
   };
 }
 

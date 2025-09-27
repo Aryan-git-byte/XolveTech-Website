@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { Menu, X, Settings, ShoppingCart, User, LogOut, BookOpen } from 'lucide-react'
+import { Menu, X, Settings, ShoppingCart, LogOut, BookOpen } from 'lucide-react'
 import { useAuth } from '../../contexts/AuthContext'
 import { useCart } from '../../contexts/CartContext'
 import { AuthModal } from '../auth/AuthModal'
@@ -150,7 +150,7 @@ export const Header: React.FC = () => {
                   {/* Partner Notebook */}
                   {isPartner && (
                     <Link
-                      to="/partner"
+                      to="/partners"
                       className={`p-2 rounded-md text-sm font-medium transition-colors ${
                         isActive('/partner')
                           ? 'text-green-600 bg-green-50'

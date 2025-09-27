@@ -11,6 +11,7 @@ interface AuthContextType {
   signOut: () => Promise<void>
   resendConfirmation: () => Promise<void>
   isAdmin: boolean
+  isPartner: boolean
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -29,18 +30,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   
   // Derive email confirmation status from user object
   const isEmailConfirmed = Boolean(user?.email_confirmed_at)
-
+  
   useEffect(() => {
     const getSession = async () => {
       const { data: { session } } = await supabase.auth.getSession()
       setUser(session?.user ?? null)
       setLoading(false)
     }
-
     getSession()
-
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (_, session) => {
+      (_event: string, session: { user: User | null } | null) => {
         setUser(session?.user ?? null)
         setLoading(false)
       }
@@ -66,23 +65,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }
 
   const signOut = async () => {
-    try {
-      // Set user to null immediately to improve UI responsiveness
-      setUser(null)
-      
-      // Then attempt to sign out from Supabase
-      const { error } = await supabase.auth.signOut()
-      
-      // If there's an error, log it but don't throw
-      if (error) {
-        console.error('Error during sign out:', error)
-        // The user is already signed out in the UI, so we don't need to throw
-      }
-    } catch (e) {
-      // Catch any unexpected errors but don't throw them
-      console.error('Unexpected error during sign out:', e)
-      // Still consider the user signed out locally
-    }
+    const { error } = await supabase.auth.signOut()
+    if (error) throw error
   }
 
   const resendConfirmation = async () => {
@@ -103,7 +87,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (error) throw error
   }
 
+  // Define authorized partner emails
+  const authorizedPartnerEmails = [
+    'aryan@xolvetech.in',
+    'ayush@xolvetech.in',
+    'rishav@xolvetech.in',
+    'shubham@xolvetech.in'// Admin is also a partner
+    // Add more partner emails as needed
+  ]
+
   const isAdmin = user?.email === 'xolvetech@gmail.com'
+  const isPartner = user?.email ? authorizedPartnerEmails.includes(user.email) : false
 
   return (
     <AuthContext.Provider value={{ 
@@ -114,7 +108,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       signUp, 
       signOut, 
       resendConfirmation,
-      isAdmin
+      isAdmin,
+      isPartner
     }}>
       {children}
     </AuthContext.Provider>

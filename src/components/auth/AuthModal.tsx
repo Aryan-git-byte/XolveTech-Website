@@ -124,6 +124,9 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               {mode === 'signin' ? 'Sign In' : 'Create Account'}
             </h3>
             <button
+              type="button"
+              title="Close modal"
+              aria-label="Close modal"
               onClick={handleClose}
               className="text-gray-400 hover:text-gray-600 transition-colors"
             >

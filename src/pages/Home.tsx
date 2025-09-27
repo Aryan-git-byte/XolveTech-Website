@@ -150,7 +150,7 @@ export const Home: React.FC = () => {
               and programming education that make STEM learning fun, accessible, and impactful across India. 
               Offering custom robotics projects and individual electronic components for DIY innovation.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex flex-col sm:flex-row gap-3">
               <Link to="/products">
                 <Button size="lg" className="bg-orange-600 hover:bg-orange-700 text-white" aria-label="View STEM Learning Kits and Arduino Products">
                   View STEM Kits <ArrowRight className="w-5 h-5 ml-2" />
@@ -162,7 +162,7 @@ export const Home: React.FC = () => {
                 </Button>
               </Link>
               <Link to="/custom-projects">
-                <Button size="lg" className="bg-purple-600 hover:bg-purple-700 text-white w-fit px-4" aria-label="Submit Custom Robotics and Arduino Project Request">
+                <Button size="lg" className="bg-purple-600 hover:bg-purple-700 text-white text-sm px-2 ml-1" aria-label="Submit Custom Robotics and Arduino Project Request">
                   Custom Robotics Projects
                 </Button>
               </Link>
@@ -170,15 +170,15 @@ export const Home: React.FC = () => {
           </div>
 
           {/* Right – Logo + Feature Cards */}
-          <div className="md:w-1/2 bg-white/5 p-6 md:p-8 rounded-2xl shadow-2xl backdrop-blur-sm border border-white/10">
+          <div className="md:w-2/5 bg-white/5 p-6 md:p-8 rounded-2xl shadow-2xl backdrop-blur-sm border border-white/10">
             {/* Logo Block */}
             <div className="bg-white rounded-xl p-6 shadow-md mb-6">
               <img 
                 src={XolveLogo} 
                 alt="XolveTech STEM Education Logo - Arduino Learning Kits Bihar India" 
-                className="w-56 h-auto mx-auto" 
+                className="w-30 h-auto mx-auto" 
                 itemProp="logo"
-                width="224"
+                width="400"
                 height="auto"
                 loading="eager"
               />

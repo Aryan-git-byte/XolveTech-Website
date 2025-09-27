@@ -162,7 +162,7 @@ export const Home: React.FC = () => {
                 </Button>
               </Link>
               <Link to="/custom-projects">
-                <Button size="lg" className="bg-purple-600 hover:bg-purple-700 text-white" aria-label="Submit Custom Robotics and Arduino Project Request">
+                <Button size="lg" className="bg-purple-600 hover:bg-purple-700 text-white w-fit px-4" aria-label="Submit Custom Robotics and Arduino Project Request">
                   Custom Robotics Projects
                 </Button>
               </Link>

@@ -1,4 +1,4 @@
-import React from 'react'
+
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { AuthProvider } from './contexts/AuthContext'
 import { CartProvider } from './contexts/CartContext'
@@ -24,7 +24,6 @@ import { AdminLogin } from './pages/admin/AdminLogin'
 import { AdminDashboard } from './pages/admin/AdminDashboard'
 import { Partners } from './pages/Partners'
 import { PartnerLogin } from './pages/PartnerLogin'
-import { TestOrder } from './pages/TestOrder'
 import { ProtectedRoute } from './components/auth/ProtectedRoute'
 
 function App() {
@@ -66,7 +65,7 @@ function App() {
                 <Route path="/shipping-delivery" element={<ShippingDeliveryPolicy />} />
                 <Route path="/order-success" element={<OrderSuccess />} />
                 <Route path="/payment-success" element={<PaymentSuccess />} />
-                <Route path="/test-order" element={<TestOrder />} />
+              
                 <Route path="/partners/login" element={<PartnerLogin />} />
                 <Route path="/partners" element={<Partners />} />
                 <Route path="/admin/login" element={<AdminLogin />} />

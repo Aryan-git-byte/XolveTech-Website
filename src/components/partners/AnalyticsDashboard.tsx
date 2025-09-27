@@ -6,7 +6,6 @@ import {
   PieChart, 
   BarChart3,
   Download,
-  Calendar,
   Users
 } from 'lucide-react'
 import { Button } from '../ui/Button'
@@ -98,7 +97,7 @@ export const AnalyticsDashboard: React.FC = () => {
       // Group contributions by partner
       const contributionsByPartner: { [key: string]: number } = {}
       contributions.data?.forEach(cont => {
-        const partnerName = cont.users?.full_name || 'Unknown'
+        const partnerName = (Array.isArray(cont.users) && cont.users[0]?.full_name) || 'Unknown'
         contributionsByPartner[partnerName] = (contributionsByPartner[partnerName] || 0) + (cont.amount || 0)
       })
 
@@ -165,6 +164,7 @@ export const AnalyticsDashboard: React.FC = () => {
         <h2 className="text-2xl font-bold text-gray-900">Analytics & Reports</h2>
         <div className="flex items-center space-x-3">
           <select
+            aria-label="Select time period"
             value={selectedPeriod}
             onChange={(e) => setSelectedPeriod(e.target.value)}
             className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"

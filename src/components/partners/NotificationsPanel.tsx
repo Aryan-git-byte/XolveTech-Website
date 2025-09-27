@@ -126,6 +126,7 @@ export const NotificationsPanel: React.FC = () => {
         <h2 className="text-2xl font-bold text-gray-900">Notifications</h2>
         <div className="flex items-center space-x-3">
           <select
+            aria-label="Filter notifications"
             value={filter}
             onChange={(e) => setFilter(e.target.value as 'all' | 'unread' | 'read')}
             className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"

@@ -183,13 +183,11 @@ export const AdminDashboard: React.FC = () => {
             
             return (
               <div
-
-
                 key={tab.id}
                 className="bg-white rounded-lg shadow p-6 hover:shadow-md transition-shadow cursor-pointer"
                 onClick={() => setActiveTab(tab.id)}
                 role="button"
-                aria-pressed={activeTab === tab.id ? "true" : "false"}
+                aria-pressed={activeTab === tab.id}
                 tabIndex={0}
               >
                 <div className="flex items-center">

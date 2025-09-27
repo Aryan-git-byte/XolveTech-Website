@@ -5,7 +5,6 @@ import { supabase } from '../../lib/supabase'
 import { Button } from '../ui/Button'
 import { Modal } from '../ui/Modal'
 import { Input } from '../ui/Input'
-import { sanitizeText } from '../../utils/sanitize'
 
 // Helper function to normalize image URLs
 const getImageUrls = (imageUrls: any): string[] => {
@@ -85,8 +84,8 @@ export const ProductsManager: React.FC<ProductsManagerProps> = ({ onUpdate }) =>
             const parsed = JSON.parse(firstProduct.image_urls)
             console.log('🔍 Parsed image_urls:', parsed)
             console.log('🔍 Parsed is array?:', Array.isArray(parsed))
-          } catch (e) {
-            console.log('🔍 image_urls is not valid JSON:', e.message)
+          } catch (parseError) {
+            console.log('🔍 image_urls is not valid JSON:', (parseError as Error).message)
           }
         }
       }
@@ -217,9 +216,11 @@ export const ProductsManager: React.FC<ProductsManagerProps> = ({ onUpdate }) =>
       resetForm()
     } catch (error) {
       console.error('Error saving product:', error)
-      console.error('Error details:', error.message, error.details, error.hint)
-      // You might want to show an error message to the user here
-      alert(`Error saving product: ${error.message}`)
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred'
+      const errorDetails = (error as any)?.details || 'No additional details'
+      const errorHint = (error as any)?.hint || 'No hints available'
+      console.error('Error details:', errorMessage, errorDetails, errorHint)
+      alert(`Error saving product: ${errorMessage}`)
     }
   }
 
@@ -277,7 +278,8 @@ export const ProductsManager: React.FC<ProductsManagerProps> = ({ onUpdate }) =>
       onUpdate()
     } catch (error) {
       console.error('Error deleting product:', error)
-      alert(`Error deleting product: ${error.message}`)
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred'
+      alert(`Error deleting product: ${errorMessage}`)
     }
   }
 
@@ -509,6 +511,7 @@ export const ProductsManager: React.FC<ProductsManagerProps> = ({ onUpdate }) =>
                     Discount Type
                   </label>
                   <select
+                    aria-label="Discount Type"
                     value={formData.discount_type}
                     onChange={(e) => setFormData(prev => ({ ...prev, discount_type: e.target.value as 'flat' | 'percentage' }))}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"

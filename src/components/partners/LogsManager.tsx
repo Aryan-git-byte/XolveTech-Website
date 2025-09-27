@@ -8,7 +8,6 @@ import {
   Briefcase,
   Filter,
   Eye,
-  MessageSquare,
   CheckCircle,
   XCircle,
   Clock
@@ -222,6 +221,7 @@ export const LogsManager: React.FC<LogsManagerProps> = ({ onUpdate }) => {
         <div className="flex items-center space-x-4">
           <Filter className="w-5 h-5 text-gray-400" />
           <select
+            aria-label="Type filter"
             value={typeFilter}
             onChange={(e) => setTypeFilter(e.target.value)}
             className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -234,6 +234,7 @@ export const LogsManager: React.FC<LogsManagerProps> = ({ onUpdate }) => {
             <option value="withdrawal">Withdrawal</option>
           </select>
           <select
+            aria-label="Status filter"
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
             className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"

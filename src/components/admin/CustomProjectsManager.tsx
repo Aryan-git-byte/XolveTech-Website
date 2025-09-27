@@ -104,6 +104,7 @@ export const CustomProjectsManager: React.FC<CustomProjectsManagerProps> = ({ on
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold text-gray-900">Custom Project Requests</h2>
         <select
+          aria-label="Filter projects by status"
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value)}
           className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"

@@ -139,6 +139,7 @@ export const TaskFormModal: React.FC<TaskFormModalProps> = ({
               Priority
             </label>
             <select
+              aria-label="Priority"
               value={formData.priority}
               onChange={(e) => handleChange('priority', e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -164,6 +165,7 @@ export const TaskFormModal: React.FC<TaskFormModalProps> = ({
               Assign To
             </label>
             <select
+              aria-label="Assign To"
               value={formData.assigned_to}
               onChange={(e) => handleChange('assigned_to', e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -182,6 +184,7 @@ export const TaskFormModal: React.FC<TaskFormModalProps> = ({
               Status
             </label>
             <select
+              aria-label="Status"
               value={formData.bucket_id}
               onChange={(e) => handleChange('bucket_id', e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -201,6 +204,7 @@ export const TaskFormModal: React.FC<TaskFormModalProps> = ({
             Project
           </label>
           <select
+            aria-label="Project"
             value={formData.project_id}
             onChange={(e) => handleChange('project_id', e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"

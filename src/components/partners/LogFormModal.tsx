@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import { Modal } from '../ui/Modal'
 import { Button } from '../ui/Button'
 import { Input } from '../ui/Input'
-import { Upload, Calendar, DollarSign, FileText } from 'lucide-react'
 import { supabase } from '../../lib/supabase'
 import { useAuth } from '../../contexts/AuthContext'
 
@@ -282,6 +281,7 @@ export const LogFormModal: React.FC<LogFormModalProps> = ({
                 placeholder="What was completed or delivered..."
                 rows={3}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                aria-label="Deliverables"
               />
             </div>
             <Input
@@ -300,17 +300,20 @@ export const LogFormModal: React.FC<LogFormModalProps> = ({
                 placeholder="Any issues or blockers encountered..."
                 rows={2}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                aria-label="Blockers"
               />
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="task-priority" className="block text-sm font-medium text-gray-700 mb-1">
                   Priority
                 </label>
                 <select
+                  id="task-priority"
                   value={formData.task_priority}
                   onChange={(e) => handleChange('task_priority', e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  aria-label="Task Priority"
                 >
                   <option value="low">Low</option>
                   <option value="medium">Medium</option>
@@ -348,6 +351,7 @@ export const LogFormModal: React.FC<LogFormModalProps> = ({
                 placeholder="Detailed description of the expense..."
                 rows={3}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                aria-label="Expense Description"
               />
             </div>
             <div className="grid grid-cols-2 gap-4">
@@ -361,14 +365,16 @@ export const LogFormModal: React.FC<LogFormModalProps> = ({
                 required
               />
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="expense-category" className="block text-sm font-medium text-gray-700 mb-1">
                   Category *
                 </label>
                 <select
+                  id="expense-category"
                   value={formData.category}
                   onChange={(e) => handleChange('category', e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   required
+                  aria-label="Expense Category"
                 >
                   <option value="">Select category</option>
                   <option value="Materials">Materials</option>
@@ -396,13 +402,15 @@ export const LogFormModal: React.FC<LogFormModalProps> = ({
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="payment-method" className="block text-sm font-medium text-gray-700 mb-1">
                   Payment Method
                 </label>
                 <select
+                  id="payment-method"
                   value={formData.payment_method}
                   onChange={(e) => handleChange('payment_method', e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  aria-label="Payment Method"
                 >
                   <option value="">Select method</option>
                   <option value="Cash">Cash</option>
@@ -450,13 +458,15 @@ export const LogFormModal: React.FC<LogFormModalProps> = ({
                 placeholder="0.00"
               />
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="expense-priority" className="block text-sm font-medium text-gray-700 mb-1">
                   Priority
                 </label>
                 <select
+                  id="expense-priority"
                   value={formData.priority}
                   onChange={(e) => handleChange('priority', e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  aria-label="Expense Priority"
                 >
                   <option value="low">Low</option>
                   <option value="medium">Medium</option>
@@ -495,13 +505,15 @@ export const LogFormModal: React.FC<LogFormModalProps> = ({
                 required
               />
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="transaction-mode" className="block text-sm font-medium text-gray-700 mb-1">
                   Payment Mode
                 </label>
                 <select
+                  id="transaction-mode"
                   value={formData.mode}
                   onChange={(e) => handleChange('mode', e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  aria-label="Transaction Payment Mode"
                 >
                   <option value="">Select mode</option>
                   <option value="Cash">Cash</option>
@@ -539,14 +551,16 @@ export const LogFormModal: React.FC<LogFormModalProps> = ({
         return (
           <>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="contribution-type" className="block text-sm font-medium text-gray-700 mb-1">
                 Contribution Type *
               </label>
               <select
+                id="contribution-type"
                 value={formData.contribution_type}
                 onChange={(e) => handleChange('contribution_type', e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 required
+                aria-label="Contribution Type"
               >
                 <option value="capital">Capital Investment</option>
                 <option value="temporary loan">Temporary Loan</option>
@@ -563,13 +577,15 @@ export const LogFormModal: React.FC<LogFormModalProps> = ({
                 placeholder="0.00"
               />
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="contribution-mode" className="block text-sm font-medium text-gray-700 mb-1">
                   Payment Mode
                 </label>
                 <select
+                  id="contribution-mode"
                   value={formData.mode}
                   onChange={(e) => handleChange('mode', e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  aria-label="Contribution Payment Mode"
                 >
                   <option value="">Select mode</option>
                   <option value="Cash">Cash</option>
@@ -594,6 +610,7 @@ export const LogFormModal: React.FC<LogFormModalProps> = ({
                 placeholder="Terms if loan, purpose, or additional notes..."
                 rows={3}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                aria-label="Contribution Remarks"
               />
             </div>
           </>
@@ -620,13 +637,15 @@ export const LogFormModal: React.FC<LogFormModalProps> = ({
                 required
               />
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="withdrawal-method" className="block text-sm font-medium text-gray-700 mb-1">
                   Method
                 </label>
                 <select
+                  id="withdrawal-method"
                   value={formData.method}
                   onChange={(e) => handleChange('method', e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  aria-label="Withdrawal Method"
                 >
                   <option value="">Select method</option>
                   <option value="cash">Cash</option>
@@ -675,13 +694,15 @@ export const LogFormModal: React.FC<LogFormModalProps> = ({
 
         {/* Common fields */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="project-select" className="block text-sm font-medium text-gray-700 mb-1">
             Project
           </label>
           <select
+            id="project-select"
             value={formData.project_id}
             onChange={(e) => handleChange('project_id', e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            aria-label="Project Selection"
           >
             <option value="">Select project (optional)</option>
             {projects.map((project) => (
@@ -709,6 +730,7 @@ export const LogFormModal: React.FC<LogFormModalProps> = ({
             placeholder="Internal notes or comments..."
             rows={3}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            aria-label="Additional Notes"
           />
         </div>
 

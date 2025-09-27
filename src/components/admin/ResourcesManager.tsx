@@ -214,6 +214,7 @@ export const ResourcesManager: React.FC<ResourcesManagerProps> = ({ onUpdate }) 
               Resource Type
             </label>
             <select
+              aria-label="Resource Type"
               value={formData.type}
               onChange={(e) => setFormData({ ...formData, type: e.target.value as 'pdf' | 'video' })}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"

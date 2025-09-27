@@ -1,15 +1,24 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { Mail, Phone, Instagram, MapPin } from 'lucide-react'
+import aryanPhoto from '../assets/aryan.jpg'
+import rishavPhoto from '../assets/rishav.jpg'
+import shubhamPhoto from '../assets/shubham.jpg'
+import ayushPhoto from '../assets/ayush.jpg'
 
 export const Team: React.FC = () => {
+  const [loadedImages, setLoadedImages] = useState<Set<number>>(new Set())
+
+  const handleImageLoad = (index: number) => {
+    setLoadedImages(prev => new Set(prev).add(index))
+  }
   const teamMembers = [
     {
       name: 'Aryan Kumar',
       title: 'Founder & CTO',
       role: 'Product Strategy | Full-Stack Development | Innovation Leadership',
       vision: 'Leading innovation in Arduino STEM education, developing cutting-edge products and full-stack solutions for India\'s next generation of makers',
-      photo: 'https://wzqvcfhjjedtgemqadsf.supabase.co/storage/v1/object/public/xolvetech-assets//aryan.jpg',
+      photo: aryanPhoto,
       description: 'Aryan is the founder and driving force behind XolveTech. He leads product design, technology development, and strategic growth initiatives. Specializing in full-stack development, Arduino, Python, and Firebase, Aryan is responsible for all kit design, platform integration, and long-term innovation planning. While he doesn\'t handle daily operations, Aryan sets the vision and ensures quality across every product.',
       altText: 'Aryan Kumar – Founder & CTO of XolveTech, leading innovation, product design, and full-stack development',
       seoTags: 'Aryan Kumar, XolveTech Founder, Full-stack Developer, Arduino, Firebase, STEM Innovator, Product Architect'
@@ -19,7 +28,7 @@ export const Team: React.FC = () => {
       title: 'Co-founder & Operations Head',
       role: 'Team Management | Task Execution | Internal Coordination',
       vision: 'Turning ideas into action by ensuring timely execution, resource alignment, and operational excellence across all of XolveTech\'s initiatives',
-      photo: 'https://wzqvcfhjjedtgemqadsf.supabase.co/storage/v1/object/public/xolvetech-assets//rishav.jpg',
+      photo: rishavPhoto,
       description: 'Rishav oversees the day-to-day operations of XolveTech. He ensures the team stays on track by managing task boards, conducting daily check-ins, and following up on progress. He bridges communication across the team and ensures smooth coordination from packaging to delivery. Rishav is the go-to person for execution clarity and internal structure.',
       altText: 'Rishav – Co-founder & Operations Head at XolveTech, managing team coordination and task execution',
       seoTags: 'Rishav, Co-founder, Operations Manager, Task Coordinator, Execution Lead, STEM Team Bihar'
@@ -29,7 +38,7 @@ export const Team: React.FC = () => {
       title: 'Media & Content Manager',
       role: 'Reels | Editing | Storytelling & Outreach',
       vision: 'Connecting young innovators across India through compelling content and visual storytelling around STEM education',
-      photo: 'https://wzqvcfhjjedtgemqadsf.supabase.co/storage/v1/object/public/xolvetech-assets//shubham.jpg',
+      photo: shubhamPhoto,
       description: 'Shubham leads all things media at XolveTech—from scripting and shooting to editing and publishing. He runs the content pipeline, manages daily social output, and handles basic media interactions. With a focus on consistency and creativity, Shubham builds the public voice of XolveTech across platforms.',
       altText: 'Shubham – Media & Content Manager at XolveTech, creating content and managing social media outreach',
       seoTags: 'Shubham, Content Creator, Video Editor, STEM Reels, Instagram Manager, Bihar Tech Media'
@@ -39,7 +48,7 @@ export const Team: React.FC = () => {
       title: 'Packaging, Inventory & Delivery Manager',
       role: 'Kit Assembly | Stock Management | Dispatch Logistics',
       vision: 'Engineering the future of hands-on STEM learning through precise hardware handling and reliable kit delivery across India',
-      photo: 'https://wzqvcfhjjedtgemqadsf.supabase.co/storage/v1/object/public/xolvetech-assets//ayush.jpg',
+      photo: ayushPhoto,
       description: 'Ayush manages everything physical—from kit packaging and inventory tracking to final dispatch. He ensures each STEM kit is complete, properly assembled, and ready for delivery. He monitors component stock and storage, sharing regular updates to avoid shortages. Ayush plays a crucial role in maintaining operational readiness on the ground.',
       altText: 'Ayush – Packaging, Inventory & Delivery Manager at XolveTech, handling kit assembly and logistics',
       seoTags: 'Ayush, Packaging Manager, Inventory Lead, STEM Kit Builder, Logistics Handler, Arduino Kit Assembly'
@@ -113,13 +122,24 @@ export const Team: React.FC = () => {
                 itemType="https://schema.org/Person"
               >
                 <div className="mb-6">
-                  <img
-                    src={member.photo}
-                    alt={member.altText}
-                    className="w-24 h-24 rounded-full mx-auto object-cover shadow-lg"
-                    loading="lazy"
-                    itemProp="image"
-                  />
+                  <div className="relative w-24 h-24 mx-auto">
+                    <img
+                      src={member.photo}
+                      alt={member.altText}
+                      className={`w-24 h-24 rounded-full object-cover shadow-lg transition-all duration-500 ${
+                        loadedImages.has(index) 
+                          ? 'blur-none opacity-100' 
+                          : 'blur-md opacity-70'
+                      }`}
+                      loading="lazy"
+                      decoding="async"
+                      itemProp="image"
+                      onLoad={() => handleImageLoad(index)}
+                    />
+                    {!loadedImages.has(index) && (
+                      <div className="absolute inset-0 bg-gradient-to-br from-blue-100 to-gray-200 rounded-full animate-pulse"></div>
+                    )}
+                  </div>
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 mb-1" itemProp="name">{member.name}</h3>
                 <p className="text-blue-600 font-semibold mb-2 text-sm" itemProp="jobTitle">{member.title}</p>

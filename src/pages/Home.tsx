@@ -132,25 +132,25 @@ export const Home: React.FC = () => {
       
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-blue-900 via-blue-800 to-blue-700 text-white py-20 px-6 md:px-20" role="banner">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between space-y-12 md:space-y-0">
+      <section className="bg-gradient-to-br from-blue-900 via-blue-800 to-blue-700 text-white py-4 px-6 md:px-20" role="banner">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
           {/* Left – Text & Buttons */}
-          <div className="md:w-1/2 space-y-6">
-            <div className="inline-block bg-orange-600 text-white px-4 py-2 rounded-full text-sm font-medium mb-4">
+          <div className="md:w-1/2 space-y-2">
+            <div className="inline-block bg-orange-600 text-white px-4 py-2 rounded-full text-sm font-medium mb-1">
               Youth-Led STEM Innovation from Bihar, India
             </div>
-            <p className="text-lg text-orange-200 mb-4 font-medium">
+            <p className="text-lg text-orange-200 mb-2 font-medium">
               Arduino STEM Kits · Electronics Components · Custom Robotics Projects
             </p>
-            <h1 className="text-5xl font-bold leading-tight" itemProp="headline">
+            <h1 className="text-4xl font-bold leading-tight" itemProp="headline">
               We Build <span className="text-orange-400">Bold STEM Innovators</span>
             </h1>
-            <p className="text-lg text-white/90">
+            <p className="text-lg text-white/90 mb-2">
               Student-led startup from Patna, Bihar creating hands-on Arduino STEM learning kits, electronics projects, 
               and programming education that make STEM learning fun, accessible, and impactful across India. 
               Offering custom robotics projects and individual electronic components for DIY innovation.
             </p>
-            <div className="flex flex-col sm:flex-row gap-3">
+            <div className="flex flex-col sm:flex-row gap-3 mt-1">
               <Link to="/products">
                 <Button size="lg" className="bg-orange-600 hover:bg-orange-700 text-white" aria-label="View STEM Learning Kits and Arduino Products">
                   View STEM Kits <ArrowRight className="w-5 h-5 ml-2" />
@@ -214,7 +214,7 @@ export const Home: React.FC = () => {
       <section className="py-16 bg-gray-50" role="main">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Explore Our Arduino STEM Learning Kits</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-2">Explore Our Arduino STEM Learning Kits</h2>
             <p className="text-lg text-gray-600">
               From Arduino electronics to Python programming, we have hands-on STEM kits for every curious student mind in India
             </p>

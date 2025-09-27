@@ -66,8 +66,23 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }
 
   const signOut = async () => {
-    const { error } = await supabase.auth.signOut()
-    if (error) throw error
+    try {
+      // Set user to null immediately to improve UI responsiveness
+      setUser(null)
+      
+      // Then attempt to sign out from Supabase
+      const { error } = await supabase.auth.signOut()
+      
+      // If there's an error, log it but don't throw
+      if (error) {
+        console.error('Error during sign out:', error)
+        // The user is already signed out in the UI, so we don't need to throw
+      }
+    } catch (e) {
+      // Catch any unexpected errors but don't throw them
+      console.error('Unexpected error during sign out:', e)
+      // Still consider the user signed out locally
+    }
   }
 
   const resendConfirmation = async () => {

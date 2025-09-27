@@ -5,11 +5,9 @@ import { useCart } from '../../contexts/CartContext'
 import { useAuth } from '../../contexts/AuthContext'
 import { Button } from '../ui/Button'
 import { Input } from '../ui/Input'
-import { supabase } from '../../lib/supabase'
 import { EmailConfirmationGuard } from '../auth/EmailConfirmationGuard'
 import { 
   generateOrderId, 
-  validateOrderId, 
   validateName, 
   validatePhone, 
   validateEmail, 
@@ -189,6 +187,9 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose })
               {paymentStep === 'details' ? 'Shipping Details' : 'Payment'}
             </h3>
             <button
+              type="button"
+              aria-label="Close checkout modal"
+              title="Close"
               onClick={onClose}
               className="text-black hover:text-gray-700 transition-colors"
             >

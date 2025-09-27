@@ -120,6 +120,9 @@ export const Contact: React.FC = () => {
                       Message
                     </label>
                     <textarea
+                      aria-label="Message"
+                      title="Your message to XolveTech"
+                      placeholder="Type your message here..."
                       name="message"
                       value={formData.message}
                       onChange={handleChange}

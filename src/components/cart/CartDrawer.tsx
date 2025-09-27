@@ -41,6 +41,8 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose }) => {
                 Shopping Cart ({itemCount})
               </h2>
               <button
+                aria-label="Close cart"
+                title="Close cart"
                 onClick={onClose}
                 className="text-black hover:text-gray-700 transition-colors"
               >

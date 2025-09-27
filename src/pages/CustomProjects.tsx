@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Helmet } from 'react-helmet-async'
-import { CheckCircle, Lightbulb, Users, Upload } from 'lucide-react'
+import { CheckCircle, Lightbulb, Users} from 'lucide-react'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../contexts/AuthContext'
 import { EmailConfirmationGuard } from '../components/auth/EmailConfirmationGuard'
@@ -194,6 +194,7 @@ export const CustomProjects: React.FC = () => {
                     Budget Range *
                   </label>
                   <select
+                    aria-label="Budget Range"
                     name="budget_range"
                     value={formData.budget_range}
                     onChange={handleChange}

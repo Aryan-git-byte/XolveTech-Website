@@ -85,6 +85,7 @@ export const Footer: React.FC = () => {
             </p>
             <ul className="list-none flex flex-wrap justify-center md:justify-start gap-x-4 gap-y-2" role="navigation" aria-label="Footer policy links">
               <li><Link to="/terms" className="text-gray-400 hover:text-white transition-colors text-sm">
+
                 Terms of Service
               </Link></li>
               <li><Link to="/cancellation-refund" className="text-gray-400 hover:text-white transition-colors text-sm">

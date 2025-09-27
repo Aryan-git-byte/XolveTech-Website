@@ -82,6 +82,7 @@ export const Learning: React.FC = () => {
             </div>
             <div className="flex items-center space-x-4">
               <select
+                aria-label="Filter by resource type"
                 value={selectedType}
                 onChange={(e) => setSelectedType(e.target.value)}
                 className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"

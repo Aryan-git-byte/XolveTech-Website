@@ -325,7 +325,7 @@ export const Home: React.FC = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 bg-gradient-to-r from-blue-600 to-blue-700 text-white text-center" role="call-to-action">
+      <section className="py-16 bg-gradient-to-r from-blue-600 to-blue-700 text-white text-center" role="region" aria-label="Call to action">
         <div className="max-w-7xl mx-auto px-4">
           <h2 className="text-3xl font-bold mb-4">Ready to Start Building Arduino Projects?</h2>
           <p className="text-xl mb-8 text-blue-100">

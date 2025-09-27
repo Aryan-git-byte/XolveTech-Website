@@ -40,7 +40,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     getSession()
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
+      async (_, session) => {
         setUser(session?.user ?? null)
         setLoading(false)
       }
@@ -54,7 +54,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (error) throw error
   }
 
-  const signUp = async (email: string, password: string, name: string) => {
+  const signUp = async (email: string, password: string, _name: string) => {
     const { error } = await supabase.auth.signUp({ 
       email, 
       password,
